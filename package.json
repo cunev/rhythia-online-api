@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.ts",
   "scripts": {
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts"

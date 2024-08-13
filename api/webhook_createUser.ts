@@ -1,7 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../types/supabase";
 
-// rhythia.com/api/webhook_createUser
+export async function webhook_createUser(input: { type: string }) {
+  const request = await fetch(`https://rhythia.com/api/webhook_createUser`);
+  return request.json();
+}
 
 const adminClient = createClient<Database>(
   `https://pfkajngbllcbdzoylrvp.supabase.co`,
