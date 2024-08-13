@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "25.0.0",
+  "version": "56.0.0",
   "main": "index.ts",
   "scripts": {
     "update": "bun scripts/update.ts",
@@ -10,9 +10,12 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.45.1",
     "@types/bun": "^1.1.6",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^22.2.0",
     "bun": "^1.1.22",
+    "lodash": "^4.17.21",
     "supabase": "^1.188.4",
-    "tsx": "^4.17.0"
+    "tsx": "^4.17.0",
+    "zod": "^3.23.8"
   }
 }
