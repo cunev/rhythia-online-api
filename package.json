@@ -1,13 +1,18 @@
 {
   "name": "rhythia-api",
-  "version": "1.0.1",
+  "version": "25.0.0",
   "main": "index.ts",
   "scripts": {
+    "update": "bun scripts/update.ts",
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts"
   },
   "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.45.1",
-    "supabase": "^1.188.4"
+    "@types/bun": "^1.1.6",
+    "@types/node": "^22.2.0",
+    "bun": "^1.1.22",
+    "supabase": "^1.188.4",
+    "tsx": "^4.17.0"
   }
 }
