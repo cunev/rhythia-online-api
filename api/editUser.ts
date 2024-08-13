@@ -1,7 +1,6 @@
 import z from "zod";
 
 export const Schema = {
-  url: "/api/editUser",
   input: z.object({
     name: z.string(),
     age: z.number(),

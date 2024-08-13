@@ -35,7 +35,9 @@ for (const api of apis) {
   );
 
   exports.push(
-    `export const ${lowerFirst(apiName)} = handleApi(${upperFirst(apiName)})`
+    `export const ${lowerFirst(
+      apiName
+    )} = handleApi({url:"/api/${apiName}",...${upperFirst(apiName)}})`
   );
 }
 exports.push(`export { handleApi } from "./handleApi"`);
