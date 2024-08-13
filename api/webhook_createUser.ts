@@ -1,9 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../types/supabase";
 
+// rhythia.com/api/webhook_createUser
+
 const adminClient = createClient<Database>(
   `https://pfkajngbllcbdzoylrvp.supabase.co`,
-  `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBma2FqbmdibGxjYmR6b3lscnZwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxODU3NjA3MCwiZXhwIjoyMDM0MTUyMDcwfQ.XKUlQWvzmcYyirM-Zi4nwhiEKcpx1xLS97QUyuR3MoY`,
+  process.env.ADMIN_KEY!,
   {
     auth: {
       autoRefreshToken: false,
