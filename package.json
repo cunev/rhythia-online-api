@@ -3,9 +3,9 @@
   "version": "57.0.0",
   "main": "index.ts",
   "scripts": {
-    "update": "bun scripts/update.ts",
+    "update": "bun ./scripts/update.ts",
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts",
-    "pipeline:build-api": "bun scripts/build.ts"
+    "pipeline:build-api": "bun ./scripts/build.ts"
   },
   "license": "MIT",
   "dependencies": {
