@@ -5,7 +5,7 @@
   "scripts": {
     "update": "bun ./scripts/update.ts",
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts",
-    "pipeline:build-api": "bun ./scripts/build.ts"
+    "pipeline:build-api": "tsx ./scripts/build.ts"
   },
   "license": "MIT",
   "dependencies": {
