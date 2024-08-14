@@ -5,19 +5,23 @@
   "scripts": {
     "update": "bun ./scripts/update.ts",
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts",
-    "pipeline:build-api": "tsx ./scripts/build.ts"
+    "pipeline:build-api": "tsx ./scripts/build.ts",
+    "pipeline:deploy-testing": "tsx ./scripts/build.ts"
   },
   "license": "MIT",
   "dependencies": {
+    "@netlify/zip-it-and-ship-it": "^9.37.9",
     "@supabase/supabase-js": "^2.45.1",
     "@types/bun": "^1.1.6",
     "@types/lodash": "^4.17.7",
     "@types/node": "^22.2.0",
+    "bufferutil": "^4.0.8",
     "bun": "^1.1.22",
     "esbuild": "^0.23.0",
     "lodash": "^4.17.21",
     "supabase": "^1.188.4",
     "tsx": "^4.17.0",
+    "utf-8-validate": "^6.0.4",
     "zod": "^3.23.8"
   }
 }
