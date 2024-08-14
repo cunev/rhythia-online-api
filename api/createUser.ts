@@ -10,13 +10,13 @@ export const Schema = {
   }),
 };
 
-export async function GET(
+export const handler = async (
   res: Response
-): Promise<(typeof Schema)["output"]["_type"]> {
+): Promise<(typeof Schema)["output"]["_type"]> => {
   const toParse = await res.json();
   const data = Schema.input.parse(toParse);
 
   return {
     uid: data.name,
   };
-}
+};

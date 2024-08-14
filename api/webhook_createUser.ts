@@ -1,11 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../types/supabase";
 
-export async function webhook_createUser(input: { type: string }) {
-  const request = await fetch(`https://rhythia.com/api/webhook_createUser`);
-  return request.json();
-}
-
 const adminClient = createClient<Database>(
   `https://pfkajngbllcbdzoylrvp.supabase.co`,
   process.env.ADMIN_KEY!,
@@ -17,12 +12,7 @@ const adminClient = createClient<Database>(
   }
 );
 
-export function GET(request: Request) {
-  const country = request.headers.get("x-vercel-ip-country");
-  return new Response(`You're visiting from beautiful ${country}`);
-}
-
-export async function POST(request: Request) {
+export const handler = async (request: Request) => {
   const payload: any = await request.json();
 
   if (payload.type !== "INSERT") return new Response(`not today`);
@@ -44,4 +34,4 @@ export async function POST(request: Request) {
 
   console.log(data);
   return new Response(`good one`);
-}
+};
