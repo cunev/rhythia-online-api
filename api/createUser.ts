@@ -15,8 +15,7 @@ export const handler: Handler = async (
   event,
   context
 ): Promise<(typeof Schema)["output"]["_type"]> => {
-  const toParse = JSON.parse(event);
-  const data = Schema.input.parse(toParse);
+  const data = Schema.input.parse(event);
 
   return {
     uid: data.name,
