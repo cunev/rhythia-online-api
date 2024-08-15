@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Handler } from "aws-lambda";
 import { Database } from "../types/supabase";
 
 const adminClient = createClient<Database>(
@@ -12,9 +13,7 @@ const adminClient = createClient<Database>(
   }
 );
 
-export const handler = async (request: Request) => {
-  const payload: any = await request.json();
-
+export const handler: Handler = async (payload, context) => {
   if (payload.type !== "INSERT") return new Response(`not today`);
   console.log("Inserting...");
   const metadata = payload.record.raw_user_meta_data;
