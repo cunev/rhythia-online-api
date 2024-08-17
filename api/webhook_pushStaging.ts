@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   if (payload.ciSecret !== process.env.CI_SECRET) {
     return new Response(`Unauthorized`);
   }
-  cloneBranch();
+  await cloneBranch();
   return new Response(`Pushed`);
 }
 
