@@ -73,4 +73,4 @@ async function cloneBranch() {
   }
 }
 
-await cloneBranch();
+cloneBranch();
