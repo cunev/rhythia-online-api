@@ -21,6 +21,7 @@
     "bufferutil": "^4.0.8",
     "bun": "^1.1.22",
     "esbuild": "^0.23.0",
+    "isomorphic-git": "^1.27.1",
     "lodash": "^4.17.21",
     "simple-git": "^3.25.0",
     "supabase": "^1.188.4",
