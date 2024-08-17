@@ -2,23 +2,11 @@ import fs from "fs";
 import * as git from "isomorphic-git";
 import http from "isomorphic-git/http/node";
 
-export const maxDuration = 60;
-
-export async function POST(request: Request) {
-  const payload: any = await request.json();
-
-  if (payload.ciSecret !== process.env.CI_SECRET) {
-    return new Response(`Unauthorized`);
-  }
-  await cloneBranch();
-  return new Response(`Pushed`);
-}
-
 // Set up the repository URL
 const repoUrl = `https://${process.env.GIT_KEY}@github.com/cunev/rhythia-api.git`;
 
-const sourceBranch = "stage-testing";
-const targetBranch = "stage-production";
+const sourceBranch = process.env.SOURCE_BRANCH!;
+const targetBranch = process.env.TARGET_BRANCH!;
 
 async function cloneBranch() {
   try {
@@ -84,3 +72,5 @@ async function cloneBranch() {
     console.error("Error performing Git operations:", error.message);
   }
 }
+
+await cloneBranch();
