@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
+    "test": "bun ./scripts/test.ts",
     "sync": "npx supabase gen types typescript --project-id \"pfkajngbllcbdzoylrvp\" --schema public > types/supabase.ts",
     "pipeline:build-api": "tsx ./scripts/build.ts",
     "pipeline:deploy-testing": "tsx ./scripts/build.ts"
@@ -21,6 +22,7 @@
     "bun": "^1.1.22",
     "esbuild": "^0.23.0",
     "lodash": "^4.17.21",
+    "simple-git": "^3.25.0",
     "supabase": "^1.188.4",
     "tsx": "^4.17.0",
     "utf-8-validate": "^6.0.4",
