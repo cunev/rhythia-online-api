@@ -44,6 +44,6 @@ exports.push(`export { handleApi } from "./handleApi"`);
 
 writeFileSync("./index.ts", exports.join("\n"));
 
-const conf = readFileSync("./.cred", "utf-8");
-await $`npm logout`.nothrow();
-await $`npm config set ${conf.split("$").join("")} && yarn publish`;
+// const conf = readFileSync("./.cred", "utf-8");
+// await $`npm logout`.nothrow();
+await $`yarn publish`;

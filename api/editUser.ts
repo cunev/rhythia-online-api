@@ -1,4 +1,3 @@
-import { Handler } from "aws-lambda";
 import z from "zod";
 
 export const Schema = {
@@ -11,13 +10,13 @@ export const Schema = {
   }),
 };
 
-export const handler: Handler = async (
-  event,
-  context
-): Promise<(typeof Schema)["output"]["_type"]> => {
-  const data = Schema.input.parse(event);
+export async function GET(
+  res: Response
+): Promise<(typeof Schema)["output"]["_type"]> {
+  const toParse = await res.json();
+  const data = Schema.input.parse(toParse);
 
   return {
     uid: data.name,
   };
-};
+}
