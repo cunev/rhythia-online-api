@@ -23,7 +23,7 @@ export const Schema = {
   }),
 };
 
-export async function GET(
+export async function POST(
   res: Response
 ): Promise<(typeof Schema)["output"]["_type"]> {
   const toParse = await res.json();
