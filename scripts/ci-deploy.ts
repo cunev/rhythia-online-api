@@ -1,6 +1,7 @@
 import fs from "fs";
 import * as git from "isomorphic-git";
 import http from "isomorphic-git/http/node";
+import path from "path";
 
 // Set up the repository URL
 const repoUrl = `https://${process.env.GIT_KEY}@github.com/cunev/rhythia-api.git`;
@@ -9,9 +10,16 @@ const sourceBranch = process.env.SOURCE_BRANCH!;
 const targetBranch = process.env.TARGET_BRANCH!;
 
 async function cloneBranch() {
+  const dir = path.join("/tmp", "repo");
+
   try {
+    // Ensure the directory is clean before cloning
+    if (fs.existsSync(dir)) {
+      fs.rmdirSync(dir, { recursive: true });
+      console.log(`Deleted existing directory: ${dir}`);
+    }
+
     // Clone the repository into a temporary directory
-    const dir = "/tmp/repo";
     await git.clone({
       fs,
       http,
@@ -23,15 +31,7 @@ async function cloneBranch() {
     });
     console.log(`Cloned ${sourceBranch} branch from remote repository.`);
 
-    // Check local branches
-    const branches = await git.listBranches({ fs, dir, remote: "origin" });
-
-    if (branches.includes(targetBranch)) {
-      console.log(`Branch ${targetBranch} already exists. Deleting it.`);
-      await git.deleteBranch({ fs, dir, ref: targetBranch });
-    }
-
-    // Checkout the source branch
+    // Check out the source branch
     await git.checkout({ fs, dir, ref: sourceBranch });
     console.log(`Checked out to branch: ${sourceBranch}`);
 
