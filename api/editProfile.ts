@@ -5,16 +5,14 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
-  input: z
-    .object({
-      session: z.string(),
-      data: z.object({
-        avatar_url: z.string().optional(),
-        about_me: z.string().optional(),
-        username: z.string().optional(),
-      }),
-    })
-    .strict(),
+  input: z.strictObject({
+    session: z.string(),
+    data: z.object({
+      avatar_url: z.string().optional(),
+      about_me: z.string().optional(),
+      username: z.string().optional(),
+    }),
+  }),
   output: z.object({
     error: z.string().optional(),
   }),
