@@ -75,7 +75,6 @@ export async function handler(
       .eq("uid", user.id);
 
     console.log(profiles, error);
-
     if (!queryData?.length) {
       const data = await supabase
         .from("profiles")
@@ -91,6 +90,8 @@ export async function handler(
         .select();
 
       profiles = data.data!;
+    } else {
+      profiles = queryData;
     }
   }
 
