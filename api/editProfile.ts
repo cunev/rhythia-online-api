@@ -1,22 +1,27 @@
+import { NextResponse } from "next/server";
 import z from "zod";
+import { protectedApi, validUser } from "../utils/requestUtils";
 
 export const Schema = {
   input: z.object({
-    name: z.string(),
-    age: z.number(),
+    session: z.string(),
   }),
   output: z.object({
-    uid: z.string(),
+    error: z.string().optional(),
   }),
 };
 
-export async function GET(
-  res: Response
-): Promise<(typeof Schema)["output"]["_type"]> {
-  const toParse = await res.json();
-  const data = Schema.input.parse(toParse);
+export async function POST(res: Response): Promise<NextResponse> {
+  return protectedApi({
+    response: res,
+    schema: Schema,
+    authorization: validUser,
+    activity: handler,
+  });
+}
 
-  return {
-    uid: data.name,
-  };
+async function handler(
+  data: (typeof Schema)["input"]["_type"]
+): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  return NextResponse.json({});
 }

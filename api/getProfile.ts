@@ -1,9 +1,12 @@
+import { NOT_FOUND } from "http-status";
 import { NextResponse } from "next/server";
 import z from "zod";
+import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.object({
+    session: z.string(),
     id: z.number(),
   }),
   output: z.object({
@@ -24,15 +27,22 @@ export const Schema = {
   }),
 };
 
-export async function POST(
-  res: Response
+export async function POST(res: Response): Promise<NextResponse> {
+  return protectedApi({
+    response: res,
+    schema: Schema,
+    authorization: validUser,
+    activity: handler,
+  });
+}
+
+async function handler(
+  data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const toParse = await res.json();
-  const data = Schema.input.parse(toParse);
   let { data: profiles, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("column", data.id);
+    .eq("id", data.id);
 
   console.log(profiles, error);
 
@@ -41,7 +51,7 @@ export async function POST(
       {
         error: "User not found",
       },
-      { status: 404 }
+      { status: NOT_FOUND }
     );
   }
 
