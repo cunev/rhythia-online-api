@@ -27,7 +27,7 @@ export async function POST(res: Response): Promise<NextResponse> {
   });
 }
 
-async function handler(
+export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   const user = (await supabase.auth.getUser(data.session)).data.user!;
