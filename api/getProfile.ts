@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import z from "zod";
+import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.object({
     session: z.string(),
-    id: z.number(),
+    id: z.number().optional(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -42,20 +43,46 @@ export async function POST(res: Response): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  let { data: profiles, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", data.id);
+  let profiles: Database["public"]["Tables"]["profiles"]["Row"][] = [];
 
-  console.log(profiles, error);
+  // Fetch by id
+  if (data.id) {
+    let { data: queryData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", data.id);
 
-  if (!profiles?.length) {
-    return NextResponse.json(
-      {
-        error: "User not found",
-      },
-      { status: 404 }
-    );
+    console.log(profiles, error);
+
+    if (!queryData?.length) {
+      return NextResponse.json(
+        {
+          error: "User not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    profiles = queryData;
+  } else {
+    // Fetch by session id
+    const user = (await supabase.auth.getUser(data.session)).data.user!;
+
+    let { data: queryData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("uid", user.id);
+
+    console.log(profiles, error);
+
+    if (!queryData?.length) {
+      return NextResponse.json(
+        {
+          error: "User cannot be retrieved from session",
+        },
+        { status: 404 }
+      );
+    }
   }
 
   const user = profiles[0];
