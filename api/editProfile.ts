@@ -61,6 +61,14 @@ export async function handler(
     .upsert(upsertPayload)
     .select();
 
-  console.log(upsertResult);
+  if (upsertResult.status == 409) {
+    return NextResponse.json(
+      {
+        error: "Can't update, username might be used by someone else",
+      },
+      { status: 404 }
+    );
+  }
+
   return NextResponse.json({});
 }
