@@ -26,6 +26,7 @@ export const Schema = {
         skill_points: z.number().nullable(),
         squares_hit: z.number().nullable(),
         total_score: z.number().nullable(),
+        position: z.number().nullable(),
       })
       .optional(),
   }),
@@ -87,9 +88,17 @@ export async function handler(
   }
 
   const user = profiles[0];
+
+  // Query to count how many players have more skill points than the specific player
+  const { count: playersWithMorePoints, error: rankError } = await supabase
+    .from("profiles")
+    .select("*", { count: "exact", head: true })
+    .gt("skill_points", user.skill_points);
+
   return NextResponse.json({
     user: {
       ...user,
+      position: (playersWithMorePoints || 0) + 1,
     },
   });
 }
