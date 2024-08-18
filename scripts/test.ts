@@ -3,7 +3,7 @@ const res = await fetch("https://development.rhythia.com/api/getProfile", {
   headers: {
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({ id: 1 }),
+  body: JSON.stringify({ id: 0 }),
 });
 
 console.log(await res.text());

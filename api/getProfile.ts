@@ -34,6 +34,8 @@ export async function POST(
     .select("*")
     .eq("column", data.id);
 
+  console.log(profiles, error);
+
   if (!profiles?.length) {
     return NextResponse.json(
       {
