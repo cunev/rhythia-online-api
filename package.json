@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "80.0.0",
+  "version": "81.0.0",
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
@@ -18,6 +18,7 @@
     "@types/bun": "^1.1.6",
     "@types/lodash": "^4.17.7",
     "@types/node": "^22.2.0",
+    "@vercel/edge": "^1.1.2",
     "@vercel/node": "^3.2.8",
     "aws-lambda": "^1.0.7",
     "bufferutil": "^4.0.8",

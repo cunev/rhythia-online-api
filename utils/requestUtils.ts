@@ -26,7 +26,7 @@ export async function protectedApi({
     return authorizationReponse;
   }
 
-  return await activity(data);
+  return await activity(data, response);
 }
 
 export async function validUser(data) {

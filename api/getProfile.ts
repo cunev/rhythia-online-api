@@ -1,3 +1,4 @@
+import { geolocation } from "@vercel/edge";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { Database } from "../types/database";
@@ -42,7 +43,8 @@ export async function POST(res: Response): Promise<NextResponse> {
 }
 
 export async function handler(
-  data: (typeof Schema)["input"]["_type"]
+  data: (typeof Schema)["input"]["_type"],
+  req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   let profiles: Database["public"]["Tables"]["profiles"]["Row"][] = [];
 
@@ -76,6 +78,7 @@ export async function handler(
 
     console.log(profiles, error);
     if (!queryData?.length) {
+      const geo = geolocation(req);
       const data = await supabase
         .from("profiles")
         .upsert({
@@ -84,7 +87,7 @@ export async function handler(
           avatar_url: user.user_metadata.avatar_url,
           badges: ["Early Bird"],
           username: user.user_metadata.full_name,
-          flag: "",
+          flag: (geo.country || "US").toUpperCase(),
           created_at: Date.now(),
         })
         .select();
