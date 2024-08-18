@@ -14,4 +14,9 @@ export const getLeaderboard = handleApi({url:"/api/getLeaderboard",...GetLeaderb
 import { Schema as GetProfile } from "./api/getProfile"
 export { Schema as SchemaGetProfile } from "./api/getProfile"
 export const getProfile = handleApi({url:"/api/getProfile",...GetProfile})
+
+// ./api/searchUsers.ts API
+import { Schema as SearchUsers } from "./api/searchUsers"
+export { Schema as SchemaSearchUsers } from "./api/searchUsers"
+export const searchUsers = handleApi({url:"/api/searchUsers",...SearchUsers})
 export { handleApi } from "./handleApi"
