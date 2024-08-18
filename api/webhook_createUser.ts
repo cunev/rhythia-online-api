@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../types/supabase";
+import { Database } from "../types/database";
 
 const adminClient = createClient<Database>(
   `https://pfkajngbllcbdzoylrvp.supabase.co`,

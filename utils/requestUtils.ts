@@ -30,10 +30,10 @@ export async function protectedApi({
     return authorizationReponse;
   }
 
-  return await activity();
+  return await activity(data);
 }
 
-export function validUser(data) {
+export async function validUser(data) {
   if (!data.session) {
     return NextResponse.json(
       {
@@ -42,7 +42,9 @@ export function validUser(data) {
       { status: INTERNAL_SERVER_ERROR }
     );
   }
-  if (!supabase.auth.getUser(data.session)) {
+
+  const user = await supabase.auth.getUser(data.session);
+  if (!user.error) {
     return NextResponse.json(
       {
         error: "Invalid user session",
