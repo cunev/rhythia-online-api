@@ -9,9 +9,6 @@ export function handleApi<
       {
         method: "POST",
         body: JSON.stringify(input),
-        headers: {
-          "Content-Type": "application/json",
-        },
       }
     );
     const output = await response.json();
