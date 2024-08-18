@@ -31,10 +31,28 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   const user = (await supabase.auth.getUser(data.session)).data.user!;
+  let userData: Database["public"]["Tables"]["profiles"]["Update"];
+
+  // Find user's entry
+  {
+    let { data: queryUserData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("uid", user.id);
+
+    if (!queryUserData?.length) {
+      return NextResponse.json(
+        {
+          error: "User cannot be retrieved from session",
+        },
+        { status: 404 }
+      );
+    }
+    userData = queryUserData[0];
+  }
 
   const upsertPayload: Database["public"]["Tables"]["profiles"]["Update"] = {
-    uid: user.id,
-    flag: "",
+    id: userData.id,
     ...data.data,
   };
 
