@@ -4,7 +4,7 @@ import { supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.object({
-    id: z.string(),
+    id: z.number(),
   }),
   output: z.object({
     error: z.string().optional(),
