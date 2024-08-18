@@ -83,6 +83,7 @@ export async function handler(
         { status: 404 }
       );
     }
+    profiles = queryData;
   }
 
   const user = profiles[0];
