@@ -21,6 +21,10 @@ export const Schema = {
         uid: z.string().nullable(),
         username: z.string().nullable(),
         verified: z.boolean().nullable(),
+        play_count: z.number().nullable(),
+        skill_points: z.number().nullable(),
+        squares_hit: z.number().nullable(),
+        total_score: z.number().nullable(),
       })
       .optional(),
   }),
