@@ -5,10 +5,12 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
-  input: z.object({
-    session: z.string(),
-    id: z.number().optional(),
-  }),
+  input: z
+    .object({
+      session: z.string(),
+      id: z.number().optional(),
+    })
+    .strict(),
   output: z.object({
     error: z.string().optional(),
     user: z
