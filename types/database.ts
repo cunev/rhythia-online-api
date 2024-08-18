@@ -17,6 +17,10 @@ export type Database = {
           created_at: number | null
           flag: string | null
           id: number
+          play_count: number | null
+          skill_points: number | null
+          squares_hit: number | null
+          total_score: number | null
           uid: string | null
           username: string | null
           verified: boolean | null
@@ -28,6 +32,10 @@ export type Database = {
           created_at?: number | null
           flag?: string | null
           id?: number
+          play_count?: number | null
+          skill_points?: number | null
+          squares_hit?: number | null
+          total_score?: number | null
           uid?: string | null
           username?: string | null
           verified?: boolean | null
@@ -39,6 +47,10 @@ export type Database = {
           created_at?: number | null
           flag?: string | null
           id?: number
+          play_count?: number | null
+          skill_points?: number | null
+          squares_hit?: number | null
+          total_score?: number | null
           uid?: string | null
           username?: string | null
           verified?: boolean | null
