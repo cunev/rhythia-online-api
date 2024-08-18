@@ -43,5 +43,6 @@ export async function handler(
     .upsert(upsertPayload)
     .select();
 
+  console.log(upsertResult);
   return NextResponse.json({});
 }
