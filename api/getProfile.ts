@@ -46,7 +46,7 @@ export async function handler(
   let profiles: Database["public"]["Tables"]["profiles"]["Row"][] = [];
 
   // Fetch by id
-  if (data.id) {
+  if (data.id !== undefined) {
     let { data: queryData, error } = await supabase
       .from("profiles")
       .select("*")
