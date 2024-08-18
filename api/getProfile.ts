@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import z from "zod";
 import { supabase } from "../utils/supabase";
 
@@ -25,25 +26,27 @@ export const Schema = {
 
 export async function POST(
   res: Response
-): Promise<(typeof Schema)["output"]["_type"]> {
+): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   const toParse = await res.json();
   const data = Schema.input.parse(toParse);
-
   let { data: profiles, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("column", data.id);
 
   if (!profiles?.length) {
-    return {
-      error: "User not found",
-    };
+    return NextResponse.json(
+      {
+        error: "User not found",
+      },
+      { status: 404 }
+    );
   }
 
   const user = profiles[0];
-  return {
+  return NextResponse.json({
     user: {
       ...user,
     },
-  };
+  });
 }
