@@ -1,4 +1,3 @@
-import status, { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from "http-status";
 import { NextResponse } from "next/server";
 import { supabase } from "./supabase";
 
@@ -19,10 +18,7 @@ export async function protectedApi({
     const toParse = await response.json();
     data = schema.input.parse(toParse);
   } catch (error) {
-    return NextResponse.json(
-      { error: error.toString() },
-      { status: status.BAD_REQUEST }
-    );
+    return NextResponse.json({ error: error.toString() }, { status: 400 });
   }
 
   const authorizationReponse = await authorization(data);
@@ -39,7 +35,7 @@ export async function validUser(data) {
       {
         error: "Session is missing",
       },
-      { status: INTERNAL_SERVER_ERROR }
+      { status: 501 }
     );
   }
 
@@ -49,7 +45,7 @@ export async function validUser(data) {
       {
         error: "Invalid user session",
       },
-      { status: UNAUTHORIZED }
+      { status: 400 }
     );
   }
 }

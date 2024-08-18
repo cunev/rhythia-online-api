@@ -1,4 +1,3 @@
-import { NOT_FOUND } from "http-status";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
@@ -51,7 +50,7 @@ export async function handler(
       {
         error: "User not found",
       },
-      { status: NOT_FOUND }
+      { status: 404 }
     );
   }
 
