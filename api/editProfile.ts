@@ -64,7 +64,7 @@ export async function handler(
   if (upsertResult.status == 409) {
     return NextResponse.json(
       {
-        error: "Can't update, username might be used by someone else",
+        error: "Can't update, username might be used by someone else!",
       },
       { status: 404 }
     );
