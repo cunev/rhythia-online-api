@@ -77,14 +77,21 @@ export async function handler(
     console.log(profiles, error);
 
     if (!queryData?.length) {
-      return NextResponse.json(
-        {
-          error: "User cannot be retrieved from session",
-        },
-        { status: 404 }
-      );
+      const data = await supabase
+        .from("profiles")
+        .upsert({
+          uid: user.id,
+          about_me: "",
+          avatar_url: user.app_metadata.avatar_url,
+          badges: ["Early Bird"],
+          username: user.app_metadata.full_name,
+          flag: "",
+          created_at: Date.now(),
+        })
+        .select();
+
+      profiles = data.data!;
     }
-    profiles = queryData;
   }
 
   const user = profiles[0];
