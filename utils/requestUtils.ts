@@ -44,7 +44,7 @@ export async function validUser(data) {
   }
 
   const user = await supabase.auth.getUser(data.session);
-  if (!user.error) {
+  if (!user.error || !user.data.user) {
     return NextResponse.json(
       {
         error: "Invalid user session",
