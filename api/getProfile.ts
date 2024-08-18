@@ -82,9 +82,9 @@ export async function handler(
         .upsert({
           uid: user.id,
           about_me: "",
-          avatar_url: user.app_metadata.avatar_url,
+          avatar_url: user.user_metadata.avatar_url,
           badges: ["Early Bird"],
-          username: user.app_metadata.full_name,
+          username: user.user_metadata.full_name,
           flag: "",
           created_at: Date.now(),
         })
