@@ -9,6 +9,27 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      beatmaps: {
+        Row: {
+          beatmapHash: string
+          beatmapTitle: string | null
+          created_at: string
+          playcount: number | null
+        }
+        Insert: {
+          beatmapHash: string
+          beatmapTitle?: string | null
+          created_at?: string
+          playcount?: number | null
+        }
+        Update: {
+          beatmapHash?: string
+          beatmapTitle?: string | null
+          created_at?: string
+          playcount?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           about_me: string | null
@@ -61,6 +82,57 @@ export type Database = {
             columns: ["uid"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scores: {
+        Row: {
+          beatmapHash: string | null
+          created_at: string
+          id: number
+          noteResults: Json | null
+          playedAt: number | null
+          replayHwid: string | null
+          songId: string | null
+          triggers: Json | null
+          userId: number | null
+        }
+        Insert: {
+          beatmapHash?: string | null
+          created_at?: string
+          id?: number
+          noteResults?: Json | null
+          playedAt?: number | null
+          replayHwid?: string | null
+          songId?: string | null
+          triggers?: Json | null
+          userId?: number | null
+        }
+        Update: {
+          beatmapHash?: string | null
+          created_at?: string
+          id?: number
+          noteResults?: Json | null
+          playedAt?: number | null
+          replayHwid?: string | null
+          songId?: string | null
+          triggers?: Json | null
+          userId?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scores_beatmapHash_fkey"
+            columns: ["beatmapHash"]
+            isOneToOne: false
+            referencedRelation: "beatmaps"
+            referencedColumns: ["beatmapHash"]
+          },
+          {
+            foreignKeyName: "scores_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

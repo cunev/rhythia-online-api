@@ -19,4 +19,9 @@ export const getProfile = handleApi({url:"/api/getProfile",...GetProfile})
 import { Schema as SearchUsers } from "./api/searchUsers"
 export { Schema as SchemaSearchUsers } from "./api/searchUsers"
 export const searchUsers = handleApi({url:"/api/searchUsers",...SearchUsers})
+
+// ./api/submitScore.ts API
+import { Schema as SubmitScore } from "./api/submitScore"
+export { Schema as SchemaSubmitScore } from "./api/submitScore"
+export const submitScore = handleApi({url:"/api/submitScore",...SubmitScore})
 export { handleApi } from "./handleApi"
