@@ -12,27 +12,30 @@ export type Database = {
       beatmaps: {
         Row: {
           beatmapHash: string
-          beatmapTitle: string | null
           created_at: string
           difficulty: number | null
+          length: number | null
           noteCount: number | null
           playcount: number | null
+          title: string | null
         }
         Insert: {
           beatmapHash: string
-          beatmapTitle?: string | null
           created_at?: string
           difficulty?: number | null
+          length?: number | null
           noteCount?: number | null
           playcount?: number | null
+          title?: string | null
         }
         Update: {
           beatmapHash?: string
-          beatmapTitle?: string | null
           created_at?: string
           difficulty?: number | null
+          length?: number | null
           noteCount?: number | null
           playcount?: number | null
+          title?: string | null
         }
         Relationships: []
       }
@@ -97,6 +100,7 @@ export type Database = {
           beatmapHash: string | null
           created_at: string
           id: number
+          misses: number | null
           noteResults: Json | null
           passed: boolean | null
           playedAt: number | null
@@ -109,6 +113,7 @@ export type Database = {
           beatmapHash?: string | null
           created_at?: string
           id?: number
+          misses?: number | null
           noteResults?: Json | null
           passed?: boolean | null
           playedAt?: number | null
@@ -121,6 +126,7 @@ export type Database = {
           beatmapHash?: string | null
           created_at?: string
           id?: number
+          misses?: number | null
           noteResults?: Json | null
           passed?: boolean | null
           playedAt?: number | null

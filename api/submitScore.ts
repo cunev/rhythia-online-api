@@ -15,7 +15,8 @@ export const Schema = {
       mapHash: z.string(),
       mapTitle: z.string(),
       mapDifficulty: z.number(),
-      noteCount: z.number(),
+      mapNoteCount: z.number(),
+      mapLength: z.number(),
     }),
   }),
   output: z.object({
@@ -68,10 +69,11 @@ export async function handler({
     .from("beatmaps")
     .upsert({
       beatmapHash: data.mapHash,
-      beatmapTitle: data.mapTitle,
+      title: data.mapTitle,
       playcount: newPlaycount,
       difficulty: data.mapDifficulty,
-      noteCount: data.noteCount,
+      noteCount: data.mapNoteCount,
+      length: data.mapLength,
     })
     .select();
 
@@ -84,7 +86,8 @@ export async function handler({
       songId: data.songId,
       triggers: data.triggers,
       userId: userData[0].id,
-      passed: data.noteCount == Object.keys(data.noteResults).length,
+      passed: data.mapNoteCount == Object.keys(data.noteResults).length,
+      misses: Object.values(data.noteResults).filter((e) => !e).length,
     })
     .select();
 
