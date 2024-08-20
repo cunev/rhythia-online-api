@@ -91,5 +91,16 @@ export async function handler({
     })
     .select();
 
+  const insertUserData = await supabase
+    .from("profiles")
+    .upsert({
+      id: userData[0].id,
+      play_count: (userData[0].play_count || 0) + 1,
+      squares_hit:
+        (userData[0].squares_hit || 0) +
+        Object.values(data.noteResults).filter((e) => e).length,
+    })
+    .select();
+
   return NextResponse.json({});
 }
