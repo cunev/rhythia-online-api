@@ -14,6 +14,8 @@ export const Schema = {
       triggers: z.array(z.array(z.number())),
       mapHash: z.string(),
       mapTitle: z.string(),
+      mapDifficulty: z.number(),
+      noteCount: z.number(),
     }),
   }),
   output: z.object({
@@ -68,6 +70,8 @@ export async function handler({
       beatmapHash: data.mapHash,
       beatmapTitle: data.mapTitle,
       playcount: newPlaycount,
+      difficulty: data.mapDifficulty,
+      noteCount: data.noteCount,
     })
     .select();
 
@@ -80,6 +84,7 @@ export async function handler({
       songId: data.songId,
       triggers: data.triggers,
       userId: userData[0].id,
+      passed: data.noteCount == Object.keys(data.noteResults).length,
     })
     .select();
 
