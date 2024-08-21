@@ -42,11 +42,11 @@ export async function handler(
   return NextResponse.json(result);
 }
 
-const SHOW_PER_PAGE = 2;
+const VIEW_PER_PAGE = 2;
 
 export async function getLeaderboard(page = 1) {
-  const startPage = (page - 1) * SHOW_PER_PAGE;
-  const endPage = startPage + SHOW_PER_PAGE - 1;
+  const startPage = (page - 1) * VIEW_PER_PAGE;
+  const endPage = startPage + VIEW_PER_PAGE - 1;
   console.log(startPage, endPage);
   const countQuery = await supabase
     .from("profiles")
@@ -60,6 +60,7 @@ export async function getLeaderboard(page = 1) {
 
   return {
     total: countQuery.count || 0,
+    viewPerPage: VIEW_PER_PAGE,
     leaderboard: queryData?.map((user) => ({
       flag: user.flag,
       id: user.id,
