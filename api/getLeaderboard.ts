@@ -44,7 +44,7 @@ export async function handler(
   return NextResponse.json(result);
 }
 
-const VIEW_PER_PAGE = 2;
+const VIEW_PER_PAGE = 100;
 
 export async function getLeaderboard(page = 1) {
   const startPage = (page - 1) * VIEW_PER_PAGE;
