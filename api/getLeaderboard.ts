@@ -10,8 +10,9 @@ export const Schema = {
   }),
   output: z.object({
     error: z.string().optional(),
-    total: z.number().optional(),
+    total: z.number(),
     viewPerPage: z.number(),
+    currentPage: z.number(),
     leaderboard: z
       .array(
         z.object({
@@ -62,6 +63,7 @@ export async function getLeaderboard(page = 1) {
   return {
     total: countQuery.count || 0,
     viewPerPage: VIEW_PER_PAGE,
+    currentPage: page,
     leaderboard: queryData?.map((user) => ({
       flag: user.flag,
       id: user.id,
