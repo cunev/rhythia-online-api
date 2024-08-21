@@ -1,32 +1,36 @@
 import { NextResponse } from "next/server";
 import { supabase } from "./supabase";
+import { ZodObject } from "zod";
+
+interface Props<
+  K = (...args: any[]) => Promise<NextResponse<any>>,
+  T = ZodObject<any>
+> {
+  request: Request;
+  schema: { input: T; output: T };
+  authorization?: Function;
+  activity: K;
+}
 
 export async function protectedApi({
-  response,
+  request,
   schema,
   authorization,
   activity,
-}: {
-  response: Response;
-  schema: { input: Zod.ZodObject<any>; output: Zod.ZodObject<any> };
-  authorization: Function;
-  activity: Function;
-}) {
-  let data;
-
+}: Props) {
   try {
-    const toParse = await response.json();
-    data = schema.input.parse(toParse);
+    const toParse = await request.json();
+    const data = schema.input.parse(toParse);
+    if (authorization) {
+      const authorizationResponse = await authorization(data);
+      if (authorizationResponse) {
+        return authorizationResponse;
+      }
+    }
+    return await activity(data, request);
   } catch (error) {
     return NextResponse.json({ error: error.toString() }, { status: 400 });
   }
-
-  const authorizationReponse = await authorization(data);
-  if (authorizationReponse) {
-    return authorizationReponse;
-  }
-
-  return await activity(data, response);
 }
 
 export async function validUser(data) {

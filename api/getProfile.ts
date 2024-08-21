@@ -33,9 +33,9 @@ export const Schema = {
   }),
 };
 
-export async function POST(res: Response): Promise<NextResponse> {
+export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
-    response: res,
+    request,
     schema: Schema,
     authorization: validUser,
     activity: handler,

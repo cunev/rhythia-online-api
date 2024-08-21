@@ -20,18 +20,16 @@ export const Schema = {
   }),
 };
 
-export async function POST(res: Response): Promise<NextResponse> {
+export async function POST(request: Request) {
   return protectedApi({
-    response: res,
+    request,
     schema: Schema,
     authorization: () => {},
     activity: handler,
   });
 }
 
-export async function handler(
-  data: (typeof Schema)["input"]["_type"]
-): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: searchData, error } = await supabase
     .from("profiles")
     .select()
