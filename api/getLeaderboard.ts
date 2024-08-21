@@ -11,6 +11,7 @@ export const Schema = {
   output: z.object({
     error: z.string().optional(),
     total: z.number().optional(),
+    viewPerPage: z.number(),
     leaderboard: z
       .array(
         z.object({
