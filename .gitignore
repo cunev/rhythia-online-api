@@ -2,3 +2,5 @@
 /yarn.lock
 /dist
 /output
+.env
+test.ts

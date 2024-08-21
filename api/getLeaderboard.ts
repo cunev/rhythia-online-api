@@ -38,8 +38,15 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const startPage = (data.page - 1) * 100;
-  const endPage = startPage + 100;
+  const result = await getLeaderboard(data.page);
+  return NextResponse.json(result);
+}
+
+const SHOW_PER_PAGE = 2;
+
+export async function getLeaderboard(page = 1) {
+  const startPage = (page - 1) * SHOW_PER_PAGE;
+  const endPage = startPage + SHOW_PER_PAGE;
 
   const countQuery = await supabase
     .from("profiles")
@@ -51,7 +58,7 @@ export async function handler(
     .order("skill_points", { ascending: false })
     .range(startPage, endPage);
 
-  return NextResponse.json({
+  return {
     total: countQuery.count || 0,
     leaderboard: queryData?.map((user) => ({
       flag: user.flag,
@@ -61,5 +68,5 @@ export async function handler(
       total_score: user.total_score,
       username: user.username,
     })),
-  });
+  };
 }
