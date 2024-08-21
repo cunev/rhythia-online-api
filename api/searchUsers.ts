@@ -32,13 +32,10 @@ export async function POST(request: Request) {
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: searchData, error } = await supabase
     .from("profiles")
-    .select()
+    .select("id,username")
     .ilike("username", `%${data.text}%`)
     .limit(10);
   return NextResponse.json({
-    results: (searchData || []).map((data) => ({
-      id: data.id,
-      username: data.username,
-    })),
+    results: searchData || [],
   });
 }

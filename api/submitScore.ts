@@ -44,9 +44,10 @@ export async function handler({
   let { data: userData, error: userError } = await supabase
     .from("profiles")
     .select("*")
-    .eq("uid", user.id);
+    .eq("uid", user.id)
+    .single();
 
-  if (!userData?.length)
+  if (!userData)
     return NextResponse.json(
       {
         error: "User doesn't exist",
@@ -56,51 +57,45 @@ export async function handler({
 
   let { data: beatmaps, error } = await supabase
     .from("beatmaps")
-    .select("*")
-    .eq("beatmapHash", data.mapHash);
+    .select("playcount")
+    .eq("beatmapHash", data.mapHash)
+    .single();
 
   let newPlaycount = 1;
 
-  if (beatmaps?.length) {
-    newPlaycount = (beatmaps[0].playcount || 1) + 1;
+  if (beatmaps) {
+    newPlaycount = (beatmaps.playcount || 1) + 1;
   }
 
-  const upsertData = await supabase
-    .from("beatmaps")
-    .upsert({
-      beatmapHash: data.mapHash,
-      title: data.mapTitle,
-      playcount: newPlaycount,
-      difficulty: data.mapDifficulty,
-      noteCount: data.mapNoteCount,
-      length: data.mapLength,
-    })
-    .select();
+  const p1 = supabase.from("beatmaps").upsert({
+    beatmapHash: data.mapHash,
+    title: data.mapTitle,
+    playcount: newPlaycount,
+    difficulty: data.mapDifficulty,
+    noteCount: data.mapNoteCount,
+    length: data.mapLength,
+  });
 
-  const insertData = await supabase
-    .from("scores")
-    .upsert({
-      beatmapHash: data.mapHash,
-      noteResults: data.noteResults,
-      replayHwid: data.relayHwid,
-      songId: data.songId,
-      triggers: data.triggers,
-      userId: userData[0].id,
-      passed: data.mapNoteCount == Object.keys(data.noteResults).length,
-      misses: Object.values(data.noteResults).filter((e) => !e).length,
-    })
-    .select();
+  const p2 = supabase.from("scores").upsert({
+    beatmapHash: data.mapHash,
+    noteResults: data.noteResults,
+    replayHwid: data.relayHwid,
+    songId: data.songId,
+    triggers: data.triggers,
+    userId: userData[0].id,
+    passed: data.mapNoteCount == Object.keys(data.noteResults).length,
+    misses: Object.values(data.noteResults).filter((e) => !e).length,
+  });
 
-  const insertUserData = await supabase
-    .from("profiles")
-    .upsert({
-      id: userData[0].id,
-      play_count: (userData[0].play_count || 0) + 1,
-      squares_hit:
-        (userData[0].squares_hit || 0) +
-        Object.values(data.noteResults).filter((e) => e).length,
-    })
-    .select();
+  const p3 = supabase.from("profiles").upsert({
+    id: userData[0].id,
+    play_count: (userData[0].play_count || 0) + 1,
+    squares_hit:
+      (userData[0].squares_hit || 0) +
+      Object.values(data.noteResults).filter((e) => e).length,
+  });
+
+  await Promise.all([p1, p2, p3]);
 
   return NextResponse.json({});
 }

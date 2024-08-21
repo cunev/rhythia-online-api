@@ -6,7 +6,7 @@ import { supabase } from "../utils/supabase";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
-    page: z.number().optional(),
+    page: z.number().default(1),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -26,9 +26,9 @@ export const Schema = {
   }),
 };
 
-export async function POST(res: Response): Promise<NextResponse> {
+export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
-    response: res,
+    request,
     schema: Schema,
     authorization: validUser,
     activity: handler,
@@ -38,11 +38,8 @@ export async function POST(res: Response): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const range = [0, 100];
-  if (data.page) {
-    range[0] = 100 * data.page;
-    range[1] = range[0] + 100;
-  }
+  const startPage = (data.page - 1) * 100;
+  const endPage = startPage + 100;
 
   const countQuery = await supabase
     .from("profiles")
@@ -52,7 +49,7 @@ export async function handler(
     .from("profiles")
     .select("*")
     .order("skill_points", { ascending: false })
-    .range(range[0], range[1]);
+    .range(startPage, endPage);
 
   return NextResponse.json({
     total: countQuery.count || 0,
