@@ -85,17 +85,17 @@ export async function handler({
     replayHwid: data.relayHwid,
     songId: data.songId,
     triggers: data.triggers,
-    userId: userData[0].id,
+    userId: userData.id,
     passed: data.mapNoteCount == Object.keys(data.noteResults).length,
     misses: Object.values(data.noteResults).filter((e) => !e).length,
   });
   console.log("p2");
 
   const p3 = await supabase.from("profiles").upsert({
-    id: userData[0].id,
-    play_count: (userData[0].play_count || 0) + 1,
+    id: userData.id,
+    play_count: (userData.play_count || 0) + 1,
     squares_hit:
-      (userData[0].squares_hit || 0) +
+      (userData.squares_hit || 0) +
       Object.values(data.noteResults).filter((e) => e).length,
   });
   console.log("p3");
