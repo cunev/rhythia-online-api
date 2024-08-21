@@ -4,9 +4,7 @@ import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
-  input: z.strictObject({
-    text: z.string(),
-  }),
+  input: z.strictObject({}),
   output: z.object({
     players: z.number(),
     beatmaps: z.number(),
