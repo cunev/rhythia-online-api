@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import z from "zod";
-import { protectedApi } from "../utils/requestUtils";
+import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
@@ -28,7 +28,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
     request,
     schema: Schema,
-    authorization: () => {},
+    authorization: validUser,
     activity: handler,
   });
 }
