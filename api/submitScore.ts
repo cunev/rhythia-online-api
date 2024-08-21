@@ -55,6 +55,7 @@ export async function handler({
       { status: 500 }
     );
 
+  console.log(userData);
   let { data: beatmaps, error } = await supabase
     .from("beatmaps")
     .select("playcount")
@@ -67,6 +68,7 @@ export async function handler({
     newPlaycount = (beatmaps.playcount || 1) + 1;
   }
 
+  console.log(newPlaycount);
   const p1 = await supabase.from("beatmaps").upsert({
     beatmapHash: data.mapHash,
     title: data.mapTitle,
@@ -76,6 +78,7 @@ export async function handler({
     length: data.mapLength,
   });
 
+  console.log("p1");
   const p2 = await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
     noteResults: data.noteResults,
@@ -86,6 +89,7 @@ export async function handler({
     passed: data.mapNoteCount == Object.keys(data.noteResults).length,
     misses: Object.values(data.noteResults).filter((e) => !e).length,
   });
+  console.log("p2");
 
   const p3 = await supabase.from("profiles").upsert({
     id: userData[0].id,
@@ -94,6 +98,7 @@ export async function handler({
       (userData[0].squares_hit || 0) +
       Object.values(data.noteResults).filter((e) => e).length,
   });
+  console.log("p3");
 
   // await Promise.all([p1, p2, p3]);
 
