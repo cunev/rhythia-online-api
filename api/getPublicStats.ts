@@ -6,7 +6,7 @@ import { supabase } from "../utils/supabase";
 export const Schema = {
   input: z.strictObject({}),
   output: z.object({
-    players: z.number(),
+    profiles: z.number(),
     beatmaps: z.number(),
     scores: z.number(),
   }),
