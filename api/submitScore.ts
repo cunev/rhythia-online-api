@@ -67,7 +67,7 @@ export async function handler({
     newPlaycount = (beatmaps.playcount || 1) + 1;
   }
 
-  const p1 = supabase.from("beatmaps").upsert({
+  const p1 = await supabase.from("beatmaps").upsert({
     beatmapHash: data.mapHash,
     title: data.mapTitle,
     playcount: newPlaycount,
@@ -76,7 +76,7 @@ export async function handler({
     length: data.mapLength,
   });
 
-  const p2 = supabase.from("scores").upsert({
+  const p2 = await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
     noteResults: data.noteResults,
     replayHwid: data.relayHwid,
@@ -87,7 +87,7 @@ export async function handler({
     misses: Object.values(data.noteResults).filter((e) => !e).length,
   });
 
-  const p3 = supabase.from("profiles").upsert({
+  const p3 = await supabase.from("profiles").upsert({
     id: userData[0].id,
     play_count: (userData[0].play_count || 0) + 1,
     squares_hit:
@@ -95,7 +95,7 @@ export async function handler({
       Object.values(data.noteResults).filter((e) => e).length,
   });
 
-  await Promise.all([p1, p2, p3]);
+  // await Promise.all([p1, p2, p3]);
 
   return NextResponse.json({});
 }
