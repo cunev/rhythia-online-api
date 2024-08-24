@@ -77,6 +77,7 @@ export async function handler(
     `
     )
     .eq("userId", data.id)
+    .eq("passed", true)
     .order("created_at", { ascending: false })
     .limit(10);
 
@@ -94,6 +95,7 @@ export async function handler(
     )
     .eq("userId", data.id)
     .neq("awarded_sp", 0)
+    .eq("passed", true)
     .order("awarded_sp", { ascending: false })
     .limit(10);
 
