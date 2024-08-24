@@ -24,6 +24,8 @@ export const Schema = {
           rank: z.string().nullable(),
           songId: z.string().nullable(),
           userId: z.number().nullable(),
+          beatmapDifficulty: z.number().optional().nullable(),
+          beatmapNotes: z.number().optional().nullable(),
         })
       )
       .optional(),
@@ -46,14 +48,30 @@ export async function handler(
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   let { data: scores1, error: errorlast } = await supabase
     .from("scores")
-    .select("*")
+    .select(
+      `
+      *,
+      beatmaps (
+        difficulty,
+        noteCount
+      )
+    `
+    )
     .eq("userId", data.id)
     .order("created_at", { ascending: false })
     .limit(10);
 
   let { data: scores2, error: errorsp } = await supabase
     .from("scores")
-    .select("*")
+    .select(
+      `
+      *,
+      beatmaps (
+        difficulty,
+        noteCount
+      )
+    `
+    )
     .eq("userId", data.id)
     .neq("awarded_sp", 0)
     .order("awarded_sp", { ascending: false })
@@ -70,6 +88,8 @@ export async function handler(
       misses: s.misses,
       rank: s.rank,
       songId: s.songId,
+      beatmapDifficulty: s.beatmaps?.difficulty,
+      beatmapNotes: s.beatmaps?.noteCount,
     })),
     top: scores2?.map((s) => ({
       created_at: s.created_at,
@@ -81,6 +101,8 @@ export async function handler(
       misses: s.misses,
       rank: s.rank,
       songId: s.songId,
+      beatmapDifficulty: s.beatmaps?.difficulty,
+      beatmapNotes: s.beatmaps?.noteCount,
     })),
   });
 }
