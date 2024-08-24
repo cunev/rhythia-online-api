@@ -7,6 +7,7 @@ import { supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.strictObject({
+    session: z.string(),
     id: z.number(),
   }),
   output: z.object({
