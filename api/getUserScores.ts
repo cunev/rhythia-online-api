@@ -55,6 +55,7 @@ export async function handler(
     .from("scores")
     .select("*")
     .eq("userId", data.id)
+    .neq("awarded_sp", 0)
     .order("awarded_sp", { ascending: false })
     .limit(10);
 
