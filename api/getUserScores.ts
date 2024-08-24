@@ -26,10 +26,28 @@ export const Schema = {
           userId: z.number().nullable(),
           beatmapDifficulty: z.number().optional().nullable(),
           beatmapNotes: z.number().optional().nullable(),
+          beatmapTitle: z.string().optional().nullable(),
         })
       )
       .optional(),
-    top: z.array(z.object({})).optional(),
+    top: z
+      .array(
+        z.object({
+          awarded_sp: z.number().nullable(),
+          beatmapHash: z.string().nullable(),
+          created_at: z.string(),
+          id: z.number(),
+          misses: z.number().nullable(),
+          passed: z.boolean().nullable(),
+          rank: z.string().nullable(),
+          songId: z.string().nullable(),
+          userId: z.number().nullable(),
+          beatmapDifficulty: z.number().optional().nullable(),
+          beatmapNotes: z.number().optional().nullable(),
+          beatmapTitle: z.string().optional().nullable(),
+        })
+      )
+      .optional(),
   }),
 };
 
@@ -53,7 +71,8 @@ export async function handler(
       *,
       beatmaps (
         difficulty,
-        noteCount
+        noteCount,
+        title
       )
     `
     )
@@ -68,7 +87,8 @@ export async function handler(
       *,
       beatmaps (
         difficulty,
-        noteCount
+        noteCount,
+        title
       )
     `
     )
@@ -90,6 +110,7 @@ export async function handler(
       songId: s.songId,
       beatmapDifficulty: s.beatmaps?.difficulty,
       beatmapNotes: s.beatmaps?.noteCount,
+      beatmapTitle: s.beatmaps?.title,
     })),
     top: scores2?.map((s) => ({
       created_at: s.created_at,
@@ -103,6 +124,7 @@ export async function handler(
       songId: s.songId,
       beatmapDifficulty: s.beatmaps?.difficulty,
       beatmapNotes: s.beatmaps?.noteCount,
+      beatmapTitle: s.beatmaps?.title,
     })),
   });
 }
