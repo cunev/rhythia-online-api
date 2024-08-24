@@ -97,39 +97,42 @@ export type Database = {
       }
       scores: {
         Row: {
+          awarded_sp: number | null
           beatmapHash: string | null
           created_at: string
           id: number
           misses: number | null
           noteResults: Json | null
           passed: boolean | null
-          playedAt: number | null
+          rank: string | null
           replayHwid: string | null
           songId: string | null
           triggers: Json | null
           userId: number | null
         }
         Insert: {
+          awarded_sp?: number | null
           beatmapHash?: string | null
           created_at?: string
           id?: number
           misses?: number | null
           noteResults?: Json | null
           passed?: boolean | null
-          playedAt?: number | null
+          rank?: string | null
           replayHwid?: string | null
           songId?: string | null
           triggers?: Json | null
           userId?: number | null
         }
         Update: {
+          awarded_sp?: number | null
           beatmapHash?: string | null
           created_at?: string
           id?: number
           misses?: number | null
           noteResults?: Json | null
           passed?: boolean | null
-          playedAt?: number | null
+          rank?: string | null
           replayHwid?: string | null
           songId?: string | null
           triggers?: Json | null

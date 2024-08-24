@@ -88,6 +88,8 @@ export async function handler({
     userId: userData.id,
     passed: data.mapNoteCount == Object.keys(data.noteResults).length,
     misses: Object.values(data.noteResults).filter((e) => !e).length,
+    awarded_sp: 0,
+    rank: "A",
   });
   console.log("p2");
 
