@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import z from "zod";
-import { protectedApi } from "../utils/requestUtils";
+import { getUser, protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
@@ -13,6 +13,7 @@ export const Schema = {
     total: z.number(),
     viewPerPage: z.number(),
     currentPage: z.number(),
+    userPosition: z.number(),
     leaderboard: z
       .array(
         z.object({
@@ -40,13 +41,34 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const result = await getLeaderboard(data.page);
+  const result = await getLeaderboard(data.page, data.session);
   return NextResponse.json(result);
 }
 
 const VIEW_PER_PAGE = 100;
 
-export async function getLeaderboard(page = 1) {
+export async function getLeaderboard(page = 1, session) {
+  const getUserData = await getUser(session);
+
+  let leaderPosition = 0;
+
+  if (getUserData) {
+    let { data: queryData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("uid", getUserData.data.user.id)
+      .single();
+
+    if (queryData) {
+      const { count: playersWithMorePoints, error: rankError } = await supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true })
+        .gt("skill_points", queryData.skill_points);
+
+      leaderPosition = (playersWithMorePoints || 0) + 1;
+    }
+  }
+
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
   console.log(startPage, endPage);
@@ -64,6 +86,7 @@ export async function getLeaderboard(page = 1) {
     total: countQuery.count || 0,
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
+    userPosition: leaderPosition,
     leaderboard: queryData?.map((user) => ({
       flag: user.flag,
       id: user.id,

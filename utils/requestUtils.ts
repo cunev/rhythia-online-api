@@ -53,3 +53,15 @@ export async function validUser(data) {
     );
   }
 }
+
+export async function getUser(data) {
+  if (!data.session) {
+    return;
+  }
+
+  const user = await supabase.auth.getUser(data.session);
+  if (user.error || !user.data.user) {
+    return;
+  }
+  return user;
+}
