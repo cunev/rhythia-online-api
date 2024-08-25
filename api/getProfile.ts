@@ -37,7 +37,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
     request,
     schema: Schema,
-    authorization: validUser,
+    authorization: () => {},
     activity: handler,
   });
 }
@@ -69,32 +69,34 @@ export async function handler(
     profiles = queryData;
   } else {
     // Fetch by session id
-    const user = (await supabase.auth.getUser(data.session)).data.user!;
+    const user = (await supabase.auth.getUser(data.session)).data.user;
 
-    let { data: queryData, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("uid", user.id);
-
-    console.log(profiles, error);
-    if (!queryData?.length) {
-      const geo = geolocation(req);
-      const data = await supabase
+    if (user) {
+      let { data: queryData, error } = await supabase
         .from("profiles")
-        .upsert({
-          uid: user.id,
-          about_me: "",
-          avatar_url: user.user_metadata.avatar_url,
-          badges: ["Early Bird"],
-          username: user.user_metadata.full_name,
-          flag: (geo.country || "US").toUpperCase(),
-          created_at: Date.now(),
-        })
-        .select();
+        .select("*")
+        .eq("uid", user.id);
 
-      profiles = data.data!;
-    } else {
-      profiles = queryData;
+      console.log(profiles, error);
+      if (!queryData?.length) {
+        const geo = geolocation(req);
+        const data = await supabase
+          .from("profiles")
+          .upsert({
+            uid: user.id,
+            about_me: "",
+            avatar_url: user.user_metadata.avatar_url,
+            badges: ["Early Bird"],
+            username: user.user_metadata.full_name,
+            flag: (geo.country || "US").toUpperCase(),
+            created_at: Date.now(),
+          })
+          .select();
+
+        profiles = data.data!;
+      } else {
+        profiles = queryData;
+      }
     }
   }
 
