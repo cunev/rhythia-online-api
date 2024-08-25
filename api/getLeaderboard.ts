@@ -47,8 +47,8 @@ export async function handler(
 
 const VIEW_PER_PAGE = 100;
 
-export async function getLeaderboard(page = 1, session) {
-  const getUserData = await getUser(session);
+export async function getLeaderboard(page = 1, session: string) {
+  const getUserData = await getUser({ session });
 
   let leaderPosition = 0;
 
