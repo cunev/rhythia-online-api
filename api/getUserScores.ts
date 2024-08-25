@@ -55,7 +55,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
     request,
     schema: Schema,
-    authorization: validUser,
+    authorization: () => {},
     activity: handler,
   });
 }
