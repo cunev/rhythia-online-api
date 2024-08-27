@@ -24,6 +24,7 @@ export const Schema = {
         beatmapDifficulty: z.number().optional().nullable(),
         beatmapNotes: z.number().optional().nullable(),
         beatmapTitle: z.string().optional().nullable(),
+        username: z.string().optional().nullable(),
       })
       .optional(),
   }),
@@ -51,6 +52,9 @@ export async function handler(
         difficulty,
         noteCount,
         title
+      ),
+      profiles (
+        username
       )
     `
     )
@@ -73,6 +77,7 @@ export async function handler(
       beatmapDifficulty: score.beatmaps?.difficulty,
       beatmapNotes: score.beatmaps?.noteCount,
       beatmapTitle: score.beatmaps?.title,
+      username: score.profiles?.username,
     },
   });
 }
