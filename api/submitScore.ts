@@ -95,35 +95,32 @@ export async function handler({
   console.log("p2");
 
   let totalSp = 0;
-  let { data: scores2, error: errorsp } = await (supabase.rpc as any)(`
-      WITH RankedScores AS (
-      SELECT
-        *,
-        ROW_NUMBER() OVER (PARTITION BY "beatmapHash" ORDER BY "awarded_sp" DESC) AS rank
-      FROM
-        "scores"
-      WHERE
-        "userId" = ${userData.id}
-        AND "awarded_sp" != 0
-        AND "passed" = true
-    )
-    SELECT
-      *
-    FROM
-      RankedScores
-    WHERE
-      rank = 1
-    ORDER BY
-      "awarded_sp" DESC
-    LIMIT 100;
-  `);
+  let { data: scores2, error: errorsp } = await supabase
+    .from("scores")
+    .select(`awarded_sp,beatmapHash`)
+    .eq("userId", userData.id)
+    .neq("awarded_sp", 0)
+    .eq("passed", true)
+    .order("awarded_sp", { ascending: false })
+    .limit(100);
 
   if (scores2 == null) return NextResponse.json({ error: "No scores" });
 
-  let weight = 100;
+  let hashMap: Record<string, number> = {};
+
   for (const score of scores2) {
+    const { beatmapHash, awarded_sp } = score;
+
+    if (!beatmapHash || !awarded_sp) continue;
+
+    if (!hashMap[beatmapHash] || hashMap[beatmapHash] < awarded_sp) {
+      hashMap[beatmapHash] = awarded_sp;
+    }
+  }
+  let weight = 100;
+  for (const score of Object.values(hashMap)) {
     weight -= 1;
-    totalSp += ((score.awarded_sp || 0) * weight) / 100;
+    totalSp += ((score || 0) * weight) / 100;
   }
 
   const p3 = await supabase.from("profiles").upsert({
