@@ -101,8 +101,7 @@ export async function handler({
     .eq("userId", userData.id)
     .neq("awarded_sp", 0)
     .eq("passed", true)
-    .order("awarded_sp", { ascending: false })
-    .limit(100);
+    .order("awarded_sp", { ascending: false });
 
   if (scores2 == null) return NextResponse.json({ error: "No scores" });
 
@@ -121,6 +120,9 @@ export async function handler({
   for (const score of Object.values(hashMap)) {
     weight -= 1;
     totalSp += ((score || 0) * weight) / 100;
+    if (weight == 0) {
+      break;
+    }
   }
 
   const p3 = await supabase.from("profiles").upsert({
