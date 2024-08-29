@@ -95,14 +95,28 @@ export async function handler({
   console.log("p2");
 
   let totalSp = 0;
-  let { data: scores2, error: errorsp } = await supabase
-    .from("scores")
-    .select(`*`)
-    .eq("userId", userData.id)
-    .neq("awarded_sp", 0)
-    .eq("passed", true)
-    .order("awarded_sp", { ascending: false })
-    .limit(100);
+  let { data: scores2, error: errorsp } = await (supabase.rpc as any)(`
+      WITH RankedScores AS (
+      SELECT
+        *,
+        ROW_NUMBER() OVER (PARTITION BY "beatmapHash" ORDER BY "awarded_sp" DESC) AS rank
+      FROM
+        "scores"
+      WHERE
+        "userId" = ${userData.id}
+        AND "awarded_sp" != 0
+        AND "passed" = true
+    )
+    SELECT
+      *
+    FROM
+      RankedScores
+    WHERE
+      rank = 1
+    ORDER BY
+      "awarded_sp" DESC
+    LIMIT 100;
+  `);
 
   if (scores2 == null) return NextResponse.json({ error: "No scores" });
 

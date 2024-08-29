@@ -17,6 +17,7 @@ export type Database = {
           length: number | null
           noteCount: number | null
           playcount: number | null
+          ranked: boolean | null
           title: string | null
         }
         Insert: {
@@ -26,6 +27,7 @@ export type Database = {
           length?: number | null
           noteCount?: number | null
           playcount?: number | null
+          ranked?: boolean | null
           title?: string | null
         }
         Update: {
@@ -35,6 +37,7 @@ export type Database = {
           length?: number | null
           noteCount?: number | null
           playcount?: number | null
+          ranked?: boolean | null
           title?: string | null
         }
         Relationships: []
