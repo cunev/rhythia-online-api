@@ -132,7 +132,7 @@ export async function handler({
   const p3 = await supabase.from("profiles").upsert({
     id: userData.id,
     play_count: (userData.play_count || 0) + 1,
-    skill_points: totalSp,
+    skill_points: Math.round(totalSp * 100) / 100,
     squares_hit:
       (userData.squares_hit || 0) +
       Object.values(data.noteResults).filter((e) => e).length,
