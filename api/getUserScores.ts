@@ -94,8 +94,27 @@ export async function handler(
     .eq("userId", data.id)
     .neq("awarded_sp", 0)
     .eq("passed", true)
-    .order("awarded_sp", { ascending: false })
-    .limit(10);
+    .order("awarded_sp", { ascending: false });
+
+  if (scores2 == null) return NextResponse.json({ error: "No scores" });
+
+  let hashMap: Record<string, { awarded_sp: number; score: any }> = {};
+
+  for (const score of scores2) {
+    const { beatmapHash, awarded_sp } = score;
+
+    if (!beatmapHash || !awarded_sp) continue;
+
+    if (!hashMap[beatmapHash] || hashMap[beatmapHash].awarded_sp < awarded_sp) {
+      hashMap[beatmapHash] = { awarded_sp, score };
+    }
+  }
+
+  const values = Object.values(hashMap);
+  let vals = values
+    .sort((a, b) => b.awarded_sp - a.awarded_sp)
+    .slice(0, 10)
+    .map((e) => e.score);
 
   return NextResponse.json({
     lastDay: scores1?.map((s) => ({
@@ -112,7 +131,7 @@ export async function handler(
       beatmapNotes: s.beatmaps?.noteCount,
       beatmapTitle: s.beatmaps?.title,
     })),
-    top: scores2?.map((s) => ({
+    top: vals?.map((s) => ({
       created_at: s.created_at,
       id: s.id,
       passed: s.passed,
