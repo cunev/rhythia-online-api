@@ -117,7 +117,10 @@ export async function handler({
     }
   }
   let weight = 100;
-  for (const score of Object.values(hashMap)) {
+  const values = Object.values(hashMap);
+  values.sort((a, b) => b - a);
+
+  for (const score of values) {
     totalSp += ((score || 0) * weight) / 100;
     weight -= 1;
 
