@@ -89,14 +89,33 @@ export async function handler({
     userId: userData.id,
     passed: data.mapNoteCount == Object.keys(data.noteResults).length,
     misses: Object.values(data.noteResults).filter((e) => !e).length,
-    awarded_sp: data.sspp,
+    awarded_sp: Math.round(data.sspp * 100) / 100,
     rank: "A",
   });
   console.log("p2");
 
+  let totalSp = 0;
+  let { data: scores2, error: errorsp } = await supabase
+    .from("scores")
+    .select(`*`)
+    .eq("userId", userData.id)
+    .neq("awarded_sp", 0)
+    .eq("passed", true)
+    .order("awarded_sp", { ascending: false })
+    .limit(100);
+
+  if (scores2 == null) return NextResponse.json({ error: "No scores" });
+
+  let weight = 100;
+  for (const score of scores2) {
+    weight -= 1;
+    totalSp += ((score.awarded_sp || 0) * weight) / 100;
+  }
+
   const p3 = await supabase.from("profiles").upsert({
     id: userData.id,
     play_count: (userData.play_count || 0) + 1,
+    skill_points: totalSp,
     squares_hit:
       (userData.squares_hit || 0) +
       Object.values(data.noteResults).filter((e) => e).length,
