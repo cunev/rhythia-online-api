@@ -17,6 +17,7 @@ export const Schema = {
       mapDifficulty: z.number(),
       mapNoteCount: z.number(),
       mapLength: z.number(),
+      sspp: z.number(),
     }),
   }),
   output: z.object({
@@ -88,7 +89,7 @@ export async function handler({
     userId: userData.id,
     passed: data.mapNoteCount == Object.keys(data.noteResults).length,
     misses: Object.values(data.noteResults).filter((e) => !e).length,
-    awarded_sp: 0,
+    awarded_sp: data.sspp,
     rank: "A",
   });
   console.log("p2");
