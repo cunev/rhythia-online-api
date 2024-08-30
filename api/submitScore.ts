@@ -82,7 +82,7 @@ export async function handler({
   console.log("p1");
   const p2 = await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
-    noteResults: data.noteResults,
+    noteResults: [],
     replayHwid: data.relayHwid,
     songId: data.songId,
     triggers: data.triggers,
