@@ -1,9 +1,9 @@
+import { object as badObjects } from "badwords-list";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
-
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
@@ -30,6 +30,24 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  if (badObjects[data.data.username || ""]) {
+    return NextResponse.json(
+      {
+        error: "Can't update, please change username",
+      },
+      { status: 404 }
+    );
+  }
+
+  if (data.data.username !== undefined && data.data.username.length === 0) {
+    return NextResponse.json(
+      {
+        error: "Username can't be empty",
+      },
+      { status: 404 }
+    );
+  }
+
   const user = (await supabase.auth.getUser(data.session)).data.user!;
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
 
