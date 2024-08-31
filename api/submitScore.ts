@@ -10,13 +10,14 @@ export const Schema = {
       token: z.string(),
       relayHwid: z.string(),
       songId: z.string(),
-      noteResults: z.record(z.boolean()),
-      triggers: z.array(z.array(z.number())),
+      misses: z.number(),
+      squareHits: z.number(),
       mapHash: z.string(),
       mapTitle: z.string(),
       mapDifficulty: z.number(),
       mapNoteCount: z.number(),
       mapLength: z.number(),
+      passed: z.boolean(),
       sspp: z.number(),
     }),
   }),
@@ -69,8 +70,7 @@ export async function handler({
     newPlaycount = (beatmaps.playcount || 1) + 1;
   }
 
-  console.log(newPlaycount);
-  const p1 = await supabase.from("beatmaps").upsert({
+  await supabase.from("beatmaps").upsert({
     beatmapHash: data.mapHash,
     title: data.mapTitle,
     playcount: newPlaycount,
@@ -80,15 +80,14 @@ export async function handler({
   });
 
   console.log("p1");
-  const p2 = await supabase.from("scores").upsert({
+  await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
     noteResults: [],
     replayHwid: data.relayHwid,
     songId: data.songId,
-    triggers: data.triggers,
     userId: userData.id,
-    passed: data.mapNoteCount == Object.keys(data.noteResults).length,
-    misses: Object.values(data.noteResults).filter((e) => !e).length,
+    passed: data.passed,
+    misses: data.misses,
     awarded_sp: Math.round(data.sspp * 100) / 100,
     rank: "A",
   });
@@ -129,13 +128,11 @@ export async function handler({
     }
   }
 
-  const p3 = await supabase.from("profiles").upsert({
+  await supabase.from("profiles").upsert({
     id: userData.id,
     play_count: (userData.play_count || 0) + 1,
     skill_points: Math.round(totalSp * 100) / 100,
-    squares_hit:
-      (userData.squares_hit || 0) +
-      Object.values(data.noteResults).filter((e) => e).length,
+    squares_hit: (userData.squares_hit || 0) + data.squareHits,
   });
   console.log("p3");
 

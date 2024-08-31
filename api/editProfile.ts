@@ -79,7 +79,7 @@ export async function handler(
     .upsert(upsertPayload)
     .select();
 
-  if (upsertResult.status == 409) {
+  if (upsertResult.error) {
     return NextResponse.json(
       {
         error: "Can't update, username might be used by someone else!",
