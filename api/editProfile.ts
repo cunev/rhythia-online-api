@@ -30,19 +30,19 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  if (badObjects[data.data.username || ""]) {
+  if (data.data.username !== undefined && data.data.username.length === 0) {
     return NextResponse.json(
       {
-        error: "Can't update, please change username",
+        error: "Username can't be empty",
       },
       { status: 404 }
     );
   }
 
-  if (data.data.username !== undefined && data.data.username.length === 0) {
+  if (badObjects[data.data.username?.toLowerCase() || ""]) {
     return NextResponse.json(
       {
-        error: "Username can't be empty",
+        error: "Can't update, please change username",
       },
       { status: 404 }
     );
@@ -71,6 +71,7 @@ export async function handler(
 
   const upsertPayload: Database["public"]["Tables"]["profiles"]["Update"] = {
     id: userData.id,
+    computedUsername: data.data.username?.toLowerCase(),
     ...data.data,
   };
 

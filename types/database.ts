@@ -47,6 +47,7 @@ export type Database = {
           about_me: string | null
           avatar_url: string | null
           badges: Json | null
+          computedUsername: string | null
           created_at: number | null
           flag: string | null
           id: number
@@ -62,6 +63,7 @@ export type Database = {
           about_me?: string | null
           avatar_url?: string | null
           badges?: Json | null
+          computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
           id?: number
@@ -77,6 +79,7 @@ export type Database = {
           about_me?: string | null
           avatar_url?: string | null
           badges?: Json | null
+          computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
           id?: number

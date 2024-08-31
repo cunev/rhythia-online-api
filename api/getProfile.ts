@@ -2,7 +2,7 @@ import { geolocation } from "@vercel/edge";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { Database } from "../types/database";
-import { protectedApi, validUser } from "../utils/requestUtils";
+import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
@@ -77,7 +77,6 @@ export async function handler(
         .select("*")
         .eq("uid", user.id);
 
-      console.log(profiles, error);
       if (!queryData?.length) {
         const geo = geolocation(req);
         const data = await supabase
@@ -107,6 +106,17 @@ export async function handler(
     .from("profiles")
     .select("*", { count: "exact", head: true })
     .gt("skill_points", user.skill_points);
+
+  if (!user.computedUsername) {
+    const upsertResult = await supabase
+      .from("profiles")
+      .upsert({
+        id: user.id,
+        uid: user.uid,
+        computedUsername: user.username?.toLowerCase(),
+      })
+      .select();
+  }
 
   return NextResponse.json({
     user: {
