@@ -82,14 +82,12 @@ export async function handler({
   console.log("p1");
   await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
-    noteResults: [],
     replayHwid: data.relayHwid,
     songId: data.songId,
     userId: userData.id,
     passed: data.passed,
     misses: data.misses,
     awarded_sp: Math.round(data.sspp * 100) / 100,
-    rank: "A",
   });
   console.log("p2");
 

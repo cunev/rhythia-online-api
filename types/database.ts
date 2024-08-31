@@ -108,12 +108,9 @@ export type Database = {
           created_at: string
           id: number
           misses: number | null
-          noteResults: Json | null
           passed: boolean | null
-          rank: string | null
           replayHwid: string | null
           songId: string | null
-          triggers: Json | null
           userId: number | null
         }
         Insert: {
@@ -122,12 +119,9 @@ export type Database = {
           created_at?: string
           id?: number
           misses?: number | null
-          noteResults?: Json | null
           passed?: boolean | null
-          rank?: string | null
           replayHwid?: string | null
           songId?: string | null
-          triggers?: Json | null
           userId?: number | null
         }
         Update: {
@@ -136,12 +130,9 @@ export type Database = {
           created_at?: string
           id?: number
           misses?: number | null
-          noteResults?: Json | null
           passed?: boolean | null
-          rank?: string | null
           replayHwid?: string | null
           songId?: string | null
-          triggers?: Json | null
           userId?: number | null
         }
         Relationships: [
