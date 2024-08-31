@@ -86,7 +86,12 @@ export async function handler(
             about_me: "",
             avatar_url: user.user_metadata.avatar_url,
             badges: ["Early Bird"],
-            username: user.user_metadata.full_name,
+            username: `${user.user_metadata.full_name}${Math.round(
+              Math.random() * 900000 + 100000
+            )}`,
+            computedUsername: `${user.user_metadata.full_name}${Math.round(
+              Math.random() * 900000 + 100000
+            )}`.toLowerCase(),
             flag: (geo.country || "US").toUpperCase(),
             created_at: Date.now(),
           })
@@ -106,17 +111,6 @@ export async function handler(
     .from("profiles")
     .select("*", { count: "exact", head: true })
     .gt("skill_points", user.skill_points);
-
-  if (!user.computedUsername) {
-    const upsertResult = await supabase
-      .from("profiles")
-      .upsert({
-        id: user.id,
-        uid: user.uid,
-        computedUsername: user.username?.toLowerCase(),
-      })
-      .select();
-  }
 
   return NextResponse.json({
     user: {
