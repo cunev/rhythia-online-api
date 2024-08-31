@@ -86,12 +86,13 @@ export async function handler(
             about_me: "",
             avatar_url: user.user_metadata.avatar_url,
             badges: ["Early Bird"],
-            username: `${user.user_metadata.full_name}${Math.round(
+            username: `${user.user_metadata.full_name.slice(0, 20)}${Math.round(
               Math.random() * 900000 + 100000
             )}`,
-            computedUsername: `${user.user_metadata.full_name}${Math.round(
-              Math.random() * 900000 + 100000
-            )}`.toLowerCase(),
+            computedUsername: `${user.user_metadata.full_name.slice(
+              0,
+              20
+            )}${Math.round(Math.random() * 900000 + 100000)}`.toLowerCase(),
             flag: (geo.country || "US").toUpperCase(),
             created_at: Date.now(),
           })
