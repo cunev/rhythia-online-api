@@ -1,4 +1,3 @@
-import { object as badObjects } from "badwords-list";
 import { NextResponse } from "next/server";
 import z from "zod";
 import { Database } from "../types/database";
@@ -39,14 +38,14 @@ export async function handler(
     );
   }
 
-  if (badObjects[data.data.username?.toLowerCase() || ""]) {
-    return NextResponse.json(
-      {
-        error: "Can't update, please change username",
-      },
-      { status: 404 }
-    );
-  }
+  // if (badObjects[data.data.username?.toLowerCase() || ""]) {
+  //   return NextResponse.json(
+  //     {
+  //       error: "Can't update, please change username",
+  //     },
+  //     { status: 404 }
+  //   );
+  // }
 
   const user = (await supabase.auth.getUser(data.session)).data.user!;
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
