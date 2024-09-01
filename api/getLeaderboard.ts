@@ -45,7 +45,7 @@ export async function handler(
   return NextResponse.json(result);
 }
 
-const VIEW_PER_PAGE = 100;
+const VIEW_PER_PAGE = 50;
 
 export async function getLeaderboard(page = 1, session: string) {
   const getUserData = await getUser({ session });
