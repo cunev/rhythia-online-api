@@ -9,7 +9,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const s3Client = new S3Client({
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
   credentials: {
-    secretAccessKey: "0036dd2cb06d730015861d27ce0796cccb5031123e",
+    secretAccessKey: "00324b092a63baaf82426d26bb0367518e4816f0d2",
     accessKeyId: "c245e893e806",
   },
 });
