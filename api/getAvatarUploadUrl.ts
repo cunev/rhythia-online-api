@@ -3,10 +3,15 @@ import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  PutBucketCorsCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3Client = new S3Client({
+  region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
   credentials: {
     secretAccessKey: "K0039mm4iKsteQOXpZSzf0+VDzuH89U",
@@ -51,9 +56,10 @@ export async function handler({
     });
   }
 
+  const key = `user-avatar-${Date.now()}-${user.id}`;
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
-    Key: `user-avatar-${Date.now()}-${user.id}`,
+    Key: key,
     ContentLength: contentLength,
     ContentType: contentType,
   });
@@ -63,6 +69,6 @@ export async function handler({
   });
   return NextResponse.json({
     url: presigned,
-    objectKey: `user-avatar-${Date.now()}-${user.id}`,
+    objectKey: key,
   });
 }
