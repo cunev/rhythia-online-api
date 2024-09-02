@@ -7,8 +7,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     data: z.object({
-      avatar_url: z.string().optional(),
-      username: z.string().optional(),
+      about_me: z.string().optional(),
     }),
   }),
   output: z.object({
@@ -28,19 +27,19 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  if (data.data.username !== undefined && data.data.username.length === 0) {
+  if (!data.data.about_me) {
     return NextResponse.json(
       {
-        error: "Username can't be empty",
+        error: "Missing body.",
       },
       { status: 404 }
     );
   }
 
-  if (data.data.username && data.data.username.length > 20) {
+  if (data.data.about_me.length > 500) {
     return NextResponse.json(
       {
-        error: "Username too long.",
+        error: "Too long.",
       },
       { status: 404 }
     );
@@ -69,8 +68,7 @@ export async function handler(
 
   const upsertPayload: Database["public"]["Tables"]["profiles"]["Update"] = {
     id: userData.id,
-    computedUsername: data.data.username?.toLowerCase(),
-    ...data.data,
+    about_me: data.data.about_me,
   };
 
   const upsertResult = await supabase
@@ -81,7 +79,7 @@ export async function handler(
   if (upsertResult.error) {
     return NextResponse.json(
       {
-        error: "Can't update, username might be used by someone else!",
+        error: "Can't update..",
       },
       { status: 404 }
     );

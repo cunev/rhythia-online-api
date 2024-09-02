@@ -1,5 +1,10 @@
 import { handleApi } from "./handleApi"
 
+// ./api/editAboutMe.ts API
+import { Schema as EditAboutMe } from "./api/editAboutMe"
+export { Schema as SchemaEditAboutMe } from "./api/editAboutMe"
+export const editAboutMe = handleApi({url:"/api/editAboutMe",...EditAboutMe})
+
 // ./api/editProfile.ts API
 import { Schema as EditProfile } from "./api/editProfile"
 export { Schema as SchemaEditProfile } from "./api/editProfile"
