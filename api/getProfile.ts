@@ -86,7 +86,7 @@ export async function handler(
             about_me: "",
             avatar_url:
               "https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/user-avatar-1725309193296-72002e6b-321c-4f60-a692-568e0e75147d",
-            badges: ["Early Bird"],
+            badges: [],
             username: `${user.user_metadata.full_name.slice(0, 20)}${Math.round(
               Math.random() * 900000 + 100000
             )}`,
