@@ -7,7 +7,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3Client = new S3Client({
-  region: "us-east-1",
+  endpoint: "s3.eu-central-003.backblazeb2.com",
   credentials: {
     secretAccessKey: "0036dd2cb06d730015861d27ce0796cccb5031123e",
     accessKeyId: "c245e893e806",
@@ -18,7 +18,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
   }),
-  output: z.object({
+  output: z.strictObject({
     url: z.string(),
   }),
 };

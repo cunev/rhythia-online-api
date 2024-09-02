@@ -5,6 +5,11 @@ import { Schema as EditProfile } from "./api/editProfile"
 export { Schema as SchemaEditProfile } from "./api/editProfile"
 export const editProfile = handleApi({url:"/api/editProfile",...EditProfile})
 
+// ./api/getAvatarUploadUrl.ts API
+import { Schema as GetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
+export { Schema as SchemaGetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
+export const getAvatarUploadUrl = handleApi({url:"/api/getAvatarUploadUrl",...GetAvatarUploadUrl})
+
 // ./api/getLeaderboard.ts API
 import { Schema as GetLeaderboard } from "./api/getLeaderboard"
 export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard"
