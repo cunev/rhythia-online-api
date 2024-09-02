@@ -40,7 +40,7 @@ export async function handler({
   const user = (await supabase.auth.getUser(session)).data.user!;
 
   const command = new PutObjectCommand({
-    Bucket: "rhythia-avatars",
+    Bucket: "rhthia-avatars",
     Key: `user-avatar-${Date.now()}-${user.id}`,
     ContentLength: 5000000,
   });
