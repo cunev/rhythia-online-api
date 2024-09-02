@@ -17,9 +17,13 @@ const s3Client = new S3Client({
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    contentLength: z.number(),
+    contentType: z.string(),
   }),
   output: z.strictObject({
-    url: z.string(),
+    error: z.string().optional(),
+    url: z.string().optional(),
+    objectKey: z.string().optional(),
   }),
 };
 
@@ -34,15 +38,24 @@ export async function POST(request: Request): Promise<NextResponse> {
 
 export async function handler({
   session,
+  contentLength,
+  contentType,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
   const user = (await supabase.auth.getUser(session)).data.user!;
 
+  if (contentLength > 5000000) {
+    return NextResponse.json({
+      error: "Max content length exceeded.",
+    });
+  }
+
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: `user-avatar-${Date.now()}-${user.id}`,
-    ContentLength: 5000000,
+    ContentLength: contentLength,
+    ContentType: contentType,
   });
 
   const presigned = await getSignedUrl(s3Client, command, {
