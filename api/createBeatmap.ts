@@ -3,7 +3,6 @@ import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
-import { createHash } from "crypto";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
 
@@ -51,7 +50,7 @@ export async function handler({
   const parser = new SSPMParser(Buffer.from(bytes));
 
   const parsedData = parser.parse();
-  let sum = createHash("sha1");
+  let sum = require("crypto").createHash("sha1");
   sum.update(Buffer.from(bytes));
   const digested = sum.digest("hex");
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
