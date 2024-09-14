@@ -6,6 +6,7 @@ import { supabase } from "../utils/supabase";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    textFilter: z.string().optional(),
     page: z.number().default(1),
   }),
   output: z.object({
@@ -48,23 +49,55 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const result = await getBeatmaps(data.page, data.session);
+  const result = await getBeatmaps(
+    data.page,
+    data.session,
+    data.textFilter || ""
+  );
   return NextResponse.json(result);
 }
 
 const VIEW_PER_PAGE = 50;
 
-export async function getBeatmaps(page = 1, session: string) {
+export async function getBeatmaps(page = 1, session: string, filter: string) {
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
   const countQuery = await supabase
     .from("beatmapPages")
     .select("*", { count: "exact", head: true });
 
-  let { data: queryData, error } = await supabase
-    .from("beatmapPages")
-    .select(
-      `
+  let queryData;
+  if (filter.length) {
+    let { data: data, error } = await supabase
+      .from("beatmapPages")
+      .select(
+        `
+        *,
+        beatmaps (
+          created_at,
+          playcount,
+          length,
+          ranked,
+          beatmapFile,
+          image,
+          starRating,
+          difficulty,
+          noteCount,
+          title
+        ),
+        profiles (
+          username,
+          avatar_url
+        )`
+      )
+      .textSearch("beatmaps.title", filter)
+      .range(startPage, endPage);
+    queryData = data;
+  } else {
+    let { data: data, error } = await supabase
+      .from("beatmapPages")
+      .select(
+        `
       *,
       beatmaps (
         created_at,
@@ -82,8 +115,10 @@ export async function getBeatmaps(page = 1, session: string) {
         username,
         avatar_url
       )`
-    )
-    .range(startPage, endPage);
+      )
+      .range(startPage, endPage);
+    queryData = data;
+  }
 
   return {
     total: countQuery.count || 0,
