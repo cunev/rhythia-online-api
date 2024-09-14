@@ -6,6 +6,7 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 export const Schema = {
   input: z.strictObject({
     url: z.string(),
+    session: z.string(),
   }),
   output: z.strictObject({
     hash: z.string().optional(),
