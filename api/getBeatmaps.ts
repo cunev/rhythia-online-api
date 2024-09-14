@@ -16,6 +16,7 @@ export const Schema = {
     beatmaps: z
       .array(
         z.object({
+          id: z.number(),
           playcount: z.number().nullable().optional(),
           created_at: z.string().nullable().optional(),
           difficulty: z.number().nullable().optional(),
@@ -89,6 +90,7 @@ export async function getBeatmaps(page = 1, session: string) {
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
     beatmaps: queryData?.map((beatmapPage) => ({
+      id: beatmapPage.id,
       playcount: beatmapPage.beatmaps?.playcount,
       created_at: beatmapPage.created_at,
       difficulty: beatmapPage.beatmaps?.difficulty,

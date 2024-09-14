@@ -30,6 +30,11 @@ import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
 export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
 export const getBeatmapPage = handleApi({url:"/api/getBeatmapPage",...GetBeatmapPage})
 
+// ./api/getBeatmaps.ts API
+import { Schema as GetBeatmaps } from "./api/getBeatmaps"
+export { Schema as SchemaGetBeatmaps } from "./api/getBeatmaps"
+export const getBeatmaps = handleApi({url:"/api/getBeatmaps",...GetBeatmaps})
+
 // ./api/getLeaderboard.ts API
 import { Schema as GetLeaderboard } from "./api/getLeaderboard"
 export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard"
