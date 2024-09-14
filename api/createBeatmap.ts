@@ -5,6 +5,7 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { createHash } from "crypto";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { rateMap } from "../utils/star-calc";
 
 const s3Client = new S3Client({
   region: "auto",
@@ -62,7 +63,7 @@ export async function handler({
   });
 
   await s3Client.send(command);
-
+  parsedData.markers.sort((a, b) => a.position - b.position);
   const upserted = await supabase.from("beatmaps").upsert({
     beatmapHash: digested,
     title: parsedData.strings.songName,
@@ -72,6 +73,7 @@ export async function handler({
     length: parsedData.pointers.audioLength,
     beatmapFile: url,
     image: `https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/${imgkey}`,
+    starRating: rateMap(parsedData),
   });
 
   if (upserted.error?.message.length) {

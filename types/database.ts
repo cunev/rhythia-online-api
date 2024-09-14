@@ -54,8 +54,10 @@ export type Database = {
           image: string | null
           length: number | null
           noteCount: number | null
+          pageId: number | null
           playcount: number | null
           ranked: boolean | null
+          starRating: number | null
           title: string | null
         }
         Insert: {
@@ -66,8 +68,10 @@ export type Database = {
           image?: string | null
           length?: number | null
           noteCount?: number | null
+          pageId?: number | null
           playcount?: number | null
           ranked?: boolean | null
+          starRating?: number | null
           title?: string | null
         }
         Update: {
@@ -78,11 +82,21 @@ export type Database = {
           image?: string | null
           length?: number | null
           noteCount?: number | null
+          pageId?: number | null
           playcount?: number | null
           ranked?: boolean | null
+          starRating?: number | null
           title?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "beatmaps_pageId_fkey"
+            columns: ["pageId"]
+            isOneToOne: false
+            referencedRelation: "beatmapPages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
