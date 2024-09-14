@@ -24,6 +24,7 @@ export const Schema = {
         starRating: z.number().nullable().optional(),
         owner: z.number().nullable().optional(),
         ownerUsername: z.string().nullable().optional(),
+        ownerAvatar: z.string().nullable().optional(),
       })
       .optional(),
   }),
@@ -60,7 +61,8 @@ export async function handler(
         title
       ),
       profiles (
-        username
+        username,
+        avatar_url
       )
     `
     )
@@ -83,6 +85,7 @@ export async function handler(
       starRating: beatmapPage.beatmaps?.starRating,
       owner: beatmapPage.owner,
       ownerUsername: beatmapPage.profiles?.username,
+      ownerAvatar: beatmapPage.profiles?.avatar_url,
     },
   });
 }

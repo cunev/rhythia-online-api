@@ -25,6 +25,11 @@ import { Schema as GetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
 export { Schema as SchemaGetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
 export const getAvatarUploadUrl = handleApi({url:"/api/getAvatarUploadUrl",...GetAvatarUploadUrl})
 
+// ./api/getBeatmapPage.ts API
+import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
+export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
+export const getBeatmapPage = handleApi({url:"/api/getBeatmapPage",...GetBeatmapPage})
+
 // ./api/getLeaderboard.ts API
 import { Schema as GetLeaderboard } from "./api/getLeaderboard"
 export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard"

@@ -66,7 +66,7 @@ export async function handler({
   parsedData.markers.sort((a, b) => a.position - b.position);
   const upserted = await supabase.from("beatmaps").upsert({
     beatmapHash: digested,
-    title: parsedData.strings.songName,
+    title: parsedData.strings.mapName,
     playcount: 0,
     difficulty: parsedData.metadata.difficulty,
     noteCount: parsedData.metadata.noteCount,
