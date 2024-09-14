@@ -52,8 +52,8 @@ export async function handler({
   const parsedData = parser.parse();
   let sum = createHash("sha1");
   sum.update(Buffer.from(bytes));
-
-  const imgkey = `beatmap-img-${Date.now()}-${sum.digest("hex")}`;
+  const digested = sum.digest("hex");
+  const imgkey = `beatmap-img-${Date.now()}-${digested}`;
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: imgkey,
@@ -64,7 +64,7 @@ export async function handler({
   await s3Client.send(command);
 
   const upserted = await supabase.from("beatmaps").upsert({
-    beatmapHash: sum.digest("hex"),
+    beatmapHash: digested,
     title: parsedData.strings.songName,
     playcount: 0,
     difficulty: parsedData.metadata.difficulty,
