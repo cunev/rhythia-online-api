@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      beatmapPages: {
+        Row: {
+          created_at: string
+          id: number
+          latestBeatmapHash: string | null
+          owner: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          latestBeatmapHash?: string | null
+          owner?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          latestBeatmapHash?: string | null
+          owner?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beatmapPages_latestBeatmapHash_fkey"
+            columns: ["latestBeatmapHash"]
+            isOneToOne: false
+            referencedRelation: "beatmaps"
+            referencedColumns: ["beatmapHash"]
+          },
+          {
+            foreignKeyName: "beatmapPages_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beatmaps: {
         Row: {
           beatmapFile: string | null
