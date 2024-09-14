@@ -57,7 +57,7 @@ export async function handler({
     .select("*")
     .single();
 
-  if (upserted.error) {
+  if (upserted.error?.message.length) {
     return NextResponse.json({ error: upserted.error.message });
   }
   return NextResponse.json({});

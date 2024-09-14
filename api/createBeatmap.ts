@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { SSPMParser } from "../utils/star-calc/sspmParser";
+import { supabase } from "../utils/supabase";
+import { createHash } from "crypto";
 
 export const Schema = {
   input: z.strictObject({
@@ -38,7 +40,20 @@ export async function handler({
   const parser = new SSPMParser(Buffer.from(bytes));
 
   const parsedData = parser.parse();
+  let sum = createHash("sha1");
+  sum.update(Buffer.from(bytes));
 
-  console.log(parsedData);
+  const upserted = await supabase.from("beatmaps").upsert({
+    beatmapHash: sum.digest("hex"),
+    title: parsedData.strings.songName,
+    playcount: 0,
+    difficulty: parsedData.metadata.difficulty,
+    noteCount: parsedData.metadata.noteCount,
+    length: parsedData.pointers.audioLength,
+  });
+
+  if (upserted.error?.message.length) {
+    return NextResponse.json({ error: upserted.error.message });
+  }
   return NextResponse.json({});
 }
