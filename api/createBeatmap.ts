@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
-import { supabase } from "../utils/supabase";
-import {
-  SSPMParsedMap,
-  SSPMParser,
-} from "rhythia-star-calculator/src/sspmParser";
+import { SSPMParser } from "rhythia-star-calculator";
 
 export const Schema = {
   input: z.strictObject({
