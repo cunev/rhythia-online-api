@@ -56,7 +56,7 @@ export async function handler({
     });
   }
 
-  const key = `beatmap-${Date.now()}-${user.id}`;
+  const key = `beatmap-${Date.now()}-${user.id}.sspm`;
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: key,
