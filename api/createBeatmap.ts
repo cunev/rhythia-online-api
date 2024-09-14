@@ -4,6 +4,16 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { createHash } from "crypto";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: "https://s3.eu-central-003.backblazeb2.com",
+  credentials: {
+    secretAccessKey: "K0039mm4iKsteQOXpZSzf0+VDzuH89U",
+    accessKeyId: "003c245e893e8060000000001",
+  },
+});
 
 export const Schema = {
   input: z.strictObject({
@@ -43,6 +53,16 @@ export async function handler({
   let sum = createHash("sha1");
   sum.update(Buffer.from(bytes));
 
+  const imgkey = `beatmap-img-${Date.now()}-${sum.digest("hex")}`;
+  const command = new PutObjectCommand({
+    Bucket: "rhthia-avatars",
+    Key: imgkey,
+    Body: parsedData.cover,
+    ContentType: "image/jpeg",
+  });
+
+  await s3Client.send(command);
+
   const upserted = await supabase.from("beatmaps").upsert({
     beatmapHash: sum.digest("hex"),
     title: parsedData.strings.songName,
@@ -50,6 +70,8 @@ export async function handler({
     difficulty: parsedData.metadata.difficulty,
     noteCount: parsedData.metadata.noteCount,
     length: parsedData.pointers.audioLength,
+    beatmapFile: url,
+    image: `https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/${imgkey}`,
   });
 
   if (upserted.error?.message.length) {
