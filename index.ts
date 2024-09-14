@@ -1,5 +1,15 @@
 import { handleApi } from "./handleApi"
 
+// ./api/createBeatmap.ts API
+import { Schema as CreateBeatmap } from "./api/createBeatmap"
+export { Schema as SchemaCreateBeatmap } from "./api/createBeatmap"
+export const createBeatmap = handleApi({url:"/api/createBeatmap",...CreateBeatmap})
+
+// ./api/createBeatmapPage.ts API
+import { Schema as CreateBeatmapPage } from "./api/createBeatmapPage"
+export { Schema as SchemaCreateBeatmapPage } from "./api/createBeatmapPage"
+export const createBeatmapPage = handleApi({url:"/api/createBeatmapPage",...CreateBeatmapPage})
+
 // ./api/editAboutMe.ts API
 import { Schema as EditAboutMe } from "./api/editAboutMe"
 export { Schema as SchemaEditAboutMe } from "./api/editAboutMe"
@@ -54,4 +64,9 @@ export const searchUsers = handleApi({url:"/api/searchUsers",...SearchUsers})
 import { Schema as SubmitScore } from "./api/submitScore"
 export { Schema as SchemaSubmitScore } from "./api/submitScore"
 export const submitScore = handleApi({url:"/api/submitScore",...SubmitScore})
+
+// ./api/updateBeatmapPage.ts API
+import { Schema as UpdateBeatmapPage } from "./api/updateBeatmapPage"
+export { Schema as SchemaUpdateBeatmapPage } from "./api/updateBeatmapPage"
+export const updateBeatmapPage = handleApi({url:"/api/updateBeatmapPage",...UpdateBeatmapPage})
 export { handleApi } from "./handleApi"
