@@ -71,7 +71,6 @@ export async function getLeaderboard(page = 1, session: string) {
 
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
-  console.log(startPage, endPage);
   const countQuery = await supabase
     .from("profiles")
     .select("*", { count: "exact", head: true })
