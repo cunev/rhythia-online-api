@@ -30,6 +30,7 @@
     "isomorphic-git": "^1.27.1",
     "lodash": "^4.17.21",
     "next": "^14.2.5",
+    "rhythia-star-calculator": "^1.0.4",
     "simple-git": "^3.25.0",
     "supabase": "^1.192.5",
     "tsx": "^4.17.0",

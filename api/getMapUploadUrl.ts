@@ -22,7 +22,6 @@ const s3Client = new S3Client({
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
-    beatmapHash: z.string(),
     contentLength: z.number(),
     contentType: z.string(),
   }),
@@ -44,7 +43,6 @@ export async function POST(request: Request): Promise<NextResponse> {
 
 export async function handler({
   session,
-  beatmapHash,
   contentLength,
   contentType,
 }: (typeof Schema)["input"]["_type"]): Promise<
@@ -58,7 +56,7 @@ export async function handler({
     });
   }
 
-  const key = `beatmap-${beatmapHash}-${user.id}`;
+  const key = `beatmap-${Date.now()}-${user.id}`;
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: key,
