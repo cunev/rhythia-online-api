@@ -113,6 +113,7 @@ export async function handler(
   const { count: playersWithMorePoints, error: rankError } = await supabase
     .from("profiles")
     .select("*", { count: "exact", head: true })
+    .neq("ban", "excluded")
     .gt("skill_points", user.skill_points);
 
   return NextResponse.json({

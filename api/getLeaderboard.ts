@@ -74,11 +74,13 @@ export async function getLeaderboard(page = 1, session: string) {
   console.log(startPage, endPage);
   const countQuery = await supabase
     .from("profiles")
-    .select("*", { count: "exact", head: true });
+    .select("*", { count: "exact", head: true })
+    .neq("ban", "excluded");
 
   let { data: queryData, error } = await supabase
     .from("profiles")
     .select("*")
+    .neq("ban", "excluded")
     .order("skill_points", { ascending: false })
     .range(startPage, endPage);
 

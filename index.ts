@@ -20,6 +20,11 @@ import { Schema as GetLeaderboard } from "./api/getLeaderboard"
 export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard"
 export const getLeaderboard = handleApi({url:"/api/getLeaderboard",...GetLeaderboard})
 
+// ./api/getMapUploadUrl.ts API
+import { Schema as GetMapUploadUrl } from "./api/getMapUploadUrl"
+export { Schema as SchemaGetMapUploadUrl } from "./api/getMapUploadUrl"
+export const getMapUploadUrl = handleApi({url:"/api/getMapUploadUrl",...GetMapUploadUrl})
+
 // ./api/getProfile.ts API
 import { Schema as GetProfile } from "./api/getProfile"
 export { Schema as SchemaGetProfile } from "./api/getProfile"

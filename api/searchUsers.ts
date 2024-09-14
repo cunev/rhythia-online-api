@@ -33,6 +33,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: searchData, error } = await supabase
     .from("profiles")
     .select("id,username")
+    .neq("ban", "excluded")
     .ilike("username", `%${data.text}%`)
     .limit(10);
   return NextResponse.json({
