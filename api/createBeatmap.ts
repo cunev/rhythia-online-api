@@ -77,5 +77,5 @@ export async function handler({
   if (upserted.error?.message.length) {
     return NextResponse.json({ error: upserted.error.message });
   }
-  return NextResponse.json({});
+  return NextResponse.json({ hash: digested });
 }
