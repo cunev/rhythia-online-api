@@ -47,6 +47,7 @@ export async function handler(
   }
 
   const user = (await supabase.auth.getUser(data.session)).data.user!;
+
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
 
   // Find user's entry
@@ -65,6 +66,20 @@ export async function handler(
       );
     }
     userData = queryUserData[0];
+  }
+
+  if (
+    userData.ban == "excluded" ||
+    userData.ban == "restricted" ||
+    userData.ban == "silenced"
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Silenced, restricted or excluded players can't update their profile.",
+      },
+      { status: 404 }
+    );
   }
 
   const upsertPayload: Database["public"]["Tables"]["profiles"]["Update"] = {

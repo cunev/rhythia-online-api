@@ -11,9 +11,11 @@ export type Database = {
     Tables: {
       beatmaps: {
         Row: {
+          beatmapFile: string | null
           beatmapHash: string
           created_at: string
           difficulty: number | null
+          image: string | null
           length: number | null
           noteCount: number | null
           playcount: number | null
@@ -21,9 +23,11 @@ export type Database = {
           title: string | null
         }
         Insert: {
+          beatmapFile?: string | null
           beatmapHash: string
           created_at?: string
           difficulty?: number | null
+          image?: string | null
           length?: number | null
           noteCount?: number | null
           playcount?: number | null
@@ -31,9 +35,11 @@ export type Database = {
           title?: string | null
         }
         Update: {
+          beatmapFile?: string | null
           beatmapHash?: string
           created_at?: string
           difficulty?: number | null
+          image?: string | null
           length?: number | null
           noteCount?: number | null
           playcount?: number | null
@@ -47,6 +53,8 @@ export type Database = {
           about_me: string | null
           avatar_url: string | null
           badges: Json | null
+          ban: Database["public"]["Enums"]["banTypes"] | null
+          bannedAt: number | null
           computedUsername: string | null
           created_at: number | null
           flag: string | null
@@ -63,6 +71,8 @@ export type Database = {
           about_me?: string | null
           avatar_url?: string | null
           badges?: Json | null
+          ban?: Database["public"]["Enums"]["banTypes"] | null
+          bannedAt?: number | null
           computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
@@ -79,6 +89,8 @@ export type Database = {
           about_me?: string | null
           avatar_url?: string | null
           badges?: Json | null
+          ban?: Database["public"]["Enums"]["banTypes"] | null
+          bannedAt?: number | null
           computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
@@ -160,7 +172,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      banTypes: "cool" | "silenced" | "restricted" | "excluded"
     }
     CompositeTypes: {
       [_ in never]: never

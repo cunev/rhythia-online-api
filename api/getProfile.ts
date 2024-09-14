@@ -21,6 +21,7 @@ export const Schema = {
         flag: z.string().nullable(),
         id: z.number(),
         uid: z.string().nullable(),
+        ban: z.string().nullable(),
         username: z.string().nullable(),
         verified: z.boolean().nullable(),
         play_count: z.number().nullable(),
