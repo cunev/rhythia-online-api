@@ -72,24 +72,22 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
     total: countQuery.count || 0,
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
-    beatmaps: queryData
-      ?.filter((e) => e.beatmaps)
-      .map((beatmapPage) => ({
-        id: beatmapPage.id,
-        playcount: beatmapPage.beatmaps?.playcount,
-        created_at: beatmapPage.created_at,
-        difficulty: beatmapPage.beatmaps?.difficulty,
-        noteCount: beatmapPage.beatmaps?.noteCount,
-        length: beatmapPage.beatmaps?.length,
-        title: beatmapPage.beatmaps?.title,
-        ranked: beatmapPage.beatmaps?.ranked,
-        beatmapFile: beatmapPage.beatmaps?.beatmapFile,
-        image: beatmapPage.beatmaps?.image,
-        starRating: beatmapPage.beatmaps?.starRating,
-        owner: beatmapPage.owner,
-        ownerUsername: beatmapPage.profiles?.username,
-        ownerAvatar: beatmapPage.profiles?.avatar_url,
-      })),
+    beatmaps: queryData?.map((beatmapPage) => ({
+      id: beatmapPage.id,
+      playcount: beatmapPage.beatmaps?.playcount,
+      created_at: beatmapPage.created_at,
+      difficulty: beatmapPage.beatmaps?.difficulty,
+      noteCount: beatmapPage.beatmaps?.noteCount,
+      length: beatmapPage.beatmaps?.length,
+      title: beatmapPage.beatmaps?.title,
+      ranked: beatmapPage.beatmaps?.ranked,
+      beatmapFile: beatmapPage.beatmaps?.beatmapFile,
+      image: beatmapPage.beatmaps?.image,
+      starRating: beatmapPage.beatmaps?.starRating,
+      owner: beatmapPage.owner,
+      ownerUsername: beatmapPage.profiles?.username,
+      ownerAvatar: beatmapPage.profiles?.avatar_url,
+    })),
   };
 }
 
