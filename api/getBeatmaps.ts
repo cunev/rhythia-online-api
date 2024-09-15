@@ -116,7 +116,7 @@ async function getQuery(startPage: number, endPage: number, filter: string) {
         )`
       )
       .order("created_at", { ascending: false })
-      .textSearch("beatmaps.title", `'${filter}'`)
+      .ilike("beatmaps.title", `%${filter}%`)
       .range(startPage, endPage);
 
     return data;
