@@ -100,7 +100,7 @@ async function getQuery(startPage: number, endPage: number, filter: string) {
       .select(
         `
         *,
-        beatmaps (
+        beatmaps!inner(
           created_at,
           playcount,
           length,
@@ -112,7 +112,7 @@ async function getQuery(startPage: number, endPage: number, filter: string) {
           noteCount,
           title
         ),
-        profiles (
+        profiles!inner(
           username,
           avatar_url
         )`
@@ -128,7 +128,7 @@ async function getQuery(startPage: number, endPage: number, filter: string) {
       .select(
         `
       *,
-      beatmaps (
+      beatmaps!inner(
         created_at,
         playcount,
         length,
@@ -140,7 +140,7 @@ async function getQuery(startPage: number, endPage: number, filter: string) {
         noteCount,
         title
       ),
-      profiles (
+      profiles!inner(
         username,
         avatar_url
       )`
