@@ -90,8 +90,10 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
           avatar_url
         )`
       )
-      .textSearch("beatmaps.title", filter)
+      .order("created_at", { ascending: false })
+      .ilike("beatmaps.title", `%${filter}%`)
       .range(startPage, endPage);
+
     queryData = data;
   } else {
     let { data: data, error } = await supabase
@@ -116,6 +118,7 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
         avatar_url
       )`
       )
+      .order("created_at", { ascending: false })
       .range(startPage, endPage);
     queryData = data;
   }
