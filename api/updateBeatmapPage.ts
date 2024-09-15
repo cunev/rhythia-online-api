@@ -43,7 +43,15 @@ export async function handler({
     .eq("id", id)
     .single();
 
+  let { data: beatmapData, error: bmPageError } = await supabase
+    .from("beatmaps")
+    .select("*")
+    .eq("beatmapHash", beatmapHash)
+    .single();
+
   if (!userData) return NextResponse.json({ error: "No user." });
+  if (!beatmapData) return NextResponse.json({ error: "No beatmap." });
+
   if (userData.id !== pageData?.owner)
     return NextResponse.json({ error: "Non-authz user." });
 
@@ -52,6 +60,9 @@ export async function handler({
     .upsert({
       id,
       latestBeatmapHash: beatmapHash,
+      genre: "",
+      title: beatmapData.title,
+      status: "UNRANKED",
       owner: userData.id,
     })
     .select("*")

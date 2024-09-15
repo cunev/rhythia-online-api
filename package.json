@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "116.0.0",
+  "version": "117.0.0",
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
