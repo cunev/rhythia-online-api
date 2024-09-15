@@ -40,9 +40,7 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
-  if (
-    !url.startsWith(`https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/`)
-  )
+  if (!url.startsWith(`https://static.rhythia.com/`))
     return NextResponse.json({ error: "Invalid url" });
 
   const request = await fetch(url);
@@ -71,7 +69,7 @@ export async function handler({
     noteCount: parsedData.metadata.noteCount,
     length: parsedData.pointers.audioLength,
     beatmapFile: url,
-    image: `https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/${imgkey}`,
+    image: `https://static.rhythia.com/${imgkey}`,
     starRating: rateMap(parsedData),
   });
 
