@@ -16,6 +16,7 @@ export const Schema = {
       .object({
         about_me: z.string().nullable(),
         avatar_url: z.string().nullable(),
+        profile_image: z.string().nullable(),
         badges: z.any().nullable(),
         created_at: z.number().nullable(),
         flag: z.string().nullable(),

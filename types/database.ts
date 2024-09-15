@@ -12,21 +12,30 @@ export type Database = {
       beatmapPages: {
         Row: {
           created_at: string
+          genre: string | null
           id: number
           latestBeatmapHash: string | null
           owner: number | null
+          status: string | null
+          title: string | null
         }
         Insert: {
           created_at?: string
+          genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
           owner?: number | null
+          status?: string | null
+          title?: string | null
         }
         Update: {
           created_at?: string
+          genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
           owner?: number | null
+          status?: string | null
+          title?: string | null
         }
         Relationships: [
           {
@@ -54,7 +63,6 @@ export type Database = {
           image: string | null
           length: number | null
           noteCount: number | null
-          pageId: number | null
           playcount: number | null
           ranked: boolean | null
           starRating: number | null
@@ -68,7 +76,6 @@ export type Database = {
           image?: string | null
           length?: number | null
           noteCount?: number | null
-          pageId?: number | null
           playcount?: number | null
           ranked?: boolean | null
           starRating?: number | null
@@ -82,21 +89,12 @@ export type Database = {
           image?: string | null
           length?: number | null
           noteCount?: number | null
-          pageId?: number | null
           playcount?: number | null
           ranked?: boolean | null
           starRating?: number | null
           title?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "beatmaps_pageId_fkey"
-            columns: ["pageId"]
-            isOneToOne: false
-            referencedRelation: "beatmapPages"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -110,6 +108,7 @@ export type Database = {
           flag: string | null
           id: number
           play_count: number | null
+          profile_image: string | null
           skill_points: number | null
           squares_hit: number | null
           total_score: number | null
@@ -128,6 +127,7 @@ export type Database = {
           flag?: string | null
           id?: number
           play_count?: number | null
+          profile_image?: string | null
           skill_points?: number | null
           squares_hit?: number | null
           total_score?: number | null
@@ -146,6 +146,7 @@ export type Database = {
           flag?: string | null
           id?: number
           play_count?: number | null
+          profile_image?: string | null
           skill_points?: number | null
           squares_hit?: number | null
           total_score?: number | null
