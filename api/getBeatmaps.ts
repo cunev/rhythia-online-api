@@ -66,7 +66,34 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
     .from("beatmapPages")
     .select("*", { count: "exact", head: true });
 
-  let queryData;
+  let queryData = await getQuery(startPage, endPage, filter);
+
+  return {
+    total: countQuery.count || 0,
+    viewPerPage: VIEW_PER_PAGE,
+    currentPage: page,
+    beatmaps: queryData
+      ?.filter((e) => e.beatmaps)
+      .map((beatmapPage) => ({
+        id: beatmapPage.id,
+        playcount: beatmapPage.beatmaps?.playcount,
+        created_at: beatmapPage.created_at,
+        difficulty: beatmapPage.beatmaps?.difficulty,
+        noteCount: beatmapPage.beatmaps?.noteCount,
+        length: beatmapPage.beatmaps?.length,
+        title: beatmapPage.beatmaps?.title,
+        ranked: beatmapPage.beatmaps?.ranked,
+        beatmapFile: beatmapPage.beatmaps?.beatmapFile,
+        image: beatmapPage.beatmaps?.image,
+        starRating: beatmapPage.beatmaps?.starRating,
+        owner: beatmapPage.owner,
+        ownerUsername: beatmapPage.profiles?.username,
+        ownerAvatar: beatmapPage.profiles?.avatar_url,
+      })),
+  };
+}
+
+async function getQuery(startPage: number, endPage: number, filter: string) {
   if (filter.length) {
     let { data: data, error } = await supabase
       .from("beatmapPages")
@@ -94,7 +121,7 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
       .ilike("beatmaps.title", `%${filter}%`)
       .range(startPage, endPage);
 
-    queryData = data;
+    return data;
   } else {
     let { data: data, error } = await supabase
       .from("beatmapPages")
@@ -120,28 +147,6 @@ export async function getBeatmaps(page = 1, session: string, filter: string) {
       )
       .order("created_at", { ascending: false })
       .range(startPage, endPage);
-    queryData = data;
+    return data;
   }
-
-  return {
-    total: countQuery.count || 0,
-    viewPerPage: VIEW_PER_PAGE,
-    currentPage: page,
-    beatmaps: queryData?.map((beatmapPage) => ({
-      id: beatmapPage.id,
-      playcount: beatmapPage.beatmaps?.playcount,
-      created_at: beatmapPage.created_at,
-      difficulty: beatmapPage.beatmaps?.difficulty,
-      noteCount: beatmapPage.beatmaps?.noteCount,
-      length: beatmapPage.beatmaps?.length,
-      title: beatmapPage.beatmaps?.title,
-      ranked: beatmapPage.beatmaps?.ranked,
-      beatmapFile: beatmapPage.beatmaps?.beatmapFile,
-      image: beatmapPage.beatmaps?.image,
-      starRating: beatmapPage.beatmaps?.starRating,
-      owner: beatmapPage.owner,
-      ownerUsername: beatmapPage.profiles?.username,
-      ownerAvatar: beatmapPage.profiles?.avatar_url,
-    })),
-  };
 }
