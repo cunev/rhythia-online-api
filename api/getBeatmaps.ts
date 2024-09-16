@@ -10,6 +10,7 @@ export const Schema = {
     page: z.number().default(1),
     maxStars: z.number().optional(),
     minStars: z.number().optional(),
+    creator: z.string().optional(),
     status: z.string().optional(),
   }),
   output: z.object({
@@ -102,6 +103,10 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
   }
   if (data.status) {
     qry = qry.eq("status", data.status);
+  }
+
+  if (data.creator) {
+    qry = qry.eq("creator", data.creator);
   }
 
   let queryData = await qry.range(startPage, endPage);
