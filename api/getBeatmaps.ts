@@ -105,7 +105,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
     qry = qry.eq("status", data.status);
   }
 
-  if (data.creator) {
+  if (data.creator !== undefined) {
     qry = qry.eq("owner", data.creator);
   }
 
