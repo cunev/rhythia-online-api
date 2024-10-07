@@ -83,8 +83,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
           title
         ),
         profiles!inner(
-          username,
-          avatar_url
+          username
         )`
     )
     .order("created_at", { ascending: false });
@@ -126,7 +125,6 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
       starRating: beatmapPage.beatmaps?.starRating,
       owner: beatmapPage.owner,
       ownerUsername: beatmapPage.profiles?.username,
-      ownerAvatar: beatmapPage.profiles?.avatar_url,
     })),
   };
 }
