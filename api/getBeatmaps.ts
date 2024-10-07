@@ -60,82 +60,76 @@ export async function handler(
 const VIEW_PER_PAGE = 50;
 
 export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
+  const startPage = (data.page - 1) * VIEW_PER_PAGE;
+  const endPage = startPage + VIEW_PER_PAGE - 1;
+  const countQuery = await supabase
+    .from("beatmapPages")
+    .select("id", { count: "exact", head: true });
+
+  let qry = supabase
+    .from("beatmapPages")
+    .select(
+      `
+        *,
+        beatmaps!inner(
+          created_at,
+          playcount,
+          length,
+          ranked,
+          beatmapFile,
+          image,
+          starRating,
+          difficulty,
+          noteCount,
+          title
+        ),
+        profiles!inner(
+          username,
+          avatar_url
+        )`
+    )
+    .order("created_at", { ascending: false });
+
+  if (data.textFilter) {
+    qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
+  }
+
+  if (data.minStars) {
+    qry = qry.gt("beatmaps.starRating", data.minStars);
+  }
+
+  if (data.maxStars) {
+    qry = qry.lt("beatmaps.starRating", data.maxStars);
+  }
+  if (data.status) {
+    qry = qry.eq("status", data.status);
+  }
+
+  if (data.creator !== undefined) {
+    qry = qry.eq("owner", data.creator);
+  }
+
+  let queryData = await qry.range(startPage, endPage);
+
   return {
-    total: 0,
-    viewPerPage: 0,
-    currentPage: 0,
-    beatmaps: [],
+    total: countQuery.count || 0,
+    viewPerPage: VIEW_PER_PAGE,
+    currentPage: data.page,
+    beatmaps: queryData.data?.map((beatmapPage) => ({
+      id: beatmapPage.id,
+      playcount: beatmapPage.beatmaps?.playcount,
+      created_at: beatmapPage.created_at,
+      difficulty: beatmapPage.beatmaps?.difficulty,
+      noteCount: beatmapPage.beatmaps?.noteCount,
+      length: beatmapPage.beatmaps?.length,
+      title: beatmapPage.beatmaps?.title,
+      ranked: beatmapPage.beatmaps?.ranked,
+      beatmapFile: beatmapPage.beatmaps?.beatmapFile,
+      image: beatmapPage.beatmaps?.image,
+      starRating: beatmapPage.beatmaps?.starRating,
+      owner: beatmapPage.owner,
+      ownerUsername: beatmapPage.profiles?.username,
+      ownerAvatar: beatmapPage.profiles?.avatar_url,
+    })),
   };
-  // const startPage = (data.page - 1) * VIEW_PER_PAGE;
-  // const endPage = startPage + VIEW_PER_PAGE - 1;
-  // const countQuery = await supabase
-  //   .from("beatmapPages")
-  //   .select("*", { count: "exact", head: true });
-
-  // let qry = supabase
-  //   .from("beatmapPages")
-  //   .select(
-  //     `
-  //       *,
-  //       beatmaps!inner(
-  //         created_at,
-  //         playcount,
-  //         length,
-  //         ranked,
-  //         beatmapFile,
-  //         image,
-  //         starRating,
-  //         difficulty,
-  //         noteCount,
-  //         title
-  //       ),
-  //       profiles!inner(
-  //         username,
-  //         avatar_url
-  //       )`
-  //   )
-  //   .order("created_at", { ascending: false });
-
-  // if (data.textFilter) {
-  //   qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
-  // }
-
-  // if (data.minStars) {
-  //   qry = qry.gt("beatmaps.starRating", data.minStars);
-  // }
-
-  // if (data.maxStars) {
-  //   qry = qry.lt("beatmaps.starRating", data.maxStars);
-  // }
-  // if (data.status) {
-  //   qry = qry.eq("status", data.status);
-  // }
-
-  // if (data.creator !== undefined) {
-  //   qry = qry.eq("owner", data.creator);
-  // }
-
-  // let queryData = await qry.range(startPage, endPage);
-
-  // return {
-  //   total: countQuery.count || 0,
-  //   viewPerPage: VIEW_PER_PAGE,
-  //   currentPage: data.page,
-  //   beatmaps: queryData.data?.map((beatmapPage) => ({
-  //     id: beatmapPage.id,
-  //     playcount: beatmapPage.beatmaps?.playcount,
-  //     created_at: beatmapPage.created_at,
-  //     difficulty: beatmapPage.beatmaps?.difficulty,
-  //     noteCount: beatmapPage.beatmaps?.noteCount,
-  //     length: beatmapPage.beatmaps?.length,
-  //     title: beatmapPage.beatmaps?.title,
-  //     ranked: beatmapPage.beatmaps?.ranked,
-  //     beatmapFile: beatmapPage.beatmaps?.beatmapFile,
-  //     image: beatmapPage.beatmaps?.image,
-  //     starRating: beatmapPage.beatmaps?.starRating,
-  //     owner: beatmapPage.owner,
-  //     ownerUsername: beatmapPage.profiles?.username,
-  //     ownerAvatar: beatmapPage.profiles?.avatar_url,
-  //   })),
-  // };
 }

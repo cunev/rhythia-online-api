@@ -73,7 +73,7 @@ export async function getLeaderboard(page = 1, session: string) {
   const endPage = startPage + VIEW_PER_PAGE - 1;
   const countQuery = await supabase
     .from("profiles")
-    .select("*", { count: "exact", head: true })
+    .select("ban", { count: "exact", head: true })
     .neq("ban", "excluded");
 
   let { data: queryData, error } = await supabase
