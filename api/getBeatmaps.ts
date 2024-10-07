@@ -70,17 +70,16 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
     .from("beatmapPages")
     .select(
       `
-        *,
+        owner,
+        created_at,
+        id,
         beatmaps!inner(
-          created_at,
           playcount,
-          length,
           ranked,
           beatmapFile,
           image,
           starRating,
           difficulty,
-          noteCount,
           title
         ),
         profiles!inner(
@@ -120,8 +119,6 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
       playcount: beatmapPage.beatmaps?.playcount,
       created_at: beatmapPage.created_at,
       difficulty: beatmapPage.beatmaps?.difficulty,
-      noteCount: beatmapPage.beatmaps?.noteCount,
-      length: beatmapPage.beatmaps?.length,
       title: beatmapPage.beatmaps?.title,
       ranked: beatmapPage.beatmaps?.ranked,
       beatmapFile: beatmapPage.beatmaps?.beatmapFile,
