@@ -33,7 +33,7 @@
     "osu-parsers": "^4.1.7",
     "osu-standard-stable": "^5.0.0",
     "simple-git": "^3.25.0",
-    "supabase": "^1.192.5",
+    "supabase": "^1.204.3",
     "tsx": "^4.17.0",
     "utf-8-validate": "^6.0.4",
     "zod": "^3.23.8"

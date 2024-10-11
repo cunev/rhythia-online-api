@@ -174,6 +174,7 @@ export type Database = {
           passed: boolean | null
           replayHwid: string | null
           songId: string | null
+          speed: number | null
           userId: number | null
         }
         Insert: {
@@ -185,6 +186,7 @@ export type Database = {
           passed?: boolean | null
           replayHwid?: string | null
           songId?: string | null
+          speed?: number | null
           userId?: number | null
         }
         Update: {
@@ -196,6 +198,7 @@ export type Database = {
           passed?: boolean | null
           replayHwid?: string | null
           songId?: string | null
+          speed?: number | null
           userId?: number | null
         }
         Relationships: [
