@@ -42,12 +42,16 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   const { data: mapData, error } = await supabase
     .from("beatmapPages")
-    .select("id,nominations")
+    .select("id,nominations,owner")
     .eq("id", data.mapId)
     .single();
 
   if (!mapData) {
     return NextResponse.json({ error: "Bad map" });
+  }
+
+  if (mapData.owner == queryUserData.id) {
+    return NextResponse.json({ error: "Can't approve own map" });
   }
 
   if ((mapData.nominations as number[])!.length < 2) {
