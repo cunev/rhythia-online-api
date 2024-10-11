@@ -1,5 +1,10 @@
 import { handleApi } from "./handleApi"
 
+// ./api/approveMap.ts API
+import { Schema as ApproveMap } from "./api/approveMap"
+export { Schema as SchemaApproveMap } from "./api/approveMap"
+export const approveMap = handleApi({url:"/api/approveMap",...ApproveMap})
+
 // ./api/createBeatmap.ts API
 import { Schema as CreateBeatmap } from "./api/createBeatmap"
 export { Schema as SchemaCreateBeatmap } from "./api/createBeatmap"
@@ -64,6 +69,11 @@ export const getScore = handleApi({url:"/api/getScore",...GetScore})
 import { Schema as GetUserScores } from "./api/getUserScores"
 export { Schema as SchemaGetUserScores } from "./api/getUserScores"
 export const getUserScores = handleApi({url:"/api/getUserScores",...GetUserScores})
+
+// ./api/nominateMap.ts API
+import { Schema as NominateMap } from "./api/nominateMap"
+export { Schema as SchemaNominateMap } from "./api/nominateMap"
+export const nominateMap = handleApi({url:"/api/nominateMap",...NominateMap})
 
 // ./api/searchUsers.ts API
 import { Schema as SearchUsers } from "./api/searchUsers"

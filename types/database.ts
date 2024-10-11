@@ -15,7 +15,7 @@ export type Database = {
           genre: string | null
           id: number
           latestBeatmapHash: string | null
-          nominations: number | null
+          nominations: Json | null
           owner: number | null
           status: string | null
           title: string | null
@@ -25,7 +25,7 @@ export type Database = {
           genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
-          nominations?: number | null
+          nominations?: Json | null
           owner?: number | null
           status?: string | null
           title?: string | null
@@ -35,7 +35,7 @@ export type Database = {
           genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
-          nominations?: number | null
+          nominations?: Json | null
           owner?: number | null
           status?: string | null
           title?: string | null

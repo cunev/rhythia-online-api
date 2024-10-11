@@ -50,9 +50,13 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Bad map" });
   }
 
+  if ((mapData.nominations as number[]).includes(queryUserData.id)) {
+    return NextResponse.json({ error: "Already nominated" });
+  }
+
   await supabase.from("beatmapPages").upsert({
     id: data.mapId,
-    nominations: mapData.nominations! + 1,
+    nominations: [...(mapData.nominations! as number[]), queryUserData.id],
   });
 
   return NextResponse.json({});
