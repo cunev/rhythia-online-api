@@ -27,6 +27,7 @@ export const Schema = {
         owner: z.number().nullable().optional(),
         ownerUsername: z.string().nullable().optional(),
         ownerAvatar: z.string().nullable().optional(),
+        status: z.string().nullable().optional(),
       })
       .optional(),
   }),
@@ -89,6 +90,7 @@ export async function handler(
       ownerUsername: beatmapPage.profiles?.username,
       ownerAvatar: beatmapPage.profiles?.avatar_url,
       id: beatmapPage.id,
+      status: beatmapPage.status,
       nominations: beatmapPage.nominations as number[],
     },
   });
