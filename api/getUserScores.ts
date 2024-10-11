@@ -24,6 +24,7 @@ export const Schema = {
           beatmapDifficulty: z.number().optional().nullable(),
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
+          speed: z.number().optional().nullable(),
         })
       )
       .optional(),
@@ -42,6 +43,7 @@ export const Schema = {
           beatmapDifficulty: z.number().optional().nullable(),
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
+          speed: z.number().optional().nullable(),
         })
       )
       .optional(),
@@ -128,6 +130,7 @@ export async function handler(
       beatmapDifficulty: s.beatmaps?.difficulty,
       beatmapNotes: s.beatmaps?.noteCount,
       beatmapTitle: s.beatmaps?.title,
+      speed: s.speed,
     })),
     top: vals?.map((s) => ({
       created_at: s.created_at,
@@ -142,6 +145,7 @@ export async function handler(
       beatmapDifficulty: s.beatmaps?.difficulty,
       beatmapNotes: s.beatmaps?.noteCount,
       beatmapTitle: s.beatmaps?.title,
+      speed: s.speed,
     })),
   });
 }
