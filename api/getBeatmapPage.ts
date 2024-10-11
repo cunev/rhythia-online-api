@@ -12,6 +12,8 @@ export const Schema = {
     error: z.string().optional(),
     beatmap: z
       .object({
+        id: z.number().nullable().optional(),
+        nominations: z.array(z.number()).nullable().optional(),
         playcount: z.number().nullable().optional(),
         created_at: z.string().nullable().optional(),
         difficulty: z.number().nullable().optional(),
@@ -86,6 +88,8 @@ export async function handler(
       owner: beatmapPage.owner,
       ownerUsername: beatmapPage.profiles?.username,
       ownerAvatar: beatmapPage.profiles?.avatar_url,
+      id: beatmapPage.id,
+      nominations: beatmapPage.nominations as number[],
     },
   });
 }
