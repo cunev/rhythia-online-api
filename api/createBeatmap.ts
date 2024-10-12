@@ -54,7 +54,7 @@ export async function handler({
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
 
   const newImage = await sharp(parsedData.cover)
-    .resize(200)
+    .resize(250)
     .jpeg({ mozjpeg: true })
     .toBuffer();
 
