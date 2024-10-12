@@ -36,7 +36,7 @@ export async function handler(
     );
   }
 
-  if (data.data.about_me.length > 500) {
+  if (data.data.about_me.length > 10000) {
     return NextResponse.json(
       {
         error: "Too long.",
