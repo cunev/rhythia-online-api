@@ -64,6 +64,21 @@ export async function handler({
     .eq("beatmapHash", data.mapHash)
     .single();
 
+  let { data: beatmapPages, error: bpError } = await supabase
+    .from("beatmapPages")
+    .select("*")
+    .eq("latestBeatmapHash", data.mapHash)
+    .single();
+
+  if (!beatmapPages) {
+    return NextResponse.json(
+      {
+        error: "Map not submitted",
+      },
+      { status: 500 }
+    );
+  }
+
   let newPlaycount = 1;
 
   if (beatmaps) {
@@ -78,6 +93,10 @@ export async function handler({
     noteCount: data.mapNoteCount,
     length: data.mapLength,
   });
+
+  if (beatmapPages.status !== "RANKED") {
+    data.sspp = 0;
+  }
 
   console.log("p1");
   await supabase.from("scores").upsert({
