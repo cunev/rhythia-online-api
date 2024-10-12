@@ -9,7 +9,6 @@ export const Schema = {
   }),
   output: z.object({
     error: z.string().optional(),
-    total: z.number(),
     leaderboard: z
       .array(
         z.object({
@@ -42,23 +41,17 @@ export async function handler(
 }
 
 export async function getLeaderboard(badge: string) {
-  const countQuery = await supabase
-    .from("profiles")
-    .select("ban", { count: "exact", head: true })
-    .neq("ban", "excluded")
-    .ilike("badges", `%${badge}%`);
-
   let { data: queryData, error } = await supabase
     .from("profiles")
     .select("*")
-    .neq("ban", "excluded")
-    .ilike("badges", `%${badge}%`)
-    .order("skill_points", { ascending: false })
-    .range(0, 200);
+    .neq("ban", "excluded");
+
+  const users = queryData?.filter((e) =>
+    ((e.badges || []) as string[]).includes(badge)
+  );
 
   return {
-    total: countQuery.count || 0,
-    leaderboard: queryData?.map((user) => ({
+    leaderboard: users?.map((user) => ({
       flag: user.flag,
       id: user.id,
       play_count: user.play_count,

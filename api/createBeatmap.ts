@@ -5,7 +5,6 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
-import sharp from "sharp";
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -55,7 +54,7 @@ export async function handler({
 
   let buffer = Buffer.from([]);
   try {
-    buffer = await sharp(parsedData.cover)
+    buffer = await require("sharp")(parsedData.cover)
       .resize(250)
       .jpeg({ mozjpeg: true })
       .toBuffer();

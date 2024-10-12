@@ -30,6 +30,11 @@ import { Schema as GetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
 export { Schema as SchemaGetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
 export const getAvatarUploadUrl = handleApi({url:"/api/getAvatarUploadUrl",...GetAvatarUploadUrl})
 
+// ./api/getBadgedUsers.ts API
+import { Schema as GetBadgedUsers } from "./api/getBadgedUsers"
+export { Schema as SchemaGetBadgedUsers } from "./api/getBadgedUsers"
+export const getBadgedUsers = handleApi({url:"/api/getBadgedUsers",...GetBadgedUsers})
+
 // ./api/getBeatmapPage.ts API
 import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
 export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
