@@ -53,15 +53,18 @@ export async function handler({
   const digested = sum.digest("hex");
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
 
-  const newImage = await sharp(parsedData.cover)
-    .resize(250)
-    .jpeg({ mozjpeg: true })
-    .toBuffer();
+  let buffer = Buffer.from([]);
+  try {
+    buffer = await sharp(parsedData.cover)
+      .resize(250)
+      .jpeg({ mozjpeg: true })
+      .toBuffer();
+  } catch (error) {}
 
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: imgkey,
-    Body: newImage,
+    Body: buffer,
     ContentType: "image/jpeg",
   });
 
