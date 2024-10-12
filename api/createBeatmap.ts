@@ -50,6 +50,17 @@ export async function handler({
   let sum = require("crypto").createHash("sha1");
   sum.update(Buffer.from(bytes));
   const digested = sum.digest("hex");
+
+  let { data: beatmapPage, error: errorlast } = await supabase
+    .from("beatmapPages")
+    .select(`*`)
+    .eq("latestBeatmapHash", digested)
+    .single();
+
+  if (beatmapPage) {
+    return NextResponse.json({ error: "Already Exists" });
+  }
+
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
 
   let buffer = Buffer.from([]);
