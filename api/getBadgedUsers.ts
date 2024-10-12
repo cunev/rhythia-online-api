@@ -15,9 +15,6 @@ export const Schema = {
           flag: z.string().nullable(),
           id: z.number(),
           username: z.string().nullable(),
-          play_count: z.number().nullable(),
-          skill_points: z.number().nullable(),
-          total_score: z.number().nullable(),
         })
       )
       .optional(),
@@ -43,7 +40,7 @@ export async function handler(
 export async function getLeaderboard(badge: string) {
   let { data: queryData, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("flag,id,username,badges")
     .neq("ban", "excluded");
 
   const users = queryData?.filter((e) =>
@@ -54,9 +51,6 @@ export async function getLeaderboard(badge: string) {
     leaderboard: users?.map((user) => ({
       flag: user.flag,
       id: user.id,
-      play_count: user.play_count,
-      skill_points: user.skill_points,
-      total_score: user.total_score,
       username: user.username,
     })),
   };
