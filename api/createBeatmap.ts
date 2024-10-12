@@ -5,7 +5,7 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
-
+import sharp from "sharp";
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -52,10 +52,16 @@ export async function handler({
   sum.update(Buffer.from(bytes));
   const digested = sum.digest("hex");
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
+
+  const newImage = await sharp(parsedData.cover)
+    .resize(200)
+    .jpeg({ mozjpeg: true })
+    .toBuffer();
+
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: imgkey,
-    Body: parsedData.cover,
+    Body: newImage,
     ContentType: "image/jpeg",
   });
 

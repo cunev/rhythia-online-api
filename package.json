@@ -32,6 +32,7 @@
     "next": "^14.2.5",
     "osu-parsers": "^4.1.7",
     "osu-standard-stable": "^5.0.0",
+    "sharp": "^0.33.5",
     "simple-git": "^3.25.0",
     "supabase": "^1.204.3",
     "tsx": "^4.17.0",
