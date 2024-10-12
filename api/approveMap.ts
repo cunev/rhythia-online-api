@@ -60,6 +60,12 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
+  if ((mapData.nominations as number[]).includes(queryUserData.id)) {
+    return NextResponse.json({
+      error: "Can't nominate and approve",
+    });
+  }
+
   await supabase.from("beatmapPages").upsert({
     id: data.mapId,
     status: "RANKED",
