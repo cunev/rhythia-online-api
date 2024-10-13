@@ -47,9 +47,7 @@ export async function handler({
   const parser = new SSPMParser(Buffer.from(bytes));
 
   const parsedData = parser.parse();
-  let sum = require("crypto").createHash("sha1");
-  sum.update(Buffer.from(bytes));
-  const digested = sum.digest("hex");
+  const digested = parsedData.strings.mapID;
 
   let { data: beatmapPage, error: errorlast } = await supabase
     .from("beatmapPages")
