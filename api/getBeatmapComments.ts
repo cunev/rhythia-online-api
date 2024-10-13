@@ -15,6 +15,10 @@ export const Schema = {
         content: z.string().nullable(),
         owner: z.number(),
         created_at: z.string(),
+        profiles: z.object({
+          avatar_url: z.string().nullable(),
+          username: z.string().nullable(),
+        }),
       })
     ),
   }),
@@ -36,7 +40,15 @@ export async function handler({
 > {
   let { data: userData, error: userError } = await supabase
     .from("beatmapPageComments")
-    .select("*")
+    .select(
+      `
+      *,
+      profiles!inner(
+          username,
+          avatar_url
+        )
+      `
+    )
     .eq("beatmapPage", page);
 
   return NextResponse.json({ comments: userData! });
