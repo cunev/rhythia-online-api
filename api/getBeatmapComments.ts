@@ -18,6 +18,7 @@ export const Schema = {
         profiles: z.object({
           avatar_url: z.string().nullable(),
           username: z.string().nullable(),
+          badges: z.any().nullable(),
         }),
       })
     ),
@@ -45,7 +46,8 @@ export async function handler({
       *,
       profiles!inner(
           username,
-          avatar_url
+          avatar_url,
+          badges
         )
       `
     )
