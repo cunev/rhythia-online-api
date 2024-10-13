@@ -80,6 +80,11 @@ import { Schema as NominateMap } from "./api/nominateMap"
 export { Schema as SchemaNominateMap } from "./api/nominateMap"
 export const nominateMap = handleApi({url:"/api/nominateMap",...NominateMap})
 
+// ./api/rankMapsArchive.ts API
+import { Schema as RankMapsArchive } from "./api/rankMapsArchive"
+export { Schema as SchemaRankMapsArchive } from "./api/rankMapsArchive"
+export const rankMapsArchive = handleApi({url:"/api/rankMapsArchive",...RankMapsArchive})
+
 // ./api/searchUsers.ts API
 import { Schema as SearchUsers } from "./api/searchUsers"
 export { Schema as SchemaSearchUsers } from "./api/searchUsers"
