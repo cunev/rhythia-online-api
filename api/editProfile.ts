@@ -3,6 +3,8 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { Filter } from "bad-words";
+
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
@@ -28,6 +30,8 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  const profane = new Filter({ placeHolder: "x" });
+
   if (data.data.username !== undefined && data.data.username.length === 0) {
     return NextResponse.json(
       {
@@ -45,6 +49,9 @@ export async function handler(
       { status: 404 }
     );
   }
+
+  // clean
+  data.data.username = profane.clean(data.data.username!);
 
   const user = (await supabase.auth.getUser(data.session)).data.user!;
 

@@ -5,6 +5,7 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
+import { Filter } from "bad-words";
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -39,6 +40,8 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
+  const profane = new Filter({ placeHolder: "x" });
+
   if (!url.startsWith(`https://static.rhythia.com/`))
     return NextResponse.json({ error: "Invalid url" });
 
@@ -82,7 +85,7 @@ export async function handler({
   parsedData.markers.sort((a, b) => a.position - b.position);
   const upserted = await supabase.from("beatmaps").upsert({
     beatmapHash: digested,
-    title: parsedData.strings.mapName,
+    title: profane.clean(parsedData.strings.mapName),
     playcount: 0,
     difficulty: parsedData.metadata.difficulty,
     noteCount: parsedData.metadata.noteCount,
