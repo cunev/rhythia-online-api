@@ -1,5 +1,6 @@
 import { z } from "zod";
 let env = "development";
+import { profanity, CensorType } from "@2toad/profanity";
 export function setEnvironment(
   stage: "development" | "testing" | "production"
 ) {
@@ -13,7 +14,7 @@ export function handleApi<
       method: "POST",
       body: JSON.stringify(input),
     });
-    const output = await response.json();
-    return output;
+    const output = await response.text();
+    return JSON.parse(profanity.censor(output));
   };
 }

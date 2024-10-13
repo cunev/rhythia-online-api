@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "129.0.0",
+  "version": "130.0.0",
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
@@ -12,6 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@2toad/profanity": "^3.0.0",
     "@aws-sdk/client-s3": "^3.637.0",
     "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@netlify/zip-it-and-ship-it": "^9.37.9",
@@ -23,6 +24,7 @@
     "@vercel/edge": "^1.1.2",
     "@vercel/node": "^3.2.8",
     "aws-lambda": "^1.0.7",
+    "bad-words": "^4.0.0",
     "badwords-list": "^2.0.1-4",
     "bufferutil": "^4.0.8",
     "bun": "^1.1.22",
