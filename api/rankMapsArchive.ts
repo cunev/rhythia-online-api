@@ -42,19 +42,21 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   const { data: mapData, error } = await supabase
     .from("beatmapPages")
-    .select("id,nominations,owner")
-    .eq("id", data.mapId)
-    .single();
+    .select("id,nominations,owner,status")
+    .eq("owner", user.id)
+    .eq("status", "UNRANKED");
 
   if (!mapData) {
     return NextResponse.json({ error: "Bad map" });
   }
 
-  await supabase.from("beatmapPages").upsert({
-    id: data.mapId,
-    nominations: [queryUserData.id, queryUserData.id],
-    status: "RANKED",
-  });
+  for (const element of mapData) {
+    await supabase.from("beatmapPages").upsert({
+      id: element.id,
+      nominations: [queryUserData.id, queryUserData.id],
+      status: "RANKED",
+    });
+  }
 
   return NextResponse.json({});
 }
