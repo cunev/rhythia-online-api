@@ -14,6 +14,7 @@ export const Schema = {
         beatmapPage: z.number(),
         content: z.string().nullable(),
         owner: z.number(),
+        created_at: z.string(),
       })
     ),
   }),

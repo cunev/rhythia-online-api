@@ -35,6 +35,11 @@ import { Schema as GetBadgedUsers } from "./api/getBadgedUsers"
 export { Schema as SchemaGetBadgedUsers } from "./api/getBadgedUsers"
 export const getBadgedUsers = handleApi({url:"/api/getBadgedUsers",...GetBadgedUsers})
 
+// ./api/getBeatmapComments.ts API
+import { Schema as GetBeatmapComments } from "./api/getBeatmapComments"
+export { Schema as SchemaGetBeatmapComments } from "./api/getBeatmapComments"
+export const getBeatmapComments = handleApi({url:"/api/getBeatmapComments",...GetBeatmapComments})
+
 // ./api/getBeatmapPage.ts API
 import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
 export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
@@ -79,6 +84,11 @@ export const getUserScores = handleApi({url:"/api/getUserScores",...GetUserScore
 import { Schema as NominateMap } from "./api/nominateMap"
 export { Schema as SchemaNominateMap } from "./api/nominateMap"
 export const nominateMap = handleApi({url:"/api/nominateMap",...NominateMap})
+
+// ./api/postBeatmapComment.ts API
+import { Schema as PostBeatmapComment } from "./api/postBeatmapComment"
+export { Schema as SchemaPostBeatmapComment } from "./api/postBeatmapComment"
+export const postBeatmapComment = handleApi({url:"/api/postBeatmapComment",...PostBeatmapComment})
 
 // ./api/rankMapsArchive.ts API
 import { Schema as RankMapsArchive } from "./api/rankMapsArchive"
