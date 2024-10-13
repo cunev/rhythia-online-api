@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      beatmapPageComments: {
+        Row: {
+          beatmapPage: number
+          content: string | null
+          created_at: string
+          id: number
+          owner: number
+        }
+        Insert: {
+          beatmapPage: number
+          content?: string | null
+          created_at?: string
+          id?: number
+          owner: number
+        }
+        Update: {
+          beatmapPage?: number
+          content?: string | null
+          created_at?: string
+          id?: number
+          owner?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beatmapPageComments_beatmapPage_fkey"
+            columns: ["beatmapPage"]
+            isOneToOne: false
+            referencedRelation: "beatmapPages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beatmapPageComments_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beatmapPages: {
         Row: {
           created_at: string
