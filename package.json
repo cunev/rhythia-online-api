@@ -1,7 +1,6 @@
 {
   "name": "rhythia-api",
   "version": "129.0.0",
-  "type": "module",
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
@@ -38,7 +37,6 @@
     "simple-git": "^3.25.0",
     "supabase": "^1.204.3",
     "tsx": "^4.17.0",
-    "typescript": "^5.6.3",
     "utf-8-validate": "^6.0.4",
     "zod": "^3.23.8"
   }
