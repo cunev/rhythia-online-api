@@ -23,7 +23,6 @@
     "@vercel/edge": "^1.1.2",
     "@vercel/node": "^3.2.8",
     "aws-lambda": "^1.0.7",
-    "bad-words": "^4.0.0",
     "badwords-list": "^2.0.1-4",
     "bufferutil": "^4.0.8",
     "bun": "^1.1.22",
