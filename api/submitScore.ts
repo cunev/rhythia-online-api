@@ -94,7 +94,7 @@ export async function handler({
     length: data.mapLength,
   });
 
-  if (beatmapPages.status !== "RANKED") {
+  if (beatmapPages.status == "UNRANKED") {
     data.sspp = 0;
   }
 
