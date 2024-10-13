@@ -32,6 +32,7 @@
     "isomorphic-git": "^1.27.1",
     "lodash": "^4.17.21",
     "next": "^14.2.5",
+    "osu-classes": "^3.1.0",
     "osu-parsers": "^4.1.7",
     "osu-standard-stable": "^5.0.0",
     "sharp": "^0.33.5",

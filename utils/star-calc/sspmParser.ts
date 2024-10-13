@@ -233,6 +233,9 @@ export class SSPMParser {
       version: this.readUInt16(),
       reserved: this.readBytes(4),
     };
+    if (header.version == 1) {
+      throw "Can't parse";
+    }
 
     // Static Metadata
     const metadata: StaticMetadata = {
@@ -278,7 +281,8 @@ export class SSPMParser {
       mapID: this.readString(),
       mapName: this.readString(),
       songName: this.readString(),
-      mappers: this.readStringList(this.readUInt16()),
+      mappers: [],
+      // mappers: this.readStringList(this.readUInt16()),
     };
 
     let customData: CustomData = { fields: [] };

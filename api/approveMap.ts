@@ -56,7 +56,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   if ((mapData.nominations as number[])!.length < 2) {
     return NextResponse.json({
-      error: "Maps can get approved only if they have 2 approvals",
+      error: "Maps can get approved only if they have 2 nominations",
     });
   }
 
