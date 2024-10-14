@@ -77,14 +77,15 @@ export async function handler({
   });
 
   await s3Client.send(command);
-  parsedData.markers.sort((a, b) => a.position - b.position);
+  const markers = parsedData.markers.sort((a, b) => a.position - b.position);
+
   const upserted = await supabase.from("beatmaps").upsert({
     beatmapHash: digested,
     title: parsedData.strings.mapName,
     playcount: 0,
     difficulty: parsedData.metadata.difficulty,
     noteCount: parsedData.metadata.noteCount,
-    length: parsedData.pointers.audioLength,
+    length: markers[markers.length - 1].position,
     beatmapFile: url,
     image: `https://static.rhythia.com/${imgkey}`,
     starRating: rateMap(parsedData),
