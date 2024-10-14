@@ -8,6 +8,8 @@ export const Schema = {
     session: z.string(),
     id: z.number(),
     beatmapHash: z.string(),
+    tags: z.string(),
+    description: z.string(),
   }),
   output: z.strictObject({
     error: z.string().optional(),
@@ -27,6 +29,8 @@ export async function handler({
   session,
   beatmapHash,
   id,
+  description,
+  tags,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
@@ -64,6 +68,8 @@ export async function handler({
       title: beatmapData.title,
       status: "UNRANKED",
       owner: userData.id,
+      description,
+      tags,
     })
     .select("*")
     .single();
