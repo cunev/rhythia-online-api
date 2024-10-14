@@ -45,11 +45,6 @@ import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
 export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
 export const getBeatmapPage = handleApi({url:"/api/getBeatmapPage",...GetBeatmapPage})
 
-// ./api/getBeatmapPageById.ts API
-import { Schema as GetBeatmapPageById } from "./api/getBeatmapPageById"
-export { Schema as SchemaGetBeatmapPageById } from "./api/getBeatmapPageById"
-export const getBeatmapPageById = handleApi({url:"/api/getBeatmapPageById",...GetBeatmapPageById})
-
 // ./api/getBeatmaps.ts API
 import { Schema as GetBeatmaps } from "./api/getBeatmaps"
 export { Schema as SchemaGetBeatmaps } from "./api/getBeatmaps"
