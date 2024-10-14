@@ -11,6 +11,8 @@ export const Schema = {
     tagsFilter: z.string().optional(),
     page: z.number().default(1),
     maxStars: z.number().optional(),
+    minLength: z.number().optional(),
+    maxLength: z.number().optional(),
     minStars: z.number().optional(),
     creator: z.number().optional(),
     status: z.string().optional(),
@@ -86,6 +88,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
           image,
           starRating,
           difficulty,
+          length,
           title
         ),
         profiles!inner(
@@ -113,6 +116,15 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
   if (data.maxStars) {
     qry = qry.lt("beatmaps.starRating", data.maxStars);
   }
+
+  if (data.minLength) {
+    qry = qry.gt("beatmaps.length", data.minLength);
+  }
+
+  if (data.maxLength) {
+    qry = qry.lt("beatmaps.length", data.maxLength);
+  }
+
   if (data.status) {
     qry = qry.eq("status", data.status);
   }
@@ -135,6 +147,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
       difficulty: beatmapPage.beatmaps?.difficulty,
       title: beatmapPage.beatmaps?.title,
       ranked: beatmapPage.beatmaps?.ranked,
+      length: beatmapPage.beatmaps?.length,
       beatmapFile: beatmapPage.beatmaps?.beatmapFile,
       image: beatmapPage.beatmaps?.image,
       starRating: beatmapPage.beatmaps?.starRating,
