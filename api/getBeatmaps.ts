@@ -91,7 +91,10 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
     .order("created_at", { ascending: false });
 
   if (data.textFilter) {
-    qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
+    // qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
+    qry = qry.or(
+      `beatmaps.title.ilike.${data.textFilter}, profiles.username.ilike.${data.textFilter},`
+    );
   }
 
   if (data.minStars) {
