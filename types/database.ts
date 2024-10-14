@@ -51,32 +51,38 @@ export type Database = {
       beatmapPages: {
         Row: {
           created_at: string
+          description: string
           genre: string | null
           id: number
           latestBeatmapHash: string | null
           nominations: Json | null
           owner: number | null
           status: string | null
+          tags: string
           title: string | null
         }
         Insert: {
           created_at?: string
+          description?: string
           genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
           nominations?: Json | null
           owner?: number | null
           status?: string | null
+          tags?: string
           title?: string | null
         }
         Update: {
           created_at?: string
+          description?: string
           genre?: string | null
           id?: number
           latestBeatmapHash?: string | null
           nominations?: Json | null
           owner?: number | null
           status?: string | null
+          tags?: string
           title?: string | null
         }
         Relationships: [

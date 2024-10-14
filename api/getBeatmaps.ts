@@ -7,6 +7,8 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     textFilter: z.string().optional(),
+    authorFilter: z.string().optional(),
+    tagsFilter: z.string().optional(),
     page: z.number().default(1),
     maxStars: z.number().optional(),
     minStars: z.number().optional(),
@@ -36,6 +38,7 @@ export const Schema = {
           ownerUsername: z.string().nullable().optional(),
           ownerAvatar: z.string().nullable().optional(),
           status: z.string().nullable().optional(),
+          tags: z.string().nullable().optional(),
         })
       )
       .optional(),
@@ -75,6 +78,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
         created_at,
         id,
         status,
+        tags,
         beatmaps!inner(
           playcount,
           ranked,
@@ -92,6 +96,14 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
 
   if (data.textFilter) {
     qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
+  }
+
+  if (data.authorFilter) {
+    qry = qry.ilike("profiles.username", `%${data.authorFilter}%`);
+  }
+
+  if (data.tagsFilter) {
+    qry = qry.ilike("tags", `%${data.tagsFilter}%`);
   }
 
   if (data.minStars) {
@@ -117,6 +129,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
     currentPage: data.page,
     beatmaps: queryData.data?.map((beatmapPage) => ({
       id: beatmapPage.id,
+      tags: beatmapPage.tags,
       playcount: beatmapPage.beatmaps?.playcount,
       created_at: beatmapPage.created_at,
       difficulty: beatmapPage.beatmaps?.difficulty,
