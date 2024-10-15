@@ -59,6 +59,9 @@ export async function handler({
   if (userData.id !== pageData?.owner)
     return NextResponse.json({ error: "Non-authz user." });
 
+  if (pageData?.status !== "UNRANKED")
+    return NextResponse.json({ error: "Only unranked maps can be updated" });
+
   const upserted = await supabase
     .from("beatmapPages")
     .upsert({
