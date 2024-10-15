@@ -36,6 +36,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
 export async function handler({
   url,
+  session,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
@@ -49,13 +50,24 @@ export async function handler({
   const parsedData = parser.parse();
   const digested = parsedData.strings.mapID;
 
+  const user = (await supabase.auth.getUser(session)).data.user!;
+  let { data: userData, error: userError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("uid", user.id)
+    .single();
+
+  if (!userData) {
+    return NextResponse.json({ error: "Bad user" });
+  }
+
   let { data: beatmapPage, error: errorlast } = await supabase
     .from("beatmapPages")
     .select(`*`)
     .eq("latestBeatmapHash", digested)
     .single();
 
-  if (beatmapPage) {
+  if (beatmapPage && beatmapPage.owner !== userData.id) {
     return NextResponse.json({ error: "Already Exists" });
   }
 
