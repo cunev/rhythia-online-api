@@ -15,6 +15,11 @@ import { Schema as CreateBeatmapPage } from "./api/createBeatmapPage"
 export { Schema as SchemaCreateBeatmapPage } from "./api/createBeatmapPage"
 export const createBeatmapPage = handleApi({url:"/api/createBeatmapPage",...CreateBeatmapPage})
 
+// ./api/deleteBeatmapPage.ts API
+import { Schema as DeleteBeatmapPage } from "./api/deleteBeatmapPage"
+export { Schema as SchemaDeleteBeatmapPage } from "./api/deleteBeatmapPage"
+export const deleteBeatmapPage = handleApi({url:"/api/deleteBeatmapPage",...DeleteBeatmapPage})
+
 // ./api/editAboutMe.ts API
 import { Schema as EditAboutMe } from "./api/editAboutMe"
 export { Schema as SchemaEditAboutMe } from "./api/editAboutMe"

@@ -46,7 +46,7 @@ export async function handler({
   let { data: beatmapData, error: bmPageError } = await supabase
     .from("beatmaps")
     .select("*")
-    .eq("beatmapHash", pageData.id)
+    .eq("beatmapHash", pageData.latestBeatmapHash || "-1-1-1-1")
     .single();
 
   if (!userData) return NextResponse.json({ error: "No user." });
