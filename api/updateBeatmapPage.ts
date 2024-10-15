@@ -73,6 +73,7 @@ export async function handler({
       owner: userData.id,
       description,
       tags,
+      nominations: [],
     })
     .select("*")
     .single();
