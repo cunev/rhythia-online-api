@@ -60,7 +60,7 @@ export async function handler({
   console.log(userData);
   let { data: beatmaps, error } = await supabase
     .from("beatmaps")
-    .select("playcount")
+    .select("*")
     .eq("beatmapHash", data.mapHash)
     .single();
 
@@ -81,10 +81,33 @@ export async function handler({
 
   let newPlaycount = 1;
 
-  if (beatmaps) {
-    newPlaycount = (beatmaps.playcount || 1) + 1;
+  if (!beatmaps) {
+    return NextResponse.json(
+      {
+        error: "Map not submitted",
+      },
+      { status: 500 }
+    );
   }
 
+  if (beatmaps.noteCount !== data.mapNoteCount) {
+    return NextResponse.json(
+      {
+        error: "Wrong map",
+      },
+      { status: 500 }
+    );
+  }
+  if (beatmaps.noteCount !== data.mapNoteCount) {
+    return NextResponse.json(
+      {
+        error: "Wrong map",
+      },
+      { status: 500 }
+    );
+  }
+
+  newPlaycount = (beatmaps.playcount || 1) + 1;
   await supabase.from("beatmaps").upsert({
     beatmapHash: data.mapHash,
     title: data.mapTitle,
