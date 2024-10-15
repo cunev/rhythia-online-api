@@ -18,6 +18,7 @@ export const Schema = {
   input: z.strictObject({
     url: z.string(),
     session: z.string(),
+    updateFlag: z.boolean().optional(),
   }),
   output: z.strictObject({
     hash: z.string().optional(),
@@ -37,6 +38,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler({
   url,
   session,
+  updateFlag,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
@@ -67,8 +69,12 @@ export async function handler({
     .eq("latestBeatmapHash", digested)
     .single();
 
-  if (beatmapPage && beatmapPage.owner !== userData.id) {
-    return NextResponse.json({ error: "Already Exists" });
+  if (beatmapPage) {
+    if (!updateFlag) {
+      return NextResponse.json({ error: "Already Exists" });
+    } else if (beatmapPage.owner !== userData.id) {
+      return NextResponse.json({ error: "Already Exists" });
+    }
   }
 
   const imgkey = `beatmap-img-${Date.now()}-${digested}`;
