@@ -116,6 +116,12 @@ export async function handler({
   const accurracy = data.hits / beatmaps.noteCount;
   let awarded_sp = 0;
 
+  console.log(
+    data.misses + data.hits == beatmaps.noteCount,
+    data.misses + data.hits,
+    beatmaps.noteCount
+  );
+
   if (beatmaps.starRating) {
     awarded_sp = calculatePerformancePoints(
       data.speed * beatmaps.starRating,
