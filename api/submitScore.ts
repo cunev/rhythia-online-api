@@ -11,20 +11,29 @@ export const Schema = {
       relayHwid: z.string(),
       songId: z.string(),
       misses: z.number(),
-      squareHits: z.number(),
+      hits: z.number(),
       mapHash: z.string(),
-      mapTitle: z.string(),
-      mapDifficulty: z.number(),
       mapNoteCount: z.number(),
-      mapLength: z.number(),
-      passed: z.boolean(),
-      sspp: z.number(),
+      speed: z.number(),
     }),
   }),
   output: z.object({
     error: z.string().optional(),
   }),
 };
+
+function easeInExpoDeq(x: number) {
+  return x === 0 ? 0 : Math.pow(2, 50 * x - 50);
+}
+
+export function calculatePerformancePoints(
+  starRating: number,
+  accuracy: number
+) {
+  return Math.round(
+    Math.pow((starRating * easeInExpoDeq(accuracy) * 100) / 2, 2) / 1000
+  );
+}
 
 export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
@@ -79,8 +88,6 @@ export async function handler({
     );
   }
 
-  let newPlaycount = 1;
-
   if (!beatmaps) {
     return NextResponse.json(
       {
@@ -98,27 +105,23 @@ export async function handler({
       { status: 500 }
     );
   }
-  if (beatmaps.noteCount !== data.mapNoteCount) {
-    return NextResponse.json(
-      {
-        error: "Wrong map",
-      },
-      { status: 500 }
-    );
-  }
 
-  newPlaycount = (beatmaps.playcount || 1) + 1;
   await supabase.from("beatmaps").upsert({
     beatmapHash: data.mapHash,
-    title: data.mapTitle,
-    playcount: newPlaycount,
-    difficulty: data.mapDifficulty,
-    noteCount: data.mapNoteCount,
-    length: data.mapLength,
+    playcount: (beatmaps.playcount || 1) + 1,
   });
 
+  const passed =
+    data.misses == 0 && data.misses + data.hits == beatmaps.noteCount;
+  const accurracy = data.hits / beatmaps.noteCount;
+  let awarded_sp = 0;
+
+  if (beatmaps.starRating) {
+    awarded_sp = calculatePerformancePoints(beatmaps.starRating, accurracy);
+  }
+
   if (beatmapPages.status == "UNRANKED") {
-    data.sspp = 0;
+    awarded_sp = 0;
   }
 
   console.log("p1");
@@ -127,9 +130,9 @@ export async function handler({
     replayHwid: data.relayHwid,
     songId: data.songId,
     userId: userData.id,
-    passed: data.passed,
+    passed,
     misses: data.misses,
-    awarded_sp: Math.round(data.sspp * 100) / 100,
+    awarded_sp: Math.round(awarded_sp * 100) / 100,
   });
   console.log("p2");
 
@@ -172,11 +175,9 @@ export async function handler({
     id: userData.id,
     play_count: (userData.play_count || 0) + 1,
     skill_points: Math.round(totalSp * 100) / 100,
-    squares_hit: (userData.squares_hit || 0) + data.squareHits,
+    squares_hit: (userData.squares_hit || 0) + data.hits,
   });
   console.log("p3");
-
-  // await Promise.all([p1, p2, p3]);
 
   return NextResponse.json({});
 }
