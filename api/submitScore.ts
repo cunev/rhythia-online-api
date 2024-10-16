@@ -117,8 +117,10 @@ export async function handler({
   let awarded_sp = 0;
 
   if (beatmaps.starRating) {
-    awarded_sp =
-      data.speed * calculatePerformancePoints(beatmaps.starRating, accurracy);
+    awarded_sp = calculatePerformancePoints(
+      data.speed * beatmaps.starRating,
+      accurracy
+    );
   }
 
   if (beatmapPages.status == "UNRANKED") {
