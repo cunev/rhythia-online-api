@@ -136,6 +136,7 @@ export async function handler({
     passed,
     misses: data.misses,
     awarded_sp: Math.round(awarded_sp * 100) / 100,
+    speed: data.speed,
   });
   console.log("p2");
 
