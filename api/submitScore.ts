@@ -111,8 +111,16 @@ export async function handler({
     playcount: (beatmaps.playcount || 1) + 1,
   });
 
-  const passed =
-    data.misses == 0 && data.misses + data.hits == beatmaps.noteCount;
+  let passed = true;
+
+  // Pass invalidation
+  if (data.misses == 0) {
+    passed = false;
+  }
+  if (data.misses + data.hits == beatmaps.noteCount) {
+    passed = false;
+  }
+
   const accurracy = data.hits / beatmaps.noteCount;
   let awarded_sp = 0;
 
