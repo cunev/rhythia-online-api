@@ -40,8 +40,7 @@ export async function handler(
 export async function getLeaderboard(badge: string) {
   let { data: queryData, error } = await supabase
     .from("profiles")
-    .select("flag,id,username,badges")
-    .neq("ban", "excluded");
+    .select("flag,id,username,badges");
 
   const users = queryData?.filter((e) =>
     ((e.badges || []) as string[]).includes(badge)
