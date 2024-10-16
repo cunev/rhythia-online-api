@@ -114,9 +114,6 @@ export async function handler({
   let passed = true;
 
   // Pass invalidation
-  if (data.misses > 0) {
-    passed = false;
-  }
   if (data.misses + data.hits !== beatmaps.noteCount) {
     passed = false;
   }
