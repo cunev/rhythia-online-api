@@ -117,7 +117,7 @@ export async function handler({
   if (data.misses == 0) {
     passed = false;
   }
-  if (data.misses + data.hits == beatmaps.noteCount) {
+  if (data.misses + data.hits !== beatmaps.noteCount) {
     passed = false;
   }
 
