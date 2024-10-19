@@ -63,6 +63,20 @@ export async function handler({
     return NextResponse.json({ error: "Bad user" });
   }
 
+  if (
+    userData.ban == "excluded" ||
+    userData.ban == "restricted" ||
+    userData.ban == "silenced"
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Silenced, restricted or excluded players can't update their profile.",
+      },
+      { status: 404 }
+    );
+  }
+
   let { data: beatmapPage, error: errorlast } = await supabase
     .from("beatmapPages")
     .select(`*`)
