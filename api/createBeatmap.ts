@@ -9,8 +9,8 @@ const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
   credentials: {
-    secretAccessKey: "K0039mm4iKsteQOXpZSzf0+VDzuH89U",
-    accessKeyId: "003c245e893e8060000000001",
+    secretAccessKey: process.env.SECRET_BUCKET || "",
+    accessKeyId: process.env.ACCESS_BUCKET || "",
   },
 });
 

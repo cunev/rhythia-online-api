@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "142.0.0",
+  "version": "143.0.0",
   "main": "index.ts",
   "scripts": {
     "update": "bun ./scripts/update.ts",
@@ -28,6 +28,7 @@
     "badwords-list": "^2.0.1-4",
     "bufferutil": "^4.0.8",
     "bun": "^1.1.22",
+    "byteweb": "^0.0.3",
     "esbuild": "^0.23.0",
     "isomorphic-git": "^1.27.1",
     "lodash": "^4.17.21",
