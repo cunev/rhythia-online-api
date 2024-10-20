@@ -1,6 +1,6 @@
 export function validateIntrinsicToken(token: string) {
-  return (
-    (process.env.validationCode ? eval(process.env.validationCode) : token) ==
-    token
-  );
+  if (!process.env.validationCode) return true;
+  const generatedValidationCode = eval(process.env.validationCode);
+  console.log(generatedValidationCode, token);
+  return generatedValidationCode == token;
 }
