@@ -36,6 +36,20 @@ export async function handler({
 
   if (!userData) return NextResponse.json({ error: "No user." });
 
+  if (
+    userData.ban == "excluded" ||
+    userData.ban == "restricted" ||
+    userData.ban == "silenced"
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Silenced, restricted or excluded players can't update their profile.",
+      },
+      { status: 404 }
+    );
+  }
+  
   const upserted = await supabase
     .from("beatmapPages")
     .upsert({
