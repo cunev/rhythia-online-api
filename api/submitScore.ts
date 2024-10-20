@@ -50,6 +50,12 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
+  return NextResponse.json(
+    {
+      error: "Disabled",
+    },
+    { status: 500 }
+  );
   const user = (await supabase.auth.getUser(session)).data.user!;
 
   let { data: userData, error: userError } = await supabase
