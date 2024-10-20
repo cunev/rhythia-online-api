@@ -25,6 +25,7 @@ export const Schema = {
     session: z.string(),
     contentLength: z.number(),
     contentType: z.string(),
+    intrinsicToken: z.string(),
   }),
   output: z.strictObject({
     error: z.string().optional(),
@@ -47,14 +48,27 @@ export async function handler({
   session,
   contentLength,
   contentType,
+  intrinsicToken,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
   const user = (await supabase.auth.getUser(session)).data.user!;
 
+  if (!validateIntrinsicToken(intrinsicToken)) {
+    return NextResponse.json({
+      error: "Invalid intrinsic token",
+    });
+  }
+
   if (contentLength > 50000000) {
     return NextResponse.json({
       error: "Max content length exceeded.",
+    });
+  }
+
+  if (contentType !== "application/octet-stream") {
+    return NextResponse.json({
+      error: "Unnacceptable format",
     });
   }
 
