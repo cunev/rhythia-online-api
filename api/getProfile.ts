@@ -8,7 +8,7 @@ import { supabase } from "../utils/supabase";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
-    id: z.number().optional(),
+    id: z.number().nullable().optional(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -51,7 +51,7 @@ export async function handler(
   let profiles: Database["public"]["Tables"]["profiles"]["Row"][] = [];
 
   // Fetch by id
-  if (data.id !== undefined) {
+  if (data.id !== undefined && data.id !== null) {
     let { data: queryData, error } = await supabase
       .from("profiles")
       .select("*")
