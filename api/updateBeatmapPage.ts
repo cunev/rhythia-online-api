@@ -67,17 +67,17 @@ export async function handler({
 
   const upsertPayload = {
     id,
-    latestBeatmapHash: beatmapHash ? beatmapHash : pageData.latestBeatmapHash,
     genre: "",
     status: "UNRANKED",
     owner: userData.id,
     description: description ? description : pageData.description,
     tags: tags ? tags : pageData.tags,
-    nominations: [],
   };
 
   if (beatmapHash && beatmapData) {
     upsertPayload["title"] = beatmapData.title;
+    upsertPayload["latestBeatmapHash"] = beatmapHash;
+    upsertPayload["nominations"] = [];
   }
 
   const upserted = await supabase
