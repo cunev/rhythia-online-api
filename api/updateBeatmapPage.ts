@@ -66,13 +66,13 @@ export async function handler({
     .from("beatmapPages")
     .upsert({
       id,
-      latestBeatmapHash: beatmapHash,
+      latestBeatmapHash: beatmapHash ? beatmapHash : pageData.latestBeatmapHash,
       genre: "",
       title: beatmapData.title,
       status: "UNRANKED",
       owner: userData.id,
-      description,
-      tags,
+      description: description ? description : pageData.description,
+      tags: tags ? tags : pageData.tags,
       nominations: [],
     })
     .select("*")
