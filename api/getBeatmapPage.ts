@@ -28,6 +28,8 @@ export const Schema = {
         ownerUsername: z.string().nullable().optional(),
         ownerAvatar: z.string().nullable().optional(),
         status: z.string().nullable().optional(),
+        description: z.string().nullable().optional(),
+        tags: z.string().nullable().optional(),
       })
       .optional(),
   }),
@@ -92,6 +94,8 @@ export async function handler(
       id: beatmapPage.id,
       status: beatmapPage.status,
       nominations: beatmapPage.nominations as number[],
+      description: beatmapPage.description,
+      tags: beatmapPage.tags,
     },
   });
 }
