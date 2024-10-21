@@ -593,9 +593,9 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     id: z.number(),
-    beatmapHash: z.string(),
-    tags: z.string(),
-    description: z.string(),
+    beatmapHash: z.string().optional(),
+    tags: z.string().optional(),
+    description: z.string().optional(),
   }),
   output: z.strictObject({
     error: z.string().optional(),

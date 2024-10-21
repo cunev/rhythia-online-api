@@ -7,9 +7,9 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     id: z.number(),
-    beatmapHash: z.string(),
-    tags: z.string(),
-    description: z.string(),
+    beatmapHash: z.string().optional(),
+    tags: z.string().optional(),
+    description: z.string().optional(),
   }),
   output: z.strictObject({
     error: z.string().optional(),
@@ -47,14 +47,17 @@ export async function handler({
     .eq("id", id)
     .single();
 
+  if (!userData) return NextResponse.json({ error: "No user." });
+
   let { data: beatmapData, error: bmPageError } = await supabase
     .from("beatmaps")
     .select("*")
-    .eq("beatmapHash", beatmapHash)
+    .eq("beatmapHash", beatmapHash || "")
     .single();
 
-  if (!userData) return NextResponse.json({ error: "No user." });
-  if (!beatmapData) return NextResponse.json({ error: "No beatmap." });
+  if (!beatmapData && beatmapHash) {
+    return NextResponse.json({ error: "No beatmap." });
+  }
 
   if (userData.id !== pageData?.owner)
     return NextResponse.json({ error: "Non-authz user." });
@@ -62,19 +65,24 @@ export async function handler({
   if (pageData?.status !== "UNRANKED")
     return NextResponse.json({ error: "Only unranked maps can be updated" });
 
+  const upsertPayload = {
+    id,
+    latestBeatmapHash: beatmapHash ? beatmapHash : pageData.latestBeatmapHash,
+    genre: "",
+    status: "UNRANKED",
+    owner: userData.id,
+    description: description ? description : pageData.description,
+    tags: tags ? tags : pageData.tags,
+    nominations: [],
+  };
+
+  if (beatmapHash && beatmapData) {
+    upsertPayload["title"] = beatmapData.title;
+  }
+
   const upserted = await supabase
     .from("beatmapPages")
-    .upsert({
-      id,
-      latestBeatmapHash: beatmapHash ? beatmapHash : pageData.latestBeatmapHash,
-      genre: "",
-      title: beatmapData.title,
-      status: "UNRANKED",
-      owner: userData.id,
-      description: description ? description : pageData.description,
-      tags: tags ? tags : pageData.tags,
-      nominations: [],
-    })
+    .upsert(upsertPayload)
     .select("*")
     .single();
 
