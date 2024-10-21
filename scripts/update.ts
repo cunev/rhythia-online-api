@@ -26,6 +26,16 @@ for (const api of apis) {
   }
   exports.push(`\n// ./api/${api} API`);
 
+  const content = readFileSync(path.join("./api", api), "utf-8");
+  exports.push(
+    `\n/*\n` +
+      content.slice(
+        content.indexOf("export const Schema"),
+        content.indexOf("};") + 2
+      ) +
+      "*/"
+  );
+
   const apiName = path.parse(api).name;
   exports.push(
     `import { Schema as ${upperFirst(apiName)} } from "./api/${apiName}"`

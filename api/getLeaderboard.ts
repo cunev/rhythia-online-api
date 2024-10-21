@@ -63,6 +63,7 @@ export async function getLeaderboard(page = 1, session: string) {
       const { count: playersWithMorePoints, error: rankError } = await supabase
         .from("profiles")
         .select("*", { count: "exact", head: true })
+        .neq("ban", "excluded")
         .gt("skill_points", queryData.skill_points);
 
       leaderPosition = (playersWithMorePoints || 0) + 1;
