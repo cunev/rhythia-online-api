@@ -198,6 +198,7 @@ export const Schema = {
         ranked: z.boolean().nullable().optional(),
         beatmapFile: z.string().nullable().optional(),
         image: z.string().nullable().optional(),
+        imageLarge: z.string().nullable().optional(),
         starRating: z.number().nullable().optional(),
         owner: z.number().nullable().optional(),
         ownerUsername: z.string().nullable().optional(),

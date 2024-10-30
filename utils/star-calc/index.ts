@@ -48,7 +48,6 @@ export function rate(
 ) {
   notes = notes.sort((a, b) => a.time - b.time);
   const decoder = new BeatmapDecoder();
-  const encoder = new BeatmapEncoder();
   const beatmap1 = decoder.decodeFromString(sampleMap);
   let i = 0;
   while (i < notes.length - 1) {
@@ -70,7 +69,6 @@ export function rate(
   const mods = ruleset.createModCombination("RX");
   const difficultyCalculator = ruleset.createDifficultyCalculator(beatmap1);
   const difficultyAttributes = difficultyCalculator.calculateWithMods(mods);
-  encoder.encodeToPath("./map.osu", beatmap1);
   return difficultyAttributes.starRating;
 }
 
