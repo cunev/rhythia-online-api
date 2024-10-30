@@ -3,6 +3,8 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
@@ -45,7 +47,7 @@ export async function handler(
     );
   }
 
-  const user = await getUserBySession(data.session);
+  const user = (await getUserBySession(data.session)) as User;
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
 
   // Find user's entry

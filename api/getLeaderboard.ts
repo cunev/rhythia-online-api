@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import z from "zod";
-import { getUser, protectedApi } from "../utils/requestUtils";
+import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 export const Schema = {
   input: z.strictObject({
@@ -48,7 +50,7 @@ export async function handler(
 const VIEW_PER_PAGE = 50;
 
 export async function getLeaderboard(page = 1, session: string) {
-  const getUserData = await getUser({ session });
+  const getUserData = (await getUserBySession(session)) as User;
 
   let leaderPosition = 0;
 
@@ -56,7 +58,7 @@ export async function getLeaderboard(page = 1, session: string) {
     let { data: queryData, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("uid", getUserData.data.user.id)
+      .eq("uid", getUserData.id)
       .single();
 
     if (queryData) {

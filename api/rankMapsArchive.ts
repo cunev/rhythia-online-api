@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 export const Schema = {
   input: z.strictObject({
@@ -23,7 +25,7 @@ export async function POST(request: Request) {
 }
 
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
-  const user = await getUserBySession(data.session);
+  const user = (await getUserBySession(data.session)) as User;
   let { data: queryUserData, error: userError } = await supabase
     .from("profiles")
     .select("*")
