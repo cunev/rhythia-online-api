@@ -3,7 +3,6 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
-import md5 from "md5";
 import { encryptString } from "../utils/security";
 export const Schema = {
   input: z.strictObject({

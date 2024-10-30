@@ -10,12 +10,15 @@ export async function getUserBySession(session: string): Promise<User | null> {
   }
 
   try {
+    console.log("trying legacy token");
     const decryptedToken = JSON.parse(decryptString(session)) as {
       userId: number;
       email: string;
       passKey: string;
       computerName: string;
     };
+
+    console.log(decryptedToken);
 
     let { data: queryPasskey, error } = await supabase
       .from("passkeys")
@@ -24,6 +27,8 @@ export async function getUserBySession(session: string): Promise<User | null> {
       .eq("email", decryptedToken.email || "nil")
       .eq("passkey", decryptedToken.passKey || "nil")
       .single();
+
+    console.log(queryPasskey);
 
     if (!queryPasskey) {
       return null;
