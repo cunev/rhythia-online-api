@@ -16,11 +16,13 @@ export async function getUserBySession(session: string): Promise<User | null> {
       passKey: string;
       computerName: string;
     };
+
     let { data: queryPasskey, error } = await supabase
       .from("passkeys")
       .select("*,profiles(uid)")
-      .eq("email", decryptedToken.email)
-      .eq("passkey", decryptedToken.passKey)
+      .eq("id", decryptedToken.userId || "nil")
+      .eq("email", decryptedToken.email || "nil")
+      .eq("passkey", decryptedToken.passKey || "nil")
       .single();
 
     if (!queryPasskey) {
