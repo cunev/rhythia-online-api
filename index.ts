@@ -353,6 +353,26 @@ import { Schema as GetMapUploadUrl } from "./api/getMapUploadUrl"
 export { Schema as SchemaGetMapUploadUrl } from "./api/getMapUploadUrl"
 export const getMapUploadUrl = handleApi({url:"/api/getMapUploadUrl",...GetMapUploadUrl})
 
+// ./api/getPassToken.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    data: z.object({
+      email: z.string(),
+      passkey: z.string(),
+      computerName: z.string(),
+    }),
+  }),
+  output: z.object({
+    token: z.string().optional(),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as GetPassToken } from "./api/getPassToken"
+export { Schema as SchemaGetPassToken } from "./api/getPassToken"
+export const getPassToken = handleApi({url:"/api/getPassToken",...GetPassToken})
+
 // ./api/getProfile.ts API
 
 /*
@@ -561,6 +581,24 @@ export const Schema = {
 import { Schema as SearchUsers } from "./api/searchUsers"
 export { Schema as SchemaSearchUsers } from "./api/searchUsers"
 export const searchUsers = handleApi({url:"/api/searchUsers",...SearchUsers})
+
+// ./api/setPasskey.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    data: z.object({
+      passkey: z.string(),
+    }),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as SetPasskey } from "./api/setPasskey"
+export { Schema as SchemaSetPasskey } from "./api/setPasskey"
+export const setPasskey = handleApi({url:"/api/setPasskey",...SetPasskey})
 
 // ./api/submitScore.ts API
 

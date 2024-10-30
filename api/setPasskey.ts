@@ -3,7 +3,6 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
-import md5 from "md5";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 export const Schema = {
@@ -53,7 +52,7 @@ export async function handler(
   await supabase.from("passkeys").upsert({
     id: userData.id!,
     email: user.email!,
-    passkey: md5(data.data.passkey),
+    passkey: data.data.passkey,
   });
 
   return NextResponse.json({});
