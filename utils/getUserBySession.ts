@@ -18,14 +18,20 @@ export async function getUserBySession(session: string): Promise<User | null> {
       computerName: string;
     };
 
+    for (const key of Object.keys(decryptedToken)) {
+      if (decryptedToken[key] === undefined || decryptedToken[key] === null) {
+        return null;
+      }
+    }
+
     console.log(decryptedToken);
 
     let { data: queryPasskey, error } = await supabase
       .from("passkeys")
       .select("*,profiles(uid)")
-      .eq("id", decryptedToken.userId || "nil")
-      .eq("email", decryptedToken.email || "nil")
-      .eq("passkey", decryptedToken.passKey || "nil")
+      .eq("id", decryptedToken.userId)
+      .eq("email", decryptedToken.email)
+      .eq("passkey", decryptedToken.passKey)
       .single();
 
     console.log(queryPasskey);
