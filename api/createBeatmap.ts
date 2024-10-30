@@ -101,6 +101,15 @@ export async function handler({
       .toBuffer();
   } catch (error) {}
 
+  let largeBuffer = Buffer.from([]);
+  try {
+    largeBuffer = await require("sharp")(parsedData.cover)
+      .resize(850)
+      .jpeg({ mozjpeg: true })
+      .toBuffer();
+  } catch (error) {}
+
+  // Images
   const command = new PutObjectCommand({
     Bucket: "rhthia-avatars",
     Key: imgkey,
@@ -109,6 +118,17 @@ export async function handler({
   });
 
   await s3Client.send(command);
+
+  const command2 = new PutObjectCommand({
+    Bucket: "rhthia-avatars",
+    Key: imgkey + "large",
+    Body: largeBuffer,
+    ContentType: "image/jpeg",
+  });
+
+  await s3Client.send(command2);
+  // Images End
+
   const markers = parsedData.markers.sort((a, b) => a.position - b.position);
 
   const upserted = await supabase.from("beatmaps").upsert({
@@ -120,6 +140,7 @@ export async function handler({
     length: markers[markers.length - 1].position,
     beatmapFile: url,
     image: `https://static.rhythia.com/${imgkey}`,
+    imageLarge: `https://static.rhythia.com/${imgkey}large`,
     starRating: rateMap(parsedData),
   });
 
