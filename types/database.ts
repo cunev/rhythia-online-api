@@ -147,6 +147,32 @@ export type Database = {
         }
         Relationships: []
       }
+      passkeys: {
+        Row: {
+          email: string
+          id: number
+          passkey: string
+        }
+        Insert: {
+          email: string
+          id: number
+          passkey: string
+        }
+        Update: {
+          email?: string
+          id?: number
+          passkey?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "passkeys_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           about_me: string | null

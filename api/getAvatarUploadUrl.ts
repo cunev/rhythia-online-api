@@ -10,6 +10,8 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { validateIntrinsicToken } from "../utils/validateToken";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 const s3Client = new S3Client({
   region: "auto",
@@ -51,7 +53,7 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
-  const user = (await supabase.auth.getUser(session)).data.user!;
+  const user = (await getUserBySession(session)) as User;
 
   if (!validateIntrinsicToken(intrinsicToken)) {
     return NextResponse.json({

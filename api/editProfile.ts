@@ -46,7 +46,7 @@ export async function handler(
     );
   }
 
-  const user = (await supabase.auth.getUser(data.session)).data.user!;
+  const user = await getUserBySession(data.session);
 
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
 

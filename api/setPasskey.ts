@@ -3,11 +3,14 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import md5 from "md5";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
     data: z.object({
-      about_me: z.string().optional(),
+      passkey: z.string(),
     }),
   }),
   output: z.object({
@@ -19,7 +22,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   return protectedApi({
     request,
     schema: Schema,
-    authorization: validUser,
+    authorization: () => {},
     activity: handler,
   });
 }
@@ -27,27 +30,8 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  if (!data.data.about_me) {
-    return NextResponse.json(
-      {
-        error: "Missing body.",
-      },
-      { status: 404 }
-    );
-  }
-
-  if (data.data.about_me.length > 10000) {
-    return NextResponse.json(
-      {
-        error: "Too long.",
-      },
-      { status: 404 }
-    );
-  }
-
-  const user = await getUserBySession(data.session);
+  const user = (await getUserBySession(data.session)) as User;
   let userData: Database["public"]["Tables"]["profiles"]["Update"];
-
   // Find user's entry
   {
     let { data: queryUserData, error } = await supabase
@@ -66,24 +50,11 @@ export async function handler(
     userData = queryUserData[0];
   }
 
-  const upsertPayload: Database["public"]["Tables"]["profiles"]["Update"] = {
-    id: userData.id,
-    about_me: data.data.about_me,
-  };
-
-  const upsertResult = await supabase
-    .from("profiles")
-    .upsert(upsertPayload)
-    .select();
-
-  if (upsertResult.error) {
-    return NextResponse.json(
-      {
-        error: "Can't update..",
-      },
-      { status: 404 }
-    );
-  }
+  await supabase.from("passkeys").upsert({
+    id: userData.id!,
+    email: user.email!,
+    passkey: md5(data.data.passkey),
+  });
 
   return NextResponse.json({});
 }

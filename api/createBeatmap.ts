@@ -5,6 +5,8 @@ import { SSPMParser } from "../utils/star-calc/sspmParser";
 import { supabase } from "../utils/supabase";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -52,7 +54,7 @@ export async function handler({
   const parsedData = parser.parse();
   const digested = parsedData.strings.mapID;
 
-  const user = (await supabase.auth.getUser(session)).data.user!;
+  const user = (await getUserBySession(session)) as User;
   let { data: userData, error: userError } = await supabase
     .from("profiles")
     .select("*")

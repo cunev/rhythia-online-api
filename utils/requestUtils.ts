@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { supabase } from "./supabase";
 import { ZodObject } from "zod";
+import { getUserBySession } from "./getUserBySession";
 
 interface Props<
   K = (...args: any[]) => Promise<NextResponse<any>>,
@@ -43,8 +43,8 @@ export async function validUser(data) {
     );
   }
 
-  const user = await supabase.auth.getUser(data.session);
-  if (user.error || !user.data.user) {
+  const user = await getUserBySession(data.session);
+  if (!user) {
     return NextResponse.json(
       {
         error: "Invalid user session",
@@ -52,16 +52,4 @@ export async function validUser(data) {
       { status: 400 }
     );
   }
-}
-
-export async function getUser(data) {
-  if (!data.session) {
-    return;
-  }
-
-  const user = await supabase.auth.getUser(data.session);
-  if (user.error || !user.data.user) {
-    return;
-  }
-  return user;
 }

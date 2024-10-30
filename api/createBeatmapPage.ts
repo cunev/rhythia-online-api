@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 export const Schema = {
   input: z.strictObject({
@@ -27,7 +29,7 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
-  const user = (await supabase.auth.getUser(session)).data.user!;
+  const user = (await getUserBySession(session)) as User;
   let { data: userData, error: userError } = await supabase
     .from("profiles")
     .select("*")
@@ -49,7 +51,7 @@ export async function handler({
       { status: 404 }
     );
   }
-  
+
   const upserted = await supabase
     .from("beatmapPages")
     .upsert({

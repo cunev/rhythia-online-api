@@ -4,6 +4,8 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { decryptString } from "../utils/security";
 import { isEqual } from "lodash";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 export const Schema = {
   input: z.strictObject({
@@ -72,7 +74,7 @@ export async function handler({
     );
   }
 
-  const user = (await supabase.auth.getUser(session)).data.user!;
+  const user = (await getUserBySession(session)) as User;
 
   let { data: userData, error: userError } = await supabase
     .from("profiles")

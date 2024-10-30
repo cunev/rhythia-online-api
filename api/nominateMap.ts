@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 }
 
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
-  const user = (await supabase.auth.getUser(data.session)).data.user!;
+  const user = await getUserBySession(data.session);
   let { data: queryUserData, error: userError } = await supabase
     .from("profiles")
     .select("*")
