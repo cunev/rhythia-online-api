@@ -4,6 +4,8 @@ import z from "zod";
 import { Database } from "../types/database";
 import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getUserBySession } from "../utils/getUserBySession";
+import { User } from "@supabase/supabase-js";
 
 export const Schema = {
   input: z.strictObject({
@@ -71,7 +73,7 @@ export async function handler(
     profiles = queryData;
   } else {
     // Fetch by session id
-    const user = (await supabase.auth.getUser(data.session)).data.user;
+    const user = (await getUserBySession(data.session)) as User;
 
     if (user) {
       let { data: queryData, error } = await supabase
