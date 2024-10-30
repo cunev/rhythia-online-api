@@ -16,6 +16,7 @@
     "@aws-sdk/client-s3": "^3.637.0",
     "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@netlify/zip-it-and-ship-it": "^9.37.9",
+    "@noble/ciphers": "^1.0.0",
     "@supabase/supabase-js": "^2.45.1",
     "@types/aws-lambda": "^8.10.143",
     "@types/bun": "^1.1.6",

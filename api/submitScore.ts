@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { decryptString } from "../utils/security";
+import { isEqual } from "lodash";
 
 export const Schema = {
   input: z.strictObject({
@@ -50,12 +52,26 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
-  return NextResponse.json(
-    {
-      error: "Disabled",
-    },
-    { status: 500 }
-  );
+  const tokenContents = JSON.parse(decryptString(data.token));
+  if (
+    !isEqual(tokenContents, {
+      relayHwid: data.relayHwid,
+      songId: data.songId,
+      misses: data.misses,
+      hits: data.hits,
+      mapHash: data.mapHash,
+      mapNoteCount: data.mapNoteCount,
+      speed: data.speed,
+    })
+  ) {
+    return NextResponse.json(
+      {
+        error: "Token miscalculation",
+      },
+      { status: 500 }
+    );
+  }
+
   const user = (await supabase.auth.getUser(session)).data.user!;
 
   let { data: userData, error: userError } = await supabase
