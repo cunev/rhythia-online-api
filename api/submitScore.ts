@@ -17,7 +17,6 @@ export const Schema = {
       misses: z.number(),
       hits: z.number(),
       mapHash: z.string(),
-      mapNoteCount: z.number(),
       speed: z.number(),
     }),
   }),
@@ -62,7 +61,6 @@ export async function handler({
       misses: data.misses,
       hits: data.hits,
       mapHash: data.mapHash,
-      mapNoteCount: data.mapNoteCount,
       speed: data.speed,
     })
   ) {
@@ -121,7 +119,8 @@ export async function handler({
     );
   }
 
-  if (beatmaps.noteCount !== data.mapNoteCount) {
+  const noteCount = data.misses + data.hits;
+  if (noteCount !== beatmaps.noteCount) {
     return NextResponse.json(
       {
         error: "Wrong map",
@@ -142,7 +141,7 @@ export async function handler({
     passed = false;
   }
 
-  const accurracy = data.hits / beatmaps.noteCount;
+  const accurracy = data.hits / noteCount;
   let awarded_sp = 0;
 
   console.log(
