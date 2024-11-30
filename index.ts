@@ -613,7 +613,6 @@ export const Schema = {
       misses: z.number(),
       hits: z.number(),
       mapHash: z.string(),
-      mapNoteCount: z.number(),
       speed: z.number(),
     }),
   }),
