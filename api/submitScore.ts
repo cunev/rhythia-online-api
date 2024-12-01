@@ -207,9 +207,9 @@ export async function handler({
 
   for (const score of values) {
     totalSp += ((score || 0) * weight) / 100;
-    weight -= 1;
+    weight = weight * 0.97;
 
-    if (weight == 0) {
+    if (weight < 5) {
       break;
     }
   }
