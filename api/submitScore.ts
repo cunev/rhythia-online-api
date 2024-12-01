@@ -25,27 +25,22 @@ export const Schema = {
   }),
 };
 
-function easeInExpoDeqEasy(x: number) {
-  return x === 0 ? 0 : Math.pow(2, 50 * x - 50);
-}
-
-function easeInExpoDeqHard(x: number) {
-  return x === 0 ? 0 : Math.pow(2, 5 * x - 5);
+function easeInExpoDeqHard(x: number, star: number) {
+  let exponent = 100 - 12 * star;
+  if (exponent < 5) exponent = 5;
+  return x === 0 ? 0 : Math.pow(2, exponent * x - exponent);
 }
 
 export function calculatePerformancePoints(
   starRating: number,
   accuracy: number
 ) {
-  if (starRating < 4) {
-    return Math.round(
-      Math.pow((starRating * easeInExpoDeqEasy(accuracy) * 100) / 2, 2) / 1000
-    );
-  } else {
-    return Math.round(
-      Math.pow((starRating * easeInExpoDeqHard(accuracy) * 100) / 2, 2) / 1000
-    );
-  }
+  return Math.round(
+    Math.pow(
+      (starRating * easeInExpoDeqHard(accuracy, starRating) * 100) / 2,
+      2
+    ) / 1000
+  );
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
