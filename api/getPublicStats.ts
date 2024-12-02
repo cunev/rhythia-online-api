@@ -73,7 +73,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
       )
     `
     )
-    .eq("ranked", true)
+    .eq("status", "RANKED")
     .order("created_at", { ascending: false })
     .limit(4);
 
