@@ -29,6 +29,23 @@ export const Schema = {
         status: z.string().nullable().optional(),
       })
     ),
+    topUsers: z.array(
+      z.object({
+        username: z.string(),
+        id: z.number(),
+        avatar_url: z.string(),
+        skill_points: z.number(),
+      })
+    ),
+    lastComments: z.array(
+      z.object({
+        owner: z.number(),
+        content: z.string(),
+        username: z.string(),
+        beatmapTitle: z.string(),
+        beatmapPage: z.number(),
+      })
+    ),
   }),
 };
 
@@ -77,6 +94,28 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     .order("created_at", { ascending: false })
     .limit(4);
 
+  let { data: topUsers } = await supabase
+    .from("profiles")
+    .select("*")
+    .neq("ban", "excluded")
+    .order("skill_points", { ascending: false })
+    .limit(3);
+
+  let { data: comments } = await supabase
+    .from("beatmapPageComments")
+    .select(
+      `
+      *,
+      beatmapPages!inner(
+        *
+      ),
+      profiles!inner(
+        username
+      )`
+    )
+    .order("created_at", { ascending: false })
+    .limit(5);
+
   const countScoresQuery = await supabase
     .from("scores")
     .select("*", { count: "exact", head: true });
@@ -102,6 +141,19 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
       id: e.id,
       status: e.status,
       nominations: e.nominations as number[],
+    })),
+    topUsers: topUsers?.map((e) => ({
+      username: e.username,
+      id: e.id,
+      avatar_url: e.avatar_url,
+      skill_points: e.skill_points,
+    })),
+    lastComments: comments?.map((e) => ({
+      owner: e.owner,
+      content: e.content,
+      username: e.profiles.username,
+      beatmapTitle: e.beatmapPages.title,
+      beatmapPage: e.beatmapPages.id,
     })),
   });
 }

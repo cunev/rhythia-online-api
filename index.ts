@@ -418,6 +418,43 @@ export const Schema = {
     profiles: z.number(),
     beatmaps: z.number(),
     scores: z.number(),
+    lastBeatmaps: z.array(
+      z.object({
+        id: z.number().nullable().optional(),
+        nominations: z.array(z.number()).nullable().optional(),
+        playcount: z.number().nullable().optional(),
+        created_at: z.string().nullable().optional(),
+        difficulty: z.number().nullable().optional(),
+        noteCount: z.number().nullable().optional(),
+        length: z.number().nullable().optional(),
+        title: z.string().nullable().optional(),
+        ranked: z.boolean().nullable().optional(),
+        beatmapFile: z.string().nullable().optional(),
+        image: z.string().nullable().optional(),
+        starRating: z.number().nullable().optional(),
+        owner: z.number().nullable().optional(),
+        ownerUsername: z.string().nullable().optional(),
+        ownerAvatar: z.string().nullable().optional(),
+        status: z.string().nullable().optional(),
+      })
+    ),
+    topUsers: z.array(
+      z.object({
+        username: z.string(),
+        id: z.number(),
+        avatar_url: z.string(),
+        skill_points: z.number(),
+      })
+    ),
+    lastComments: z.array(
+      z.object({
+        owner: z.number(),
+        content: z.string(),
+        username: z.string(),
+        beatmapTitle: z.string(),
+        beatmapPage: z.number(),
+      })
+    ),
   }),
 };*/
 import { Schema as GetPublicStats } from "./api/getPublicStats"
