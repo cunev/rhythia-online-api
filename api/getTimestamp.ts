@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import z from "zod";
-import { protectedApi, validUser } from "../utils/requestUtils";
+import { protectedApi } from "../utils/requestUtils";
 
 export const Schema = {
   input: z.strictObject({}),
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   return protectedApi({
     request,
     schema: Schema,
-    authorization: validUser,
+    authorization: () => {},
     activity: handler,
   });
 }
