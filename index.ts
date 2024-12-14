@@ -494,6 +494,19 @@ import { Schema as GetScore } from "./api/getScore"
 export { Schema as SchemaGetScore } from "./api/getScore"
 export const getScore = handleApi({url:"/api/getScore",...GetScore})
 
+// ./api/getTimestamp.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({}),
+  output: z.object({
+    time: z.number(),
+  }),
+};*/
+import { Schema as GetTimestamp } from "./api/getTimestamp"
+export { Schema as SchemaGetTimestamp } from "./api/getTimestamp"
+export const getTimestamp = handleApi({url:"/api/getTimestamp",...GetTimestamp})
+
 // ./api/getUserScores.ts API
 
 /*
