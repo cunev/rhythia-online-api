@@ -159,7 +159,7 @@ export async function handler({
 
   let multiplierMod = 1;
   if (data.mods.includes("mod_hardrock")) {
-    multiplierMod *= 1.075;
+    multiplierMod *= 1.12;
   }
 
   if (data.mods.includes("mod_nofail")) {
