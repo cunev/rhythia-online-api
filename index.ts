@@ -686,6 +686,7 @@ export const Schema = {
       mapHash: z.string(),
       speed: z.number(),
       mods: z.array(z.string()),
+      additionalData: z.record(z.string(), z.any()),
     }),
   }),
   output: z.object({
