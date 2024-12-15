@@ -163,7 +163,7 @@ export async function handler({
   }
 
   if (data.mods.includes("mod_nofail")) {
-    multiplierMod *= 0.5;
+    multiplierMod *= Math.pow(0.95, data.misses);
   }
 
   if (beatmaps.starRating) {
@@ -187,6 +187,7 @@ export async function handler({
     misses: data.misses,
     awarded_sp: Math.round(awarded_sp * 100) / 100,
     speed: data.speed,
+    mods: data.mods,
   });
   console.log("p2");
 

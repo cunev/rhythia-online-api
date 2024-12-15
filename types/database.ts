@@ -184,8 +184,10 @@ export type Database = {
           created_at: number | null
           flag: string | null
           id: number
+          mu_rank: number
           play_count: number | null
           profile_image: string | null
+          sigma_rank: number | null
           skill_points: number | null
           squares_hit: number | null
           total_score: number | null
@@ -203,8 +205,10 @@ export type Database = {
           created_at?: number | null
           flag?: string | null
           id?: number
+          mu_rank?: number
           play_count?: number | null
           profile_image?: string | null
+          sigma_rank?: number | null
           skill_points?: number | null
           squares_hit?: number | null
           total_score?: number | null
@@ -222,8 +226,10 @@ export type Database = {
           created_at?: number | null
           flag?: string | null
           id?: number
+          mu_rank?: number
           play_count?: number | null
           profile_image?: string | null
+          sigma_rank?: number | null
           skill_points?: number | null
           squares_hit?: number | null
           total_score?: number | null
@@ -240,6 +246,7 @@ export type Database = {
           created_at: string
           id: number
           misses: number | null
+          mods: Json
           passed: boolean | null
           replayHwid: string | null
           songId: string | null
@@ -252,6 +259,7 @@ export type Database = {
           created_at?: string
           id?: number
           misses?: number | null
+          mods?: Json
           passed?: boolean | null
           replayHwid?: string | null
           songId?: string | null
@@ -264,6 +272,7 @@ export type Database = {
           created_at?: string
           id?: number
           misses?: number | null
+          mods?: Json
           passed?: boolean | null
           replayHwid?: string | null
           songId?: string | null
