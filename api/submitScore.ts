@@ -180,6 +180,12 @@ export async function handler({
   }
 
   console.log("p1");
+
+  let parsed = [];
+
+  try {
+    parsed = JSON.parse(decryptString(data.additionalData));
+  } catch (error) {}
   await supabase.from("scores").upsert({
     beatmapHash: data.mapHash,
     replayHwid: data.relayHwid,
@@ -190,7 +196,7 @@ export async function handler({
     awarded_sp: Math.round(awarded_sp * 100) / 100,
     speed: data.speed,
     mods: data.mods,
-    additional_data: data.additionalData,
+    additional_data: parsed,
   });
   console.log("p2");
 
