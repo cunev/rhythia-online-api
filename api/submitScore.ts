@@ -18,6 +18,7 @@ export const Schema = {
       hits: z.number(),
       mapHash: z.string(),
       speed: z.number(),
+      mods: z.array(z.string()),
     }),
   }),
   output: z.object({
@@ -155,9 +156,18 @@ export async function handler({
     beatmaps.noteCount
   );
 
+  let multiplierMod = 1;
+  if (data.mods.includes("mod_hardrock")) {
+    multiplierMod *= 1.075;
+  }
+
+  if (data.mods.includes("mod_nofail")) {
+    multiplierMod *= 0.5;
+  }
+
   if (beatmaps.starRating) {
     awarded_sp = calculatePerformancePoints(
-      data.speed * beatmaps.starRating,
+      data.speed * beatmaps.starRating * multiplierMod,
       accurracy
     );
   }
