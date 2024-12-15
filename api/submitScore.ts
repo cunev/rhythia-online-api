@@ -190,6 +190,7 @@ export async function handler({
     awarded_sp: Math.round(awarded_sp * 100) / 100,
     speed: data.speed,
     mods: data.mods,
+    additional_data: data.additionalData,
   });
   console.log("p2");
 

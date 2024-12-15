@@ -241,6 +241,7 @@ export type Database = {
       }
       scores: {
         Row: {
+          additional_data: Json
           awarded_sp: number | null
           beatmapHash: string | null
           created_at: string
@@ -254,6 +255,7 @@ export type Database = {
           userId: number | null
         }
         Insert: {
+          additional_data?: Json
           awarded_sp?: number | null
           beatmapHash?: string | null
           created_at?: string
@@ -267,6 +269,7 @@ export type Database = {
           userId?: number | null
         }
         Update: {
+          additional_data?: Json
           awarded_sp?: number | null
           beatmapHash?: string | null
           created_at?: string
