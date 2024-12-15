@@ -68,6 +68,7 @@ export async function handler({
       hits: data.hits,
       mapHash: data.mapHash,
       speed: data.speed,
+      mods: data.mods,
     })
   ) {
     return NextResponse.json(
