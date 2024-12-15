@@ -300,6 +300,27 @@ import { Schema as GetBeatmaps } from "./api/getBeatmaps"
 export { Schema as SchemaGetBeatmaps } from "./api/getBeatmaps"
 export const getBeatmaps = handleApi({url:"/api/getBeatmaps",...GetBeatmaps})
 
+// ./api/getBeatmapStarRating.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    mapId: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+    beatmap: z
+      .object({
+        starRating: z.number().nullable().optional(),
+      })
+      .optional(),
+  }),
+};*/
+import { Schema as GetBeatmapStarRating } from "./api/getBeatmapStarRating"
+export { Schema as SchemaGetBeatmapStarRating } from "./api/getBeatmapStarRating"
+export const getBeatmapStarRating = handleApi({url:"/api/getBeatmapStarRating",...GetBeatmapStarRating})
+
 // ./api/getLeaderboard.ts API
 
 /*
