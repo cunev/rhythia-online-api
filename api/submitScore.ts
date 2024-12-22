@@ -20,6 +20,7 @@ export const Schema = {
       speed: z.number(),
       mods: z.array(z.string()),
       additionalData: z.any(),
+      spin: z.boolean(),
     }),
   }),
   output: z.object({
@@ -37,11 +38,13 @@ export function calculatePerformancePoints(
   starRating: number,
   accuracy: number
 ) {
-  return Math.round(
-    Math.pow(
-      (starRating * easeInExpoDeqHard(accuracy, starRating) * 100) / 2,
-      2
-    ) / 1000
+  return (
+    Math.round(
+      Math.pow(
+        (starRating * easeInExpoDeqHard(accuracy, starRating) * 100) / 2,
+        2
+      ) / 1000
+    ) * 2
   );
 }
 
@@ -197,6 +200,7 @@ export async function handler({
     speed: data.speed,
     mods: data.mods,
     additional_data: parsed,
+    spin: data.spin || false,
   });
   console.log("p2");
 
