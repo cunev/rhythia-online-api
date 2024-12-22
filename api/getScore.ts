@@ -25,6 +25,7 @@ export const Schema = {
         beatmapTitle: z.string().optional().nullable(),
         username: z.string().optional().nullable(),
         speed: z.number().optional().nullable(),
+        spin: z.boolean().optional().nullable(),
       })
       .optional(),
   }),
@@ -78,6 +79,7 @@ export async function handler(
       beatmapTitle: score.beatmaps?.title,
       username: score.profiles?.username,
       speed: score.speed,
+      spin: score.spin,
     },
   });
 }

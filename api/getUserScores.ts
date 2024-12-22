@@ -25,6 +25,7 @@ export const Schema = {
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
           speed: z.number().optional().nullable(),
+          spin: z.boolean().optional().nullable(),
         })
       )
       .optional(),
@@ -44,6 +45,7 @@ export const Schema = {
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
           speed: z.number().optional().nullable(),
+          spin: z.boolean().optional().nullable(),
         })
       )
       .optional(),
@@ -131,6 +133,7 @@ export async function handler(
       beatmapNotes: s.beatmaps?.noteCount,
       beatmapTitle: s.beatmaps?.title,
       speed: s.speed,
+      spin: s.spin,
     })),
     top: vals?.map((s) => ({
       created_at: s.created_at,
@@ -146,6 +149,7 @@ export async function handler(
       beatmapNotes: s.beatmaps?.noteCount,
       beatmapTitle: s.beatmaps?.title,
       speed: s.speed,
+      spin: s.spin,
     })),
   });
 }
