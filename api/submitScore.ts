@@ -74,6 +74,7 @@ export async function handler({
       speed: data.speed,
       mods: data.mods,
       additionalData: data.additionalData,
+      spin: data.spin,
     })
   ) {
     return NextResponse.json(
