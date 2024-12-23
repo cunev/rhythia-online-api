@@ -74,6 +74,7 @@ export async function handler({
     owner: userData.id,
     description: description ? description : pageData.description,
     tags: tags ? tags : pageData.tags,
+    updated_at: Date.now(),
   };
 
   if (beatmapHash && beatmapData) {

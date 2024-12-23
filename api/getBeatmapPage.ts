@@ -16,6 +16,7 @@ export const Schema = {
         nominations: z.array(z.number()).nullable().optional(),
         playcount: z.number().nullable().optional(),
         created_at: z.string().nullable().optional(),
+        updated_at: z.number().nullable().optional(),
         difficulty: z.number().nullable().optional(),
         noteCount: z.number().nullable().optional(),
         length: z.number().nullable().optional(),
@@ -82,6 +83,7 @@ export async function handler(
     beatmap: {
       playcount: beatmapPage.beatmaps?.playcount,
       created_at: beatmapPage.created_at,
+      updated_at: beatmapPage.updated_at,
       difficulty: beatmapPage.beatmaps?.difficulty,
       noteCount: beatmapPage.beatmaps?.noteCount,
       length: beatmapPage.beatmaps?.length,
