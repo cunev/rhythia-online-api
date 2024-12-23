@@ -57,6 +57,7 @@ export type Database = {
           latestBeatmapHash: string | null
           nominations: Json | null
           owner: number | null
+          ranked_at: number
           status: string | null
           tags: string
           title: string | null
@@ -69,6 +70,7 @@ export type Database = {
           latestBeatmapHash?: string | null
           nominations?: Json | null
           owner?: number | null
+          ranked_at?: number
           status?: string | null
           tags?: string
           title?: string | null
@@ -81,6 +83,7 @@ export type Database = {
           latestBeatmapHash?: string | null
           nominations?: Json | null
           owner?: number | null
+          ranked_at?: number
           status?: string | null
           tags?: string
           title?: string | null

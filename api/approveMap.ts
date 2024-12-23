@@ -71,6 +71,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   await supabase.from("beatmapPages").upsert({
     id: data.mapId,
     status: "RANKED",
+    ranked_at: Date.now(),
   });
 
   return NextResponse.json({});
