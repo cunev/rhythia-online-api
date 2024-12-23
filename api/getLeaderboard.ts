@@ -9,6 +9,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     page: z.number().default(1),
+    flag: z.string().optional(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -43,13 +44,13 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const result = await getLeaderboard(data.page, data.session);
+  const result = await getLeaderboard(data.page, data.session, data.flag);
   return NextResponse.json(result);
 }
 
 const VIEW_PER_PAGE = 50;
 
-export async function getLeaderboard(page = 1, session: string) {
+export async function getLeaderboard(page = 1, session: string, flag?: string) {
   const getUserData = (await getUserBySession(session)) as User;
 
   let leaderPosition = 0;
@@ -79,13 +80,16 @@ export async function getLeaderboard(page = 1, session: string) {
     .select("ban", { count: "exact", head: true })
     .neq("ban", "excluded");
 
-  let { data: queryData, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .neq("ban", "excluded")
-    .order("skill_points", { ascending: false })
-    .range(startPage, endPage);
+  let query = supabase.from("profiles").select("*").neq("ban", "excluded");
 
+  if (flag) {
+    query.eq("flag", flag);
+  }
+
+  query.order("skill_points", { ascending: false });
+  query.range(startPage, endPage);
+
+  let { data: queryData, error } = await query;
   return {
     total: countQuery.count || 0,
     viewPerPage: VIEW_PER_PAGE,
