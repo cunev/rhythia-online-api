@@ -91,7 +91,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     `
     )
     .eq("status", "RANKED")
-    .order("created_at", { ascending: false })
+    .order("ranked_at", { ascending: false })
     .limit(4);
 
   let { data: topUsers } = await supabase
