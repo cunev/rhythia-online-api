@@ -191,6 +191,7 @@ export const Schema = {
         nominations: z.array(z.number()).nullable().optional(),
         playcount: z.number().nullable().optional(),
         created_at: z.string().nullable().optional(),
+        updated_at: z.number().nullable().optional(),
         difficulty: z.number().nullable().optional(),
         noteCount: z.number().nullable().optional(),
         length: z.number().nullable().optional(),
@@ -230,6 +231,7 @@ export const Schema = {
         nominations: z.array(z.number()).nullable().optional(),
         playcount: z.number().nullable().optional(),
         created_at: z.string().nullable().optional(),
+        updated_at: z.number().nullable().optional(),
         difficulty: z.number().nullable().optional(),
         noteCount: z.number().nullable().optional(),
         length: z.number().nullable().optional(),
@@ -507,6 +509,7 @@ export const Schema = {
         beatmapTitle: z.string().optional().nullable(),
         username: z.string().optional().nullable(),
         speed: z.number().optional().nullable(),
+        spin: z.boolean().optional().nullable(),
       })
       .optional(),
   }),
@@ -553,6 +556,7 @@ export const Schema = {
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
           speed: z.number().optional().nullable(),
+          spin: z.boolean().optional().nullable(),
         })
       )
       .optional(),
@@ -572,6 +576,7 @@ export const Schema = {
           beatmapNotes: z.number().optional().nullable(),
           beatmapTitle: z.string().optional().nullable(),
           speed: z.number().optional().nullable(),
+          spin: z.boolean().optional().nullable(),
         })
       )
       .optional(),
@@ -686,7 +691,8 @@ export const Schema = {
       mapHash: z.string(),
       speed: z.number(),
       mods: z.array(z.string()),
-      additionalData: z.record(z.string(), z.any()),
+      additionalData: z.any(),
+      spin: z.boolean(),
     }),
   }),
   output: z.object({
