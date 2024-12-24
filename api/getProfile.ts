@@ -32,6 +32,7 @@ export const Schema = {
         squares_hit: z.number().nullable(),
         total_score: z.number().nullable(),
         position: z.number().nullable(),
+        is_online: z.boolean(),
       })
       .optional(),
   }),
@@ -51,7 +52,7 @@ export async function handler(
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   let profiles: Database["public"]["Tables"]["profiles"]["Row"][] = [];
-
+  let isOnline = false;
   // Fetch by id
   if (data.id !== undefined && data.id !== null) {
     let { data: queryData, error } = await supabase
@@ -108,6 +109,17 @@ export async function handler(
         profiles = queryData;
       }
     }
+
+    const { data: activityData } = await supabase
+      .from("profileActivities")
+      .select("*")
+      .eq("uid", user.id)
+      .single();
+
+    //last 30 minutes
+    if (activityData && activityData.last_activity) {
+      isOnline = Date.now() - activityData.last_activity < 1800000;
+    }
   }
 
   const user = profiles[0];
@@ -123,6 +135,7 @@ export async function handler(
     user: {
       ...user,
       position: (playersWithMorePoints || 0) + 1,
+      is_online: isOnline,
     },
   });
 }
