@@ -425,6 +425,7 @@ export const Schema = {
         squares_hit: z.number().nullable(),
         total_score: z.number().nullable(),
         position: z.number().nullable(),
+        is_online: z.boolean(),
       })
       .optional(),
   }),

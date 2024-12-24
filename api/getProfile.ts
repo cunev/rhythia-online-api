@@ -109,20 +109,20 @@ export async function handler(
         profiles = queryData;
       }
     }
-
-    const { data: activityData } = await supabase
-      .from("profileActivities")
-      .select("*")
-      .eq("uid", user.id)
-      .single();
-
-    //last 30 minutes
-    if (activityData && activityData.last_activity) {
-      isOnline = Date.now() - activityData.last_activity < 1800000;
-    }
   }
 
   const user = profiles[0];
+
+  const { data: activityData } = await supabase
+    .from("profileActivities")
+    .select("*")
+    .eq("uid", user.uid || "")
+    .single();
+
+  //last 30 minutes
+  if (activityData && activityData.last_activity) {
+    isOnline = Date.now() - activityData.last_activity < 1800000;
+  }
 
   // Query to count how many players have more skill points than the specific player
   const { count: playersWithMorePoints, error: rankError } = await supabase
