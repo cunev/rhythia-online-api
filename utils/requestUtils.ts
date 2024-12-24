@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { ZodObject } from "zod";
+import { set, ZodObject } from "zod";
 import { getUserBySession } from "./getUserBySession";
+import { supabase } from "./supabase";
 
 interface Props<
   K = (...args: any[]) => Promise<NextResponse<any>>,
@@ -21,6 +22,7 @@ export async function protectedApi({
   try {
     const toParse = await request.json();
     const data = schema.input.parse(toParse);
+    setActivity(data);
     if (authorization) {
       const authorizationResponse = await authorization(data);
       if (authorizationResponse) {
@@ -30,6 +32,18 @@ export async function protectedApi({
     return await activity(data, request);
   } catch (error) {
     return NextResponse.json({ error: error.toString() }, { status: 400 });
+  }
+}
+
+export async function setActivity(data: Record<string, any>) {
+  if (data.session) {
+    const user = (await supabase.auth.getUser(data.session)).data.user;
+    if (user) {
+      await supabase.from("profileActivities").upsert({
+        uid: user.id,
+        last_activity: Date.now(),
+      });
+    }
   }
 }
 

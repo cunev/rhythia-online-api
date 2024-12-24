@@ -539,6 +539,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     id: z.number(),
+    limit: z.number().default(10),
   }),
   output: z.object({
     error: z.string().optional(),

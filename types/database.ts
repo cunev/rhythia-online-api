@@ -179,6 +179,21 @@ export type Database = {
           },
         ]
       }
+      profileActivities: {
+        Row: {
+          last_activity: number | null
+          uid: string
+        }
+        Insert: {
+          last_activity?: number | null
+          uid: string
+        }
+        Update: {
+          last_activity?: number | null
+          uid?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           about_me: string | null
