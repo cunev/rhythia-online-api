@@ -330,6 +330,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     page: z.number().default(1),
+    flag: z.string().optional(),
   }),
   output: z.object({
     error: z.string().optional(),

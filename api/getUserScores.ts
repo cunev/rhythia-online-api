@@ -7,6 +7,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     id: z.number(),
+    limit: z.number().default(10),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -65,6 +66,9 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  if (data.limit > 100) {
+    return NextResponse.json({ error: "Limit breached" });
+  }
   let { data: scores1, error: errorlast } = await supabase
     .from("scores")
     .select(
@@ -80,7 +84,7 @@ export async function handler(
     .eq("userId", data.id)
     .eq("passed", true)
     .order("created_at", { ascending: false })
-    .limit(10);
+    .limit(data.limit);
 
   let { data: scores2, error: errorsp } = await supabase
     .from("scores")
@@ -116,7 +120,7 @@ export async function handler(
   const values = Object.values(hashMap);
   let vals = values
     .sort((a, b) => b.awarded_sp - a.awarded_sp)
-    .slice(0, 10)
+    .slice(0, data.limit)
     .map((e) => e.score);
 
   return NextResponse.json({
