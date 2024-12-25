@@ -50,6 +50,12 @@ export const Schema = {
         })
       )
       .optional(),
+    stats: z
+      .object({
+        totalScores: z.number(),
+        spinScores: z.number(),
+      })
+      .optional(),
   }),
 };
 
@@ -105,12 +111,18 @@ export async function handler(
 
   if (scores2 == null) return NextResponse.json({ error: "No scores" });
 
+  let spinScores = 0;
+  let totalScores = scores2.length;
   let hashMap: Record<string, { awarded_sp: number; score: any }> = {};
 
   for (const score of scores2) {
-    const { beatmapHash, awarded_sp } = score;
+    const { beatmapHash, awarded_sp, spin } = score;
 
     if (!beatmapHash || !awarded_sp) continue;
+
+    if (score.spin) {
+      spinScores++;
+    }
 
     if (!hashMap[beatmapHash] || hashMap[beatmapHash].awarded_sp < awarded_sp) {
       hashMap[beatmapHash] = { awarded_sp, score };
@@ -155,5 +167,9 @@ export async function handler(
       speed: s.speed,
       spin: s.spin,
     })),
+    stats: {
+      totalScores,
+      spinScores,
+    },
   });
 }
