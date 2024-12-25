@@ -583,6 +583,12 @@ export const Schema = {
         })
       )
       .optional(),
+    stats: z
+      .object({
+        totalScores: z.number(),
+        spinScores: z.number(),
+      })
+      .optional(),
   }),
 };*/
 import { Schema as GetUserScores } from "./api/getUserScores"
