@@ -250,7 +250,7 @@ export async function handler({
   });
   console.log("p3");
 
-  if (awarded_sp > 0) {
+  if (awarded_sp > 99) {
     await postToWebhooks({
       rp: Math.round(awarded_sp * 100) / 100,
       username: userData.username || "",
@@ -364,7 +364,7 @@ export async function postToWebhooks({
     embed.fields[0].value = `${rp} RP`;
     embed.fields[1].value = `${Math.round(accuracy * 10000) / 100}%`;
     embed.fields[2].value = `${speed}x`;
-    embed.fields[3].value = spin ? "Spin" : "Non-spin";
+    embed.fields[3].value = spin ? "Spin" : "Lock";
     embed.author.name = username;
     embed.author.url = `https://www.rhythia.com/player/${userid}`;
     embed.author.icon_url = avatar;
