@@ -369,6 +369,9 @@ export async function postToWebhooks({
     embed.author.url = `https://www.rhythia.com/player/${userid}`;
     embed.author.icon_url = avatar;
     embed.thumbnail.url = mapimage;
+    if (mapimage.includes("backfill")) {
+      embed.thumbnail.url = "https://www.rhythia.com/unkimg.png";
+    }
     embed.footer.text = new Date().toUTCString();
     await fetch(webhookUrl, {
       method: "POST",
