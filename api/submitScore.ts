@@ -262,6 +262,7 @@ export async function handler({
       accuracy: accurracy,
       mapname: beatmaps.title || "",
       mapid: beatmapPages.id || 0,
+      misses: data.misses || 0,
     });
   }
 
@@ -297,18 +298,27 @@ const webHookTemplate = {
         {
           name: "Rhythm Points",
           value: "424 RP",
+          inline: true,
         },
         {
           name: "Accuracy",
           value: "100%",
+          inline: true,
         },
         {
           name: "Speed",
           value: "1.45x",
+          inline: true,
         },
         {
           name: "Playstyle",
           value: "Spin",
+          inline: true,
+        },
+        {
+          name: "Misses",
+          value: "0",
+          inline: true,
         },
       ],
       author: {
@@ -339,6 +349,7 @@ export async function postToWebhooks({
   accuracy,
   mapname,
   mapid,
+  misses,
 }: {
   rp: number;
   username: string;
@@ -350,6 +361,7 @@ export async function postToWebhooks({
   accuracy: number;
   mapname: string;
   mapid: number;
+  misses: number;
 }) {
   const webHooks = await supabase.from("discordWebhooks").select("*");
 
@@ -365,6 +377,7 @@ export async function postToWebhooks({
     embed.fields[1].value = `${Math.round(accuracy * 10000) / 100}%`;
     embed.fields[2].value = `${speed}x`;
     embed.fields[3].value = spin ? "Spin" : "Lock";
+    embed.fields[4].value = `${misses} misses`;
     embed.author.name = username;
     embed.author.url = `https://www.rhythia.com/player/${userid}`;
     embed.author.icon_url = avatar;
