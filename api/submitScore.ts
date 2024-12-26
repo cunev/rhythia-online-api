@@ -252,7 +252,7 @@ export async function handler({
 
   if (awarded_sp > 0) {
     await postToWebhooks({
-      rp: awarded_sp,
+      rp: Math.round(awarded_sp * 100) / 100,
       username: userData.username || "",
       userid: userData.id,
       avatar: userData.avatar_url || "",
