@@ -210,6 +210,7 @@ export type Database = {
           profile_image: string | null
           sigma_rank: number | null
           skill_points: number | null
+          spin_skill_points: number
           squares_hit: number | null
           total_score: number | null
           uid: string | null
@@ -231,6 +232,7 @@ export type Database = {
           profile_image?: string | null
           sigma_rank?: number | null
           skill_points?: number | null
+          spin_skill_points?: number
           squares_hit?: number | null
           total_score?: number | null
           uid?: string | null
@@ -252,6 +254,7 @@ export type Database = {
           profile_image?: string | null
           sigma_rank?: number | null
           skill_points?: number | null
+          spin_skill_points?: number
           squares_hit?: number | null
           total_score?: number | null
           uid?: string | null

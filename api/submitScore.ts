@@ -205,10 +205,9 @@ export async function handler({
   });
   console.log("p2");
 
-  let totalSp = 0;
   let { data: scores2, error: errorsp } = await supabase
     .from("scores")
-    .select(`awarded_sp,beatmapHash`)
+    .select(`awarded_sp,beatmapHash,spin`)
     .eq("userId", userData.id)
     .neq("awarded_sp", 0)
     .eq("passed", true)
@@ -216,18 +215,48 @@ export async function handler({
 
   if (scores2 == null) return NextResponse.json({ error: "No scores" });
 
-  let hashMap: Record<string, number> = {};
+  let allHashMap: Record<string, number> = {};
+  let spinHashMap: Record<string, number> = {};
 
   for (const score of scores2) {
     const { beatmapHash, awarded_sp } = score;
 
     if (!beatmapHash || !awarded_sp) continue;
 
-    if (!hashMap[beatmapHash] || hashMap[beatmapHash] < awarded_sp) {
-      hashMap[beatmapHash] = awarded_sp;
+    // Normal Scores
+    if (!allHashMap[beatmapHash] || allHashMap[beatmapHash] < awarded_sp) {
+      allHashMap[beatmapHash] = awarded_sp;
+    }
+
+    // Spin Scores
+    if (score.spin) {
+      if (!spinHashMap[beatmapHash] || spinHashMap[beatmapHash] < awarded_sp) {
+        spinHashMap[beatmapHash] = awarded_sp;
+      }
     }
   }
+  // All scores
+  const totalSp = weightCalculate(allHashMap);
+
+  // Only spin scores
+  const spinTotalSp = weightCalculate(spinHashMap);
+
+  await supabase.from("profiles").upsert({
+    id: userData.id,
+    play_count: (userData.play_count || 0) + 1,
+    skill_points: Math.round(totalSp * 100) / 100,
+    spin_skill_points: Math.round(spinTotalSp * 100) / 100,
+    squares_hit: (userData.squares_hit || 0) + data.hits,
+  });
+  console.log("p3");
+
+  return NextResponse.json({});
+}
+
+export function weightCalculate(hashMap: Record<string, number>) {
+  let totalSp = 0;
   let weight = 100;
+
   const values = Object.values(hashMap);
   values.sort((a, b) => b - a);
 
@@ -239,14 +268,5 @@ export async function handler({
       break;
     }
   }
-
-  await supabase.from("profiles").upsert({
-    id: userData.id,
-    play_count: (userData.play_count || 0) + 1,
-    skill_points: Math.round(totalSp * 100) / 100,
-    squares_hit: (userData.squares_hit || 0) + data.hits,
-  });
-  console.log("p3");
-
-  return NextResponse.json({});
+  return totalSp;
 }
