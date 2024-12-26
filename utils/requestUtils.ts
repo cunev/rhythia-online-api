@@ -22,6 +22,8 @@ export async function protectedApi({
   try {
     const toParse = await request.json();
     const data = schema.input.parse(toParse);
+    console.log(data);
+
     setActivity(data);
     if (authorization) {
       const authorizationResponse = await authorization(data);
