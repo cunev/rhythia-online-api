@@ -10,6 +10,7 @@ export const Schema = {
     session: z.string(),
     page: z.number().default(1),
     flag: z.string().optional(),
+    spin: z.boolean().default(false),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -44,13 +45,23 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const result = await getLeaderboard(data.page, data.session, data.flag);
+  const result = await getLeaderboard(
+    data.page,
+    data.session,
+    data.spin,
+    data.flag
+  );
   return NextResponse.json(result);
 }
 
 const VIEW_PER_PAGE = 50;
 
-export async function getLeaderboard(page = 1, session: string, flag?: string) {
+export async function getLeaderboard(
+  page = 1,
+  session: string,
+  spin: boolean,
+  flag?: string
+) {
   const getUserData = (await getUserBySession(session)) as User;
 
   let leaderPosition = 0;
@@ -86,7 +97,12 @@ export async function getLeaderboard(page = 1, session: string, flag?: string) {
     query.eq("flag", flag);
   }
 
-  query.order("skill_points", { ascending: false });
+  if (spin) {
+    query.order("spin_skill_points", { ascending: false });
+  } else {
+    query.order("skill_points", { ascending: false });
+  }
+
   query.range(startPage, endPage);
 
   let { data: queryData, error } = await query;
@@ -100,6 +116,7 @@ export async function getLeaderboard(page = 1, session: string, flag?: string) {
       id: user.id,
       play_count: user.play_count,
       skill_points: user.skill_points,
+      spin_skill_points: user.spin_skill_points,
       total_score: user.total_score,
       username: user.username,
     })),
