@@ -358,7 +358,7 @@ export async function postToWebhooks({
   for (const webhook of webHooks.data) {
     const webhookUrl = webhook.webhook_link;
 
-    const embed = { ...webHookTemplate.embeds[0] };
+    const embed = webHookTemplate.embeds[0];
     embed.title = mapname;
     embed.url = `https://www.rhythia.com/maps/${mapid}`;
     embed.fields[0].value = `${rp} RP`;
