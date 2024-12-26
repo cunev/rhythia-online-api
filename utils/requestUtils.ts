@@ -22,7 +22,8 @@ export async function protectedApi({
   try {
     const toParse = await request.json();
     const data = schema.input.parse(toParse);
-    console.log(data);
+
+    console.log({ ...data, session: undefined });
 
     setActivity(data);
     if (authorization) {
