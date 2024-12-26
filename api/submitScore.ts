@@ -260,7 +260,7 @@ export async function handler({
       spin: data.spin,
       speed: data.speed,
       accuracy: accurracy,
-      mapname: beatmapPages.title || "",
+      mapname: beatmaps.title || "",
       mapid: beatmapPages.id || 0,
     });
   }
@@ -362,7 +362,7 @@ export async function postToWebhooks({
     embed.title = mapname;
     embed.url = `https://www.rhythia.com/maps/${mapid}`;
     embed.fields[0].value = `${rp} RP`;
-    embed.fields[1].value = `${Math.round(accuracy * 100)}%`;
+    embed.fields[1].value = `${Math.round(accuracy * 10000) / 1000}%`;
     embed.fields[2].value = `${speed}x`;
     embed.fields[3].value = spin ? "Spin" : "Non-spin";
     embed.author.name = username;
