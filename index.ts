@@ -445,6 +445,7 @@ export const Schema = {
     profiles: z.number(),
     beatmaps: z.number(),
     scores: z.number(),
+    onlineUsers: z.number(),
     lastBeatmaps: z.array(
       z.object({
         id: z.number().nullable().optional(),

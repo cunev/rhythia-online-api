@@ -125,7 +125,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const countOnline = await supabase
     .from("profileActivities")
     .select("*", { count: "exact", head: true })
-    .eq("last_activity", Date.now() - 1800000);
+    .gt("last_activity", Date.now() - 1800000);
 
   return NextResponse.json({
     beatmaps: countBeatmapsQuery.count,
