@@ -118,12 +118,19 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   const countScoresQuery = await supabase
     .from("scores")
-    .select("*", { count: "exact", head: true });
+    .select("id", { count: "exact", head: true });
+
+  // 30 minutes activity
+  const countOnline = await supabase
+    .from("profileActivities")
+    .select("*", { count: "exact", head: true })
+    .eq("last_activity", Date.now() - 1800000);
 
   return NextResponse.json({
     beatmaps: countBeatmapsQuery.count,
     profiles: countProfilesQuery.count,
     scores: countScoresQuery.count,
+    onlineUsers: countOnline.count,
     lastBeatmaps: beatmapPage?.map((e) => ({
       playcount: e.beatmaps?.playcount,
       created_at: e.created_at,
