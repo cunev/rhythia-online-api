@@ -331,6 +331,7 @@ export const Schema = {
     session: z.string(),
     page: z.number().default(1),
     flag: z.string().optional(),
+    spin: z.boolean().default(false),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -346,6 +347,7 @@ export const Schema = {
           username: z.string().nullable(),
           play_count: z.number().nullable(),
           skill_points: z.number().nullable(),
+          spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
         })
       )

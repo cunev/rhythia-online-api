@@ -26,6 +26,7 @@ export const Schema = {
           username: z.string().nullable(),
           play_count: z.number().nullable(),
           skill_points: z.number().nullable(),
+          spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
         })
       )

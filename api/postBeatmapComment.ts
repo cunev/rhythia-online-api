@@ -40,6 +40,7 @@ export async function handler({
     .single();
 
   if (!userData) return NextResponse.json({ error: "No user." });
+  if (userData.ban !== "cool") return NextResponse.json({ error: "Error" });
 
   const upserted = await supabase
     .from("beatmapPageComments")
