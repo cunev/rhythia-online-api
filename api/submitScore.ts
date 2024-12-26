@@ -256,7 +256,7 @@ export async function handler({
       username: userData.username || "",
       userid: userData.id,
       avatar: userData.avatar_url || "",
-      mapimage: beatmaps.image || "",
+      mapimage: beatmaps.imageLarge || "",
       spin: data.spin,
       speed: data.speed,
       accuracy: accurracy,
