@@ -153,6 +153,21 @@ export type Database = {
         }
         Relationships: []
       }
+      discordWebhooks: {
+        Row: {
+          id: number
+          webhook_link: string
+        }
+        Insert: {
+          id?: number
+          webhook_link?: string
+        }
+        Update: {
+          id?: number
+          webhook_link?: string
+        }
+        Relationships: []
+      }
       passkeys: {
         Row: {
           email: string

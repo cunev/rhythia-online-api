@@ -250,6 +250,21 @@ export async function handler({
   });
   console.log("p3");
 
+  if (awarded_sp > 0) {
+    await postToWebhooks({
+      rp: Math.round(totalSp),
+      username: userData.username || "",
+      userid: userData.id,
+      avatar: userData.avatar_url || "",
+      mapimage: beatmaps.image || "",
+      spin: data.spin,
+      speed: data.speed,
+      accuracy: accurracy,
+      mapname: beatmapPages.title || "",
+      mapid: beatmapPages.id || 0,
+    });
+  }
+
   return NextResponse.json({});
 }
 
@@ -269,4 +284,98 @@ export function weightCalculate(hashMap: Record<string, number>) {
     }
   }
   return totalSp;
+}
+
+const webHookTemplate = {
+  content: null,
+  embeds: [
+    {
+      title: "Captain Lou Albano - Do the Mario",
+      url: "https://www.rhythia.com/maps/4469",
+      color: 9633967,
+      fields: [
+        {
+          name: "Rhythm Points",
+          value: "424 RP",
+        },
+        {
+          name: "Accuracy",
+          value: "100%",
+        },
+        {
+          name: "Speed",
+          value: "1.45x",
+        },
+        {
+          name: "Playstyle",
+          value: "Spin",
+        },
+      ],
+      author: {
+        name: "cunev",
+        url: "https://www.rhythia.com/player/0",
+        icon_url:
+          "https://static.rhythia.com/user-avatar-1735149648551-a2a8cfbe-af5d-46e8-a19a-be2339c1679a",
+      },
+      footer: {
+        text: "Sun, 22 Dec 2024 22:40:17 GMT",
+      },
+      thumbnail: {
+        url: "https://static.rhythia.com/beatmap-img-1735223264605-eliuka_dj_sharpnel_-_we_luv_lamalarge",
+      },
+    },
+  ],
+  attachments: [],
+};
+
+export async function postToWebhooks({
+  rp,
+  username,
+  userid,
+  avatar,
+  mapimage,
+  spin,
+  speed,
+  accuracy,
+  mapname,
+  mapid,
+}: {
+  rp: number;
+  username: string;
+  userid: number;
+  avatar: string;
+  mapimage: string;
+  spin: boolean;
+  speed: number;
+  accuracy: number;
+  mapname: string;
+  mapid: number;
+}) {
+  const webHooks = await supabase.from("discordWebhooks").select("*");
+
+  if (!webHooks.data) return;
+
+  for (const webhook of webHooks.data) {
+    const webhookUrl = webhook.webhook_link;
+
+    const embed = { ...webHookTemplate.embeds[0] };
+    embed.title = mapname;
+    embed.url = `https://www.rhythia.com/maps/${mapid}`;
+    embed.fields[0].value = `${rp} RP`;
+    embed.fields[1].value = `${Math.round(accuracy * 100)}%`;
+    embed.fields[2].value = `${speed}x`;
+    embed.fields[3].value = spin ? "Spin" : "Non-spin";
+    embed.author.name = username;
+    embed.author.url = `https://www.rhythia.com/player/${userid}`;
+    embed.author.icon_url = avatar;
+    embed.thumbnail.url = mapimage;
+    embed.footer.text = new Date().toUTCString();
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(webHookTemplate),
+    });
+  }
 }
