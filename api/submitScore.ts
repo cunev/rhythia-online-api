@@ -21,6 +21,7 @@ export const Schema = {
       mods: z.array(z.string()),
       additionalData: z.any(),
       spin: z.boolean(),
+      virtualStars: z.number(),
     }),
   }),
   output: z.object({
@@ -75,6 +76,7 @@ export async function handler({
       mods: data.mods,
       additionalData: data.additionalData,
       spin: data.spin,
+      virtualStars: data.virtualStars,
     })
   ) {
     return NextResponse.json(
@@ -172,7 +174,10 @@ export async function handler({
     multiplierMod *= Math.pow(0.95, data.misses);
   }
 
-  if (beatmaps.starRating) {
+  if (
+    beatmaps.starRating &&
+    Math.abs(beatmaps.starRating - data.virtualStars) < 0.15 // Allow for a small threshold due to offsync, offsets and other small game modifications.
+  ) {
     awarded_sp = calculatePerformancePoints(
       data.speed * beatmaps.starRating * multiplierMod,
       accurracy
