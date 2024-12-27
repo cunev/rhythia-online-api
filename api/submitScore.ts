@@ -174,10 +174,7 @@ export async function handler({
     multiplierMod *= Math.pow(0.95, data.misses);
   }
 
-  if (
-    beatmaps.starRating &&
-    Math.abs(beatmaps.starRating - data.virtualStars) < 0.15 // Allow for a small threshold due to offsync, offsets and other small game modifications.
-  ) {
+  if (beatmaps.starRating && beatmaps.starRating == data.virtualStars) {
     awarded_sp = calculatePerformancePoints(
       data.speed * beatmaps.starRating * multiplierMod,
       accurracy
