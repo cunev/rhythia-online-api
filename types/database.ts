@@ -168,6 +168,21 @@ export type Database = {
         }
         Relationships: []
       }
+      levers: {
+        Row: {
+          disable_scores: boolean
+          id: number
+        }
+        Insert: {
+          disable_scores?: boolean
+          id?: number
+        }
+        Update: {
+          disable_scores?: boolean
+          id?: number
+        }
+        Relationships: []
+      }
       passkeys: {
         Row: {
           email: string

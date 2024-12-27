@@ -89,6 +89,18 @@ export async function handler({
 
   const user = (await getUserBySession(session)) as User;
 
+  let { data: leversData } = await supabase
+    .from("levers")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (leversData && leversData.disable_scores) {
+    return NextResponse.json({
+      error: "Scores are temporarily disabled",
+    });
+  }
+
   let { data: userData, error: userError } = await supabase
     .from("profiles")
     .select("*")
@@ -273,7 +285,7 @@ export async function handler({
 
   if (Math.abs((beatmaps.starRating || 0) - data.virtualStars) > 0.01) {
     return NextResponse.json({
-      error: "Star rating mismatch, no RP points were awarded",
+      error: "Map mismatch, no RP points were awarded, please report the bug.",
     });
   }
 
