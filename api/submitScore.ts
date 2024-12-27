@@ -174,7 +174,10 @@ export async function handler({
     multiplierMod *= Math.pow(0.95, data.misses);
   }
 
-  if (beatmaps.starRating && beatmaps.starRating == data.virtualStars) {
+  if (
+    beatmaps.starRating &&
+    Math.abs(beatmaps.starRating - data.virtualStars) < 0.01
+  ) {
     awarded_sp = calculatePerformancePoints(
       data.speed * beatmaps.starRating * multiplierMod,
       accurracy
@@ -265,6 +268,12 @@ export async function handler({
       mapname: beatmaps.title || "",
       mapid: beatmapPages.id || 0,
       misses: data.misses || 0,
+    });
+  }
+
+  if (Math.abs((beatmaps.starRating || 0) - data.virtualStars) > 0.01) {
+    return NextResponse.json({
+      error: "Star rating mismatch, no RP points were awarded",
     });
   }
 

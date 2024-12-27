@@ -705,6 +705,7 @@ export const Schema = {
       mods: z.array(z.string()),
       additionalData: z.any(),
       spin: z.boolean(),
+      virtualStars: z.number(),
     }),
   }),
   output: z.object({
