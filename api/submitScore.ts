@@ -267,7 +267,7 @@ export async function handler({
   });
   console.log("p3");
 
-  if (awarded_sp > 99) {
+  if (awarded_sp > 99 && userData.ban == "cool") {
     await postToWebhooks({
       rp: Math.round(awarded_sp * 100) / 100,
       username: userData.username || "",
