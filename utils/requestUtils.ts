@@ -23,7 +23,15 @@ export async function protectedApi({
     const toParse = await request.json();
     const data = schema.input.parse(toParse);
 
-    console.log({ ...data, session: undefined });
+    const dataClone = structuredClone(data);
+    if (dataClone) {
+      if (dataClone["token"]) {
+        dataClone["token"] = "********";
+      }
+      Object.keys(dataClone).forEach((key) => {
+        console.log("KEY: ", key, dataClone[key]);
+      });
+    }
 
     setActivity(data);
     if (authorization) {
