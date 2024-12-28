@@ -30,6 +30,13 @@ export async function protectedApi({
       }
       Object.keys(dataClone).forEach((key) => {
         console.log("KEY: ", key, dataClone[key]);
+        if (key == "data") {
+          try {
+            Object.keys(dataClone[key]).forEach((key2) => {
+              console.log("KEY2: ", key2, dataClone[key][key2]);
+            });
+          } catch (error) {}
+        }
       });
     }
 
