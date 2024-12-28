@@ -92,6 +92,7 @@ export const Schema = {
     session: z.string(),
     data: z.object({
       avatar_url: z.string().optional(),
+      profile_image: z.string().optional(),
       username: z.string().optional(),
     }),
   }),
