@@ -9,6 +9,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     name: z.string(),
+    acronym: z.string(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -53,10 +54,16 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
       error: "Clan name must be between 3 and 32 characters.",
     });
   }
+  if (data.acronym.length < 3 || data.acronym.length > 6) {
+    return NextResponse.json({
+      error: "Acronyms must be of length between 3 and 6",
+    });
+  }
 
   await supabase.from("clans").upsert({
     name: data.name,
     owner: queryUserData.id,
+    acronym: data.acronym.toUpperCase(),
   });
 
   return NextResponse.json({});

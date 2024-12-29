@@ -66,9 +66,9 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
-  if (data.acronym.length !== 3) {
+  if (data.acronym.length < 3 || data.acronym.length > 6) {
     return NextResponse.json({
-      error: "Acronyms must be of length 3",
+      error: "Acronyms must be of length between 3 and 6",
     });
   }
 
@@ -83,7 +83,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     name: data.name,
     avatar_url: data.avatar_url,
     description: data.description,
-    acronym: data.acronym,
+    acronym: data.acronym.toUpperCase(),
   });
 
   return NextResponse.json({});
