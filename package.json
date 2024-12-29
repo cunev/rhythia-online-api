@@ -2,7 +2,7 @@
   "name": "rhythia-api",
   "version": "170.0.0",
   "main": "index.ts",
-  "author": "online-contributors",
+  "author": "online-contributors-test",
   "scripts": {
     "update": "bun ./scripts/update.ts",
     "ci-deploy": "tsx ./scripts/ci-deploy.ts",
