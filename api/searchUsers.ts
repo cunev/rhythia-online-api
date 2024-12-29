@@ -34,7 +34,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     .from("profiles")
     .select("id,username")
     .neq("ban", "excluded")
-    .eq("username", data.text)
+    .eq("computedUsername", data.text.toLocaleLowerCase())
     .single();
 
   const { data: searchData, error } = await supabase
