@@ -33,6 +33,13 @@ export const Schema = {
         total_score: z.number().nullable(),
         position: z.number().nullable(),
         is_online: z.boolean(),
+        clans: z
+          .object({
+            id: z.number(),
+            acronym: z.string(),
+          })
+          .optional()
+          .nullable(),
       })
       .optional(),
   }),
@@ -57,7 +64,13 @@ export async function handler(
   if (data.id !== undefined && data.id !== null) {
     let { data: queryData, error } = await supabase
       .from("profiles")
-      .select("*")
+      .select(
+        `*,
+      clans!inner(
+          id,
+          acronym
+        )`
+      )
       .eq("id", data.id);
 
     console.log(profiles, error);
@@ -84,25 +97,27 @@ export async function handler(
 
       if (!queryData?.length) {
         const geo = geolocation(req);
-        const data = await supabase
-          .from("profiles")
-          .upsert({
-            uid: user.id,
-            about_me: "",
-            avatar_url:
-              "https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/user-avatar-1725309193296-72002e6b-321c-4f60-a692-568e0e75147d",
-            badges: [],
-            username: `${user.user_metadata.full_name.slice(0, 20)}${Math.round(
-              Math.random() * 900000 + 100000
-            )}`,
-            computedUsername: `${user.user_metadata.full_name.slice(
-              0,
-              20
-            )}${Math.round(Math.random() * 900000 + 100000)}`.toLowerCase(),
-            flag: (geo.country || "US").toUpperCase(),
-            created_at: Date.now(),
-          })
-          .select();
+        const data = await supabase.from("profiles").upsert({
+          uid: user.id,
+          about_me: "",
+          avatar_url:
+            "https://rhthia-avatars.s3.eu-central-003.backblazeb2.com/user-avatar-1725309193296-72002e6b-321c-4f60-a692-568e0e75147d",
+          badges: [],
+          username: `${user.user_metadata.full_name.slice(0, 20)}${Math.round(
+            Math.random() * 900000 + 100000
+          )}`,
+          computedUsername: `${user.user_metadata.full_name.slice(
+            0,
+            20
+          )}${Math.round(Math.random() * 900000 + 100000)}`.toLowerCase(),
+          flag: (geo.country || "US").toUpperCase(),
+          created_at: Date.now(),
+        }).select(`
+          *,
+      clans!inner(
+          id,
+          acronym
+        )`);
 
         profiles = data.data!;
       } else {
@@ -127,7 +142,7 @@ export async function handler(
   // Query to count how many players have more skill points than the specific player
   const { count: playersWithMorePoints, error: rankError } = await supabase
     .from("profiles")
-    .select("*", { count: "exact", head: true })
+    .select(`*`, { count: "exact", head: true })
     .neq("ban", "excluded")
     .gt("skill_points", user.skill_points);
 
