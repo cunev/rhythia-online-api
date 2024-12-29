@@ -66,7 +66,7 @@ export async function handler(
       .from("profiles")
       .select(
         `*,
-      clans!inner(
+      clans(
           id,
           acronym
         )`
@@ -114,7 +114,7 @@ export async function handler(
           created_at: Date.now(),
         }).select(`
           *,
-      clans!inner(
+      clans(
           id,
           acronym
         )`);
