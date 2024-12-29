@@ -64,13 +64,7 @@ export async function handler(
   if (data.id !== undefined && data.id !== null) {
     let { data: queryData, error } = await supabase
       .from("profiles")
-      .select(
-        `*,
-      clans(
-          id,
-          acronym
-        )`
-      )
+      .select(`*,clans:clan(id,acronym)`)
       .eq("id", data.id);
 
     console.log(profiles, error);
@@ -113,11 +107,7 @@ export async function handler(
           flag: (geo.country || "US").toUpperCase(),
           created_at: Date.now(),
         }).select(`
-          *,
-      clans(
-          id,
-          acronym
-        )`);
+          *,clans:clan(id,acronym)`);
 
         profiles = data.data!;
       } else {
