@@ -44,7 +44,9 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     .ilike("username", `%${data.text}%`)
     .limit(10);
 
-  const conjoined = [exactUser, ...(searchData || [])];
+  const conjoined = [exactUser, ...(searchData || [])].filter(
+    (e) => e !== null
+  );
 
   return NextResponse.json({
     results: conjoined || [],
