@@ -30,13 +30,23 @@ export async function POST(request: Request) {
 }
 
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
+  const { data: exactUser } = await supabase
+    .from("profiles")
+    .select("id,username")
+    .neq("ban", "excluded")
+    .eq("username", data.text)
+    .single();
+
   const { data: searchData, error } = await supabase
     .from("profiles")
     .select("id,username")
     .neq("ban", "excluded")
     .ilike("username", `%${data.text}%`)
     .limit(10);
+
+  const conjoined = [...(searchData || []), exactUser];
+
   return NextResponse.json({
-    results: searchData || [],
+    results: conjoined || [],
   });
 }

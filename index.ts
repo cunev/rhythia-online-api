@@ -429,6 +429,13 @@ export const Schema = {
           skill_points: z.number().nullable(),
           spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
+          clans: z
+            .object({
+              id: z.number(),
+              acronym: z.string(),
+            })
+            .optional()
+            .nullable(),
         })
       )
       .optional(),
