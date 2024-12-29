@@ -48,9 +48,9 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
-  if (data.name.length < 3 || data.name.length > 20) {
+  if (data.name.length < 3 || data.name.length > 32) {
     return NextResponse.json({
-      error: "Clan name must be between 3 and 20 characters.",
+      error: "Clan name must be between 3 and 32 characters.",
     });
   }
 
