@@ -50,6 +50,23 @@ import { Schema as CreateBeatmapPage } from "./api/createBeatmapPage"
 export { Schema as SchemaCreateBeatmapPage } from "./api/createBeatmapPage"
 export const createBeatmapPage = handleApi({url:"/api/createBeatmapPage",...CreateBeatmapPage})
 
+// ./api/createClan.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    name: z.string(),
+    acronym: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as CreateClan } from "./api/createClan"
+export { Schema as SchemaCreateClan } from "./api/createClan"
+export const createClan = handleApi({url:"/api/createClan",...CreateClan})
+
 // ./api/deleteBeatmapPage.ts API
 
 /*
@@ -83,6 +100,26 @@ export const Schema = {
 import { Schema as EditAboutMe } from "./api/editAboutMe"
 export { Schema as SchemaEditAboutMe } from "./api/editAboutMe"
 export const editAboutMe = handleApi({url:"/api/editAboutMe",...EditAboutMe})
+
+// ./api/editClan.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    id: z.number(),
+    name: z.string(),
+    avatar_url: z.string(),
+    description: z.string(),
+    acronym: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as EditClan } from "./api/editClan"
+export { Schema as SchemaEditClan } from "./api/editClan"
+export const editClan = handleApi({url:"/api/editClan",...EditClan})
 
 // ./api/editProfile.ts API
 
@@ -323,6 +360,50 @@ export const Schema = {
 import { Schema as GetBeatmapStarRating } from "./api/getBeatmapStarRating"
 export { Schema as SchemaGetBeatmapStarRating } from "./api/getBeatmapStarRating"
 export const getBeatmapStarRating = handleApi({url:"/api/getBeatmapStarRating",...GetBeatmapStarRating})
+
+// ./api/getClan.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    id: z.number(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+    acronym: z.string(),
+    avatar_url: z.string(),
+    created_at: z.number(),
+    description: z.string(),
+    id: z.number(),
+    name: z.string(),
+    owner: z.number(),
+    users: z.array(
+      z.object({
+        about_me: z.string().nullable(),
+        avatar_url: z.string().nullable(),
+        profile_image: z.string().nullable(),
+        badges: z.any().nullable(),
+        created_at: z.number().nullable(),
+        flag: z.string().nullable(),
+        id: z.number(),
+        uid: z.string().nullable(),
+        ban: z.string().nullable(),
+        username: z.string().nullable(),
+        verified: z.boolean().nullable(),
+        play_count: z.number().nullable(),
+        skill_points: z.number().nullable(),
+        squares_hit: z.number().nullable(),
+        total_score: z.number().nullable(),
+        position: z.number().nullable(),
+        is_online: z.boolean(),
+      })
+    ),
+  }),
+};*/
+import { Schema as GetClan } from "./api/getClan"
+export { Schema as SchemaGetClan } from "./api/getClan"
+export const getClan = handleApi({url:"/api/getClan",...GetClan})
 
 // ./api/getLeaderboard.ts API
 
