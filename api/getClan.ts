@@ -34,8 +34,6 @@ export const Schema = {
         skill_points: z.number().nullable(),
         squares_hit: z.number().nullable(),
         total_score: z.number().nullable(),
-        position: z.number().nullable(),
-        is_online: z.boolean(),
       })
     ),
   }),
