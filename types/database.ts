@@ -153,6 +153,38 @@ export type Database = {
         }
         Relationships: []
       }
+      clans: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: number
+          name: string
+          owner: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: number
+          name?: string
+          owner?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: number
+          name?: string
+          owner?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clans_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discordWebhooks: {
         Row: {
           id: number
@@ -231,6 +263,7 @@ export type Database = {
           badges: Json | null
           ban: Database["public"]["Enums"]["banTypes"] | null
           bannedAt: number | null
+          clan: number | null
           computedUsername: string | null
           created_at: number | null
           flag: string | null
@@ -253,6 +286,7 @@ export type Database = {
           badges?: Json | null
           ban?: Database["public"]["Enums"]["banTypes"] | null
           bannedAt?: number | null
+          clan?: number | null
           computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
@@ -275,6 +309,7 @@ export type Database = {
           badges?: Json | null
           ban?: Database["public"]["Enums"]["banTypes"] | null
           bannedAt?: number | null
+          clan?: number | null
           computedUsername?: string | null
           created_at?: number | null
           flag?: string | null
@@ -291,7 +326,15 @@ export type Database = {
           username?: string | null
           verified?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_clan_fkey"
+            columns: ["clan"]
+            isOneToOne: false
+            referencedRelation: "clans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scores: {
         Row: {
