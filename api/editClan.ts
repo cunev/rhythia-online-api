@@ -11,6 +11,8 @@ export const Schema = {
     id: z.number(),
     name: z.string(),
     avatar_url: z.string(),
+    description: z.string(),
+    acronym: z.string(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -64,10 +66,24 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
+  if (data.acronym.length !== 3) {
+    return NextResponse.json({
+      error: "Acronyms must be of length 3",
+    });
+  }
+
+  if (data.description.length > 24000) {
+    return NextResponse.json({
+      error: "Description length exceeds 24000 characters",
+    });
+  }
+
   await supabase.from("clans").upsert({
     id: data.id,
-    name: data.name || queryClanData.name,
-    avatar_url: data.avatar_url || queryClanData.avatar_url,
+    name: data.name,
+    avatar_url: data.avatar_url,
+    description: data.description,
+    acronym: data.acronym,
   });
 
   return NextResponse.json({});

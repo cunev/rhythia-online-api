@@ -155,22 +155,28 @@ export type Database = {
       }
       clans: {
         Row: {
+          acronym: string | null
           avatar_url: string | null
           created_at: string
+          description: string | null
           id: number
           name: string
           owner: number | null
         }
         Insert: {
+          acronym?: string | null
           avatar_url?: string | null
           created_at?: string
+          description?: string | null
           id?: number
           name?: string
           owner?: number | null
         }
         Update: {
+          acronym?: string | null
           avatar_url?: string | null
           created_at?: string
+          description?: string | null
           id?: number
           name?: string
           owner?: number | null
