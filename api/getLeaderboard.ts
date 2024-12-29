@@ -28,6 +28,13 @@ export const Schema = {
           skill_points: z.number().nullable(),
           spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
+          clans: z
+            .object({
+              id: z.number(),
+              acronym: z.string(),
+            })
+            .optional()
+            .nullable(),
         })
       )
       .optional(),
@@ -92,7 +99,10 @@ export async function getLeaderboard(
     .select("ban", { count: "exact", head: true })
     .neq("ban", "excluded");
 
-  let query = supabase.from("profiles").select("*").neq("ban", "excluded");
+  let query = supabase
+    .from("profiles")
+    .select("*,clans:clan(id, acronym)")
+    .neq("ban", "excluded");
 
   if (flag) {
     query.eq("flag", flag);
@@ -120,6 +130,7 @@ export async function getLeaderboard(
       spin_skill_points: user.spin_skill_points,
       total_score: user.total_score,
       username: user.username,
+      clans: user.clans as any,
     })),
   };
 }

@@ -156,6 +156,7 @@ export type Database = {
       clans: {
         Row: {
           acronym: string | null
+          allowed_users: Json
           avatar_url: string | null
           created_at: string
           description: string | null
@@ -165,6 +166,7 @@ export type Database = {
         }
         Insert: {
           acronym?: string | null
+          allowed_users?: Json
           avatar_url?: string | null
           created_at?: string
           description?: string | null
@@ -174,6 +176,7 @@ export type Database = {
         }
         Update: {
           acronym?: string | null
+          allowed_users?: Json
           avatar_url?: string | null
           created_at?: string
           description?: string | null
