@@ -66,5 +66,16 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     acronym: data.acronym.toUpperCase(),
   });
 
+  let { data: queryClanData, error: clanError } = await supabase
+    .from("clans")
+    .select("*")
+    .eq("owner", queryUserData.id)
+    .single();
+
+  await supabase.from("profiles").upsert({
+    id: queryUserData.id,
+    clan: queryClanData?.id,
+  });
+
   return NextResponse.json({});
 }
