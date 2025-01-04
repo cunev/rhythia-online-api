@@ -5,6 +5,8 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import validator from "validator";
+
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
@@ -44,6 +46,15 @@ export async function handler(
     return NextResponse.json(
       {
         error: "Username too long.",
+      },
+      { status: 404 }
+    );
+  }
+
+  if (validator.trim(data.data.username || "") !== (data.data.username || "")) {
+    return NextResponse.json(
+      {
+        error: "Username can't start or end with spaces.",
       },
       { status: 404 }
     );
