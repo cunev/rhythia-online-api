@@ -6,6 +6,7 @@ import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 import validator from "validator";
+import removeZeroWidth from "zero-width";
 
 export const Schema = {
   input: z.strictObject({
@@ -59,6 +60,8 @@ export async function handler(
       { status: 404 }
     );
   }
+
+  data.data.username = removeZeroWidth(data.data.username || "");
 
   const user = (await getUserBySession(data.session)) as User;
 
