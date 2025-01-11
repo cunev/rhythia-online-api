@@ -101,17 +101,20 @@ export async function handler({
     return NextResponse.json({ error: upserted.error.message });
   }
 
-  postBeatmapToWebhooks({
-    username: userData.username || "",
-    userid: userData.id,
-    avatar: userData.avatar_url || "",
-    mapimage: beatmapData?.image || "",
-    mapname: beatmapData?.title || "",
-    mapid: upserted.data?.id || 0,
-    mapDownload: beatmapData?.beatmapFile || "",
-    starRating: beatmapData?.starRating || 0,
-    length: beatmapData?.length || 0,
-  });
+  if (beatmapData?.starRating) {
+    postBeatmapToWebhooks({
+      username: userData.username || "",
+      userid: userData.id,
+      avatar: userData.avatar_url || "",
+      mapimage: beatmapData?.image || "",
+      mapname: beatmapData?.title || "",
+      mapid: upserted.data?.id || 0,
+      mapDownload: beatmapData?.beatmapFile || "",
+      starRating: beatmapData?.starRating || 0,
+      length: beatmapData?.length || 0,
+    });
+  }
+
   return NextResponse.json({});
 }
 
