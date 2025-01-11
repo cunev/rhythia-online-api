@@ -29,6 +29,16 @@ export function rateMap(map: SSPMParsedMap) {
   return rate(notes);
 }
 
+export function rateMapNotes(map: [number, number, number][]) {
+  let notes = map.map((marker) => ({
+    time: marker[0],
+    x: marker[1],
+    y: marker[2],
+  }));
+
+  return rate(notes);
+}
+
 export function rateMapOld(map: SSPMMap) {
   let notes = map.notes.map((marker) => ({
     time: marker.position,

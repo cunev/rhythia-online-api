@@ -583,6 +583,27 @@ import { Schema as GetPublicStats } from "./api/getPublicStats"
 export { Schema as SchemaGetPublicStats } from "./api/getPublicStats"
 export const getPublicStats = handleApi({url:"/api/getPublicStats",...GetPublicStats})
 
+// ./api/getRawStarRating.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    rawMap: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+    beatmap: z
+      .object({
+        starRating: z.number().nullable().optional(),
+      })
+      .optional(),
+  }),
+};*/
+import { Schema as GetRawStarRating } from "./api/getRawStarRating"
+export { Schema as SchemaGetRawStarRating } from "./api/getRawStarRating"
+export const getRawStarRating = handleApi({url:"/api/getRawStarRating",...GetRawStarRating})
+
 // ./api/getScore.ts API
 
 /*
