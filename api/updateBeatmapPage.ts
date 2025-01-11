@@ -178,7 +178,7 @@ export async function postBeatmapToWebhooks({
   const webHooks = await supabase
     .from("discordWebhooks")
     .select("*")
-    .eq("type", "beatmap");
+    .eq("type", "maps");
 
   if (!webHooks.data) return;
 
