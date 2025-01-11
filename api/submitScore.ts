@@ -116,6 +116,16 @@ export async function handler({
     );
 
   console.log(userData);
+
+  if (userData.ban == "excluded" || userData.ban == "restricted") {
+    return NextResponse.json(
+      {
+        error: "Silenced, restricted or excluded players can't submit scores.",
+      },
+      { status: 400 }
+    );
+  }
+
   let { data: beatmaps, error } = await supabase
     .from("beatmaps")
     .select("*")
