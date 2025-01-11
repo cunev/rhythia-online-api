@@ -26,7 +26,14 @@ export async function POST(request: Request): Promise<NextResponse> {
     activity: handler,
   });
 }
-
+export function formatTime(milliseconds: number): string {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+}
 export async function handler({
   session,
   beatmapHash,
@@ -171,9 +178,6 @@ export async function postBeatmapToWebhooks({
   mapDownload: string;
 }) {
   // format length in MM:SS with padding 0
-  const minutes = Math.floor(length / 60);
-  const seconds = length - minutes * 60;
-  const newLength = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
   const webHooks = await supabase
     .from("discordWebhooks")
@@ -191,7 +195,7 @@ export async function postBeatmapToWebhooks({
     mainEmbed.title = mapname;
     mainEmbed.url = `https://www.rhythia.com/maps/${mapid}`;
     mainEmbed.fields[0].value = `${starRating}*`;
-    mainEmbed.fields[1].value = `${newLength} minutes`;
+    mainEmbed.fields[1].value = `${formatTime(length)} minutes`;
     mainEmbed.author.name = username;
     mainEmbed.author.url = `https://www.rhythia.com/player/${userid}`;
     mainEmbed.author.icon_url = avatar;
