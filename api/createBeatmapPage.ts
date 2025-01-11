@@ -46,7 +46,7 @@ export async function handler({
     return NextResponse.json(
       {
         error:
-          "Silenced, restricted or excluded players can't update their profile.",
+          "Silenced, restricted or excluded players can't create beatmap pages.",
       },
       { status: 404 }
     );
@@ -59,5 +59,6 @@ export async function handler({
     })
     .select("*")
     .single();
+
   return NextResponse.json({ id: upserted.data?.id });
 }

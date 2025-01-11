@@ -386,7 +386,10 @@ export async function postToWebhooks({
   mapid: number;
   misses: number;
 }) {
-  const webHooks = await supabase.from("discordWebhooks").select("*");
+  const webHooks = await supabase
+    .from("discordWebhooks")
+    .select("*")
+    .eq("type", "score");
 
   if (!webHooks.data) return;
 

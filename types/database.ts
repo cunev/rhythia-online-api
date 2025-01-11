@@ -197,14 +197,17 @@ export type Database = {
       discordWebhooks: {
         Row: {
           id: number
+          type: Database["public"]["Enums"]["discordWebhookType"] | null
           webhook_link: string
         }
         Insert: {
           id?: number
+          type?: Database["public"]["Enums"]["discordWebhookType"] | null
           webhook_link?: string
         }
         Update: {
           id?: number
+          type?: Database["public"]["Enums"]["discordWebhookType"] | null
           webhook_link?: string
         }
         Relationships: []
@@ -417,6 +420,7 @@ export type Database = {
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"
+      discordWebhookType: "maps" | "scores"
     }
     CompositeTypes: {
       [_ in never]: never
