@@ -120,7 +120,7 @@ const beatmapWebhookTemplate: any = {
   embeds: [
     {
       title: "Captain Lou Albano - Do the Mario",
-      description: "New Beatmap Created",
+      description: "Beatmap Created",
       url: "https://www.rhythia.com/maps/4469",
       color: 16775930,
       fields: [
