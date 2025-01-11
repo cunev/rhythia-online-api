@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
-import { rateMapNotes } from "../utils/star-calc";
+import { calculatePerformancePoints, rateMapNotes } from "../utils/star-calc";
 
 export const Schema = {
   input: z.strictObject({
@@ -41,6 +41,16 @@ export async function handler(
   return NextResponse.json({
     beatmap: {
       starRating,
+      rp: {
+        "S---": calculatePerformancePoints((starRating * 1) / 1.35, 1),
+        "S--": calculatePerformancePoints((starRating * 1) / 1.25, 1),
+        "S-": calculatePerformancePoints((starRating * 1) / 1.15, 1),
+        S: calculatePerformancePoints(starRating * 1, 1),
+        "S+": calculatePerformancePoints(starRating * 1.15, 1),
+        "S++": calculatePerformancePoints(starRating * 1.25, 1),
+        "S+++": calculatePerformancePoints(starRating * 1.35, 1),
+        "S++++": calculatePerformancePoints(starRating * 1.45, 1),
+      },
     },
   });
 }
