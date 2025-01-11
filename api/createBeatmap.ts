@@ -73,7 +73,7 @@ export async function handler({
     return NextResponse.json(
       {
         error:
-          "Silenced, restricted or excluded players can't update their profile.",
+          "Silenced, restricted or excluded players can't create beatmaps their profile.",
       },
       { status: 404 }
     );
