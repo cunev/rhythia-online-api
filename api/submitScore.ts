@@ -389,7 +389,7 @@ export async function postToWebhooks({
   const webHooks = await supabase
     .from("discordWebhooks")
     .select("*")
-    .eq("type", "score");
+    .eq("type", "scores");
 
   if (!webHooks.data) return;
 
