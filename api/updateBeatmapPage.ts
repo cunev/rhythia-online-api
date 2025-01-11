@@ -4,6 +4,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { calculatePerformancePoints } from "./submitScore";
 
 export const Schema = {
   input: z.strictObject({
@@ -133,6 +134,11 @@ const beatmapWebhookTemplate: any = {
           value: "4:24 minutes",
           inline: true,
         },
+        {
+          name: "Max RP",
+          value: "100 RP",
+          inline: true,
+        },
       ],
       author: {
         name: "cunev",
@@ -194,8 +200,10 @@ export async function postBeatmapToWebhooks({
 
     mainEmbed.title = mapname;
     mainEmbed.url = `https://www.rhythia.com/maps/${mapid}`;
-    mainEmbed.fields[0].value = `${starRating}*`;
+    mainEmbed.fields[0].value = `${Math.round(starRating * 100) / 100}*`;
     mainEmbed.fields[1].value = `${formatTime(length)} minutes`;
+    mainEmbed.fields[2].value =
+      calculatePerformancePoints(starRating, 1) + " RP";
     mainEmbed.author.name = username;
     mainEmbed.author.url = `https://www.rhythia.com/player/${userid}`;
     mainEmbed.author.icon_url = avatar;
