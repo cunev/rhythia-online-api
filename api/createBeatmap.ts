@@ -86,6 +86,9 @@ export async function handler({
     .single();
 
   if (beatmapPage) {
+    if (beatmapPage?.status !== "UNRANKED")
+      return NextResponse.json({ error: "Only unranked maps can be updated" });
+
     if (!updateFlag) {
       return NextResponse.json({ error: "Already Exists" });
     } else if (beatmapPage.owner !== userData.id) {
