@@ -143,7 +143,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     profiles: countProfilesQuery.count,
     scores: countScoresQuery.count,
     onlineUsers: countOnline.count,
-    countChart,
+    countChart: countChart.data,
     lastBeatmaps: beatmapPage?.map((e) => ({
       playcount: e.beatmaps?.playcount,
       created_at: e.created_at,
