@@ -136,7 +136,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const countChart = await supabase
     .from("chartedValues")
     .select("*")
-    .gt("created_at", Date.now() - 86400000);
+    .gt("created_at", new Date(Date.now() - 86400000).toISOString());
 
   return NextResponse.json({
     beatmaps: countBeatmapsQuery.count,
