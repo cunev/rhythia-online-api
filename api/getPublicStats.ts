@@ -10,6 +10,12 @@ export const Schema = {
     beatmaps: z.number(),
     scores: z.number(),
     onlineUsers: z.number(),
+    countChart: z.array(
+      z.object({
+        type: z.string(),
+        value: z.number(),
+      })
+    ),
     lastBeatmaps: z.array(
       z.object({
         id: z.number().nullable().optional(),
@@ -127,11 +133,17 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     .select("*", { count: "exact", head: true })
     .gt("last_activity", Date.now() - 1800000);
 
+  const countChart = await supabase
+    .from("chartedValues")
+    .select("*")
+    .gt("created_at", Date.now() - 86400000);
+
   return NextResponse.json({
     beatmaps: countBeatmapsQuery.count,
     profiles: countProfilesQuery.count,
     scores: countScoresQuery.count,
     onlineUsers: countOnline.count,
+    countChart,
     lastBeatmaps: beatmapPage?.map((e) => ({
       playcount: e.beatmaps?.playcount,
       created_at: e.created_at,
