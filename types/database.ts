@@ -153,6 +153,27 @@ export type Database = {
         }
         Relationships: []
       }
+      chartedValues: {
+        Row: {
+          created_at: string
+          id: number
+          type: string | null
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          type?: string | null
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          type?: string | null
+          value?: number | null
+        }
+        Relationships: []
+      }
       clans: {
         Row: {
           acronym: string | null
