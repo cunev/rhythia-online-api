@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      beatmapCollections: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          owner: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: number
+          owner: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          owner?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beatmapCollections_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beatmapPageComments: {
         Row: {
           beatmapPage: number
@@ -211,6 +243,42 @@ export type Database = {
             columns: ["owner"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collectionRelations: {
+        Row: {
+          beatmapPage: number | null
+          collection: number
+          created_at: string
+          id: number
+        }
+        Insert: {
+          beatmapPage?: number | null
+          collection: number
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          beatmapPage?: number | null
+          collection?: number
+          created_at?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collectionRelations_beatmapPage_fkey"
+            columns: ["beatmapPage"]
+            isOneToOne: false
+            referencedRelation: "beatmapPages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collectionRelations_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "beatmapCollections"
             referencedColumns: ["id"]
           },
         ]
