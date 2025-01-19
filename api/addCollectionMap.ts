@@ -37,6 +37,18 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Can't find user" });
   }
 
+  let { data: queryCollectionRelation, error: collectionRelationError } =
+    await supabase
+      .from("collectionRelations")
+      .select("*")
+      .eq("collection", data.collection)
+      .eq("beatmapPage", data.beatmapPage)
+      .single();
+
+  if (queryCollectionRelation) {
+    return NextResponse.json({ error: "Map already in collection" });
+  }
+
   let { data: queryCollectionData, error: collectionError } = await supabase
     .from("beatmapCollections")
     .select("*")
