@@ -16,6 +16,17 @@ import { Schema as ApproveMap } from "./api/approveMap"
 export { Schema as SchemaApproveMap } from "./api/approveMap"
 export const approveMap = handleApi({url:"/api/approveMap",...ApproveMap})
 
+// ./api/chartPublicStats.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({}),
+  output: z.object({}),
+};*/
+import { Schema as ChartPublicStats } from "./api/chartPublicStats"
+export { Schema as SchemaChartPublicStats } from "./api/chartPublicStats"
+export const chartPublicStats = handleApi({url:"/api/chartPublicStats",...ChartPublicStats})
+
 // ./api/createBeatmap.ts API
 
 /*
@@ -540,6 +551,12 @@ export const Schema = {
     beatmaps: z.number(),
     scores: z.number(),
     onlineUsers: z.number(),
+    countChart: z.array(
+      z.object({
+        type: z.string(),
+        value: z.number(),
+      })
+    ),
     lastBeatmaps: z.array(
       z.object({
         id: z.number().nullable().optional(),

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
-import { calculatePerformancePoints, rateMapNotes } from "../utils/star-calc";
+import { rateMapNotes } from "../utils/star-calc";
+import { calculatePerformancePoints } from "./submitScore";
 
 export const Schema = {
   input: z.strictObject({

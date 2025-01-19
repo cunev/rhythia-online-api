@@ -4,19 +4,6 @@ import { sampleMap } from "./osuUtils";
 import { SSPMParsedMap } from "./sspmParser";
 import { SSPMMap, V1SSPMParser } from "./sspmv1Parser";
 
-function easeInExpoDeq(x: number) {
-  return x === 0 ? 0 : Math.pow(2, 35 * x - 35);
-}
-
-export function calculatePerformancePoints(
-  starRating: number,
-  accuracy: number
-) {
-  return Math.round(
-    Math.pow((starRating * easeInExpoDeq(accuracy) * 100) / 2, 2) / 1000
-  );
-}
-
 export function rateMap(map: SSPMParsedMap) {
   let notes = map.markers
     .filter((marker) => marker.type === 0)
