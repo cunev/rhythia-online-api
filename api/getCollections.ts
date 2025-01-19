@@ -6,6 +6,8 @@ import { supabase } from "../utils/supabase";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    page: z.number().optional().default(1),
+    itemsPerPage: z.number().optional().default(10),
   }),
   output: z.object({
     collections: z.array(
@@ -14,10 +16,16 @@ export const Schema = {
         title: z.string(),
         description: z.string(),
         beatmapCount: z.number(),
-        createdAt: z.string().nullable().optional(),
-        updatedAt: z.string().nullable().optional(),
+        starRatingDistribution: z.array(
+          z.object({
+            stars: z.number(),
+            count: z.number(),
+          })
+        ),
+        createdAt: z.string(),
       })
     ),
+    totalPages: z.number(),
     error: z.string().optional(),
   }),
 };
@@ -32,41 +40,62 @@ export async function POST(request: Request) {
 }
 
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
-  // First get all collections
-  let { data: collections, error: collectionsError } = await supabase
-    .from("beatmapCollections")
-    .select(
-      `
-      *,
-      collectionRelations!left(count)
-    `
-    )
+  const { data: collections, error } = await supabase
+    .rpc("get_collections_v1", {
+      page_number: data.page,
+      items_per_page: data.itemsPerPage,
+    })
     .returns<
-      Array<{
+      {
         id: number;
         title: string;
         description: string;
-        created_at: string | null;
-        updated_at: string | null;
-        collectionRelations: Array<{ count: number }>;
-      }>
+        created_at: string;
+        beatmap_count: number;
+        star1: number;
+        star2: number;
+        star3: number;
+        star4: number;
+        star5: number;
+        star6: number;
+        star7: number;
+        star8: number;
+        star9: number;
+        star10: number;
+        total_pages: number;
+      }[]
     >();
 
-  if (collectionsError) {
+  if (error) {
     return NextResponse.json({ error: "Error fetching collections" });
   }
+
+  // Get the total pages from the first row (all rows will have the same value)
+  const totalPages = collections?.[0]?.total_pages ?? 1;
 
   const formattedCollections =
     collections?.map((collection) => ({
       id: collection.id,
       title: collection.title,
       description: collection.description,
-      beatmapCount: collection.collectionRelations?.[0]?.count ?? 0,
+      beatmapCount: collection.beatmap_count,
+      starRatingDistribution: [
+        { stars: 1, count: collection.star1 },
+        { stars: 2, count: collection.star2 },
+        { stars: 3, count: collection.star3 },
+        { stars: 4, count: collection.star4 },
+        { stars: 5, count: collection.star5 },
+        { stars: 6, count: collection.star6 },
+        { stars: 7, count: collection.star7 },
+        { stars: 8, count: collection.star8 },
+        { stars: 9, count: collection.star9 },
+        { stars: 10, count: collection.star10 },
+      ],
       createdAt: collection.created_at,
-      updatedAt: collection.updated_at,
     })) || [];
 
   return NextResponse.json({
     collections: formattedCollections,
+    totalPages,
   });
 }

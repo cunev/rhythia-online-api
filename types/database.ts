@@ -505,7 +505,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_collections_v1: {
+        Args: {
+          page_number?: number
+          items_per_page?: number
+        }
+        Returns: {
+          id: number
+          title: string
+          description: string
+          created_at: string
+          beatmap_count: number
+          star1: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          star10: number
+          total_pages: number
+        }[]
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"

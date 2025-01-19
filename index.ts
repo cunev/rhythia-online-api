@@ -1,5 +1,22 @@
 import { handleApi } from "./handleApi"
 
+// ./api/addCollectionMap.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    collection: z.number(),
+    beatmapPage: z.number(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as AddCollectionMap } from "./api/addCollectionMap"
+export { Schema as SchemaAddCollectionMap } from "./api/addCollectionMap"
+export const addCollectionMap = handleApi({url:"/api/addCollectionMap",...AddCollectionMap})
+
 // ./api/approveMap.ts API
 
 /*
@@ -77,6 +94,22 @@ export const Schema = {
 import { Schema as CreateClan } from "./api/createClan"
 export { Schema as SchemaCreateClan } from "./api/createClan"
 export const createClan = handleApi({url:"/api/createClan",...CreateClan})
+
+// ./api/createCollection.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    title: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as CreateCollection } from "./api/createCollection"
+export { Schema as SchemaCreateCollection } from "./api/createCollection"
+export const createCollection = handleApi({url:"/api/createCollection",...CreateCollection})
 
 // ./api/deleteBeatmapPage.ts API
 
@@ -413,6 +446,69 @@ export const Schema = {
 import { Schema as GetClan } from "./api/getClan"
 export { Schema as SchemaGetClan } from "./api/getClan"
 export const getClan = handleApi({url:"/api/getClan",...GetClan})
+
+// ./api/getCollection.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    collection: z.number(),
+  }),
+  output: z.object({
+    collection: z.object({
+      title: z.string(),
+      description: z.string(),
+      beatmaps: z.array(
+        z.object({
+          id: z.number(),
+          playcount: z.number().nullable().optional(),
+          created_at: z.string().nullable().optional(),
+          difficulty: z.number().nullable().optional(),
+          length: z.number().nullable().optional(),
+          title: z.string().nullable().optional(),
+          ranked: z.boolean().nullable().optional(),
+          beatmapFile: z.string().nullable().optional(),
+          image: z.string().nullable().optional(),
+          starRating: z.number().nullable().optional(),
+          owner: z.number().nullable().optional(),
+          ownerUsername: z.string().nullable().optional(),
+          status: z.string().nullable().optional(),
+          tags: z.string().nullable().optional(),
+        })
+      ),
+    }),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as GetCollection } from "./api/getCollection"
+export { Schema as SchemaGetCollection } from "./api/getCollection"
+export const getCollection = handleApi({url:"/api/getCollection",...GetCollection})
+
+// ./api/getCollections.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+  }),
+  output: z.object({
+    collections: z.array(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        description: z.string(),
+        beatmapCount: z.number(),
+        createdAt: z.string().nullable().optional(),
+        updatedAt: z.string().nullable().optional(),
+      })
+    ),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as GetCollections } from "./api/getCollections"
+export { Schema as SchemaGetCollections } from "./api/getCollections"
+export const getCollections = handleApi({url:"/api/getCollections",...GetCollections})
 
 // ./api/getLeaderboard.ts API
 
