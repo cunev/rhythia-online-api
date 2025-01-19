@@ -11,6 +11,7 @@ export const Schema = {
     title: z.string(),
   }),
   output: z.object({
+    id: z.number(),
     error: z.string().optional(),
   }),
 };
@@ -36,11 +37,17 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Can't find user" });
   }
 
-  await supabase.from("beatmapCollections").insert({
-    title: data.title,
-    description: "",
-    owner: queryUserData.id,
-  });
+  const inserted = await supabase
+    .from("beatmapCollections")
+    .insert({
+      title: data.title,
+      description: "",
+      owner: queryUserData.id,
+    })
+    .select("*")
+    .single();
 
-  return NextResponse.json({});
+  return NextResponse.json({
+    id: inserted.data!.id,
+  });
 }
