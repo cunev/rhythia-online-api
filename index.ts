@@ -491,6 +491,8 @@ export const getCollection = handleApi({url:"/api/getCollection",...GetCollectio
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    page: z.number().optional().default(1),
+    itemsPerPage: z.number().optional().default(10),
   }),
   output: z.object({
     collections: z.array(
@@ -499,10 +501,16 @@ export const Schema = {
         title: z.string(),
         description: z.string(),
         beatmapCount: z.number(),
-        createdAt: z.string().nullable().optional(),
-        updatedAt: z.string().nullable().optional(),
+        starRatingDistribution: z.array(
+          z.object({
+            stars: z.number(),
+            count: z.number(),
+          })
+        ),
+        createdAt: z.string(),
       })
     ),
+    totalPages: z.number(),
     error: z.string().optional(),
   }),
 };*/
