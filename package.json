@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "176.0.0",
+  "version": "177.0.0",
   "main": "index.ts",
   "author": "online-contributors",
   "scripts": {

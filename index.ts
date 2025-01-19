@@ -104,6 +104,7 @@ export const Schema = {
     title: z.string(),
   }),
   output: z.object({
+    id: z.number(),
     error: z.string().optional(),
   }),
 };*/

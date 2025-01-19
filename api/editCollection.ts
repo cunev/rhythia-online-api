@@ -4,14 +4,16 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { describe } from "node:test";
 
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    collection: z.number(),
     title: z.string(),
+    description: z.string(),
   }),
   output: z.object({
-    id: z.number(),
     error: z.string().optional(),
   }),
 };
@@ -37,22 +39,31 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Can't find user" });
   }
 
+  let { data: queryCollectionData, error: collectionError } = await supabase
+    .from("beatmapCollections")
+    .select("*")
+    .eq("id", data.collection)
+    .single();
+
+  if (!queryCollectionData) {
+    return NextResponse.json({ error: "Can't find collection" });
+  }
+
+  if (queryCollectionData.owner !== queryUserData.id) {
+    return NextResponse.json({ error: "You can't update foreign collections" });
+  }
+
   if (data.title.length < 3) {
     return NextResponse.json({
       error: "Collection title should be longer than 3",
     });
   }
-  const inserted = await supabase
-    .from("beatmapCollections")
-    .insert({
-      title: data.title,
-      description: "",
-      owner: queryUserData.id,
-    })
-    .select("*")
-    .single();
 
-  return NextResponse.json({
-    id: inserted.data!.id,
+  await supabase.from("beatmapCollections").upsert({
+    id: data.collection,
+    title: data.title,
+    description: data.description,
+    owner: queryUserData.id,
   });
+  return NextResponse.json({});
 }

@@ -8,10 +8,9 @@ import { User } from "@supabase/supabase-js";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
-    title: z.string(),
+    collection: z.number(),
   }),
   output: z.object({
-    id: z.number(),
     error: z.string().optional(),
   }),
 };
@@ -37,22 +36,20 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Can't find user" });
   }
 
-  if (data.title.length < 3) {
-    return NextResponse.json({
-      error: "Collection title should be longer than 3",
-    });
-  }
-  const inserted = await supabase
+  let { data: queryCollectionData, error: collectionError } = await supabase
     .from("beatmapCollections")
-    .insert({
-      title: data.title,
-      description: "",
-      owner: queryUserData.id,
-    })
     .select("*")
+    .eq("id", data.collection)
     .single();
 
-  return NextResponse.json({
-    id: inserted.data!.id,
-  });
+  if (!queryCollectionData) {
+    return NextResponse.json({ error: "Can't find collection" });
+  }
+
+  if (queryCollectionData.owner !== queryUserData.id) {
+    return NextResponse.json({ error: "You can't update foreign collections" });
+  }
+
+  await supabase.from("beatmapCollections").delete().eq("id", data.collection);
+  return NextResponse.json({});
 }
