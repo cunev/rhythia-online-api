@@ -515,6 +515,7 @@ export type Database = {
           title: string
           description: string
           created_at: string
+          owner: number
           beatmap_count: number
           star1: number
           star2: number
@@ -526,6 +527,14 @@ export type Database = {
           star8: number
           star9: number
           star10: number
+          star11: number
+          star12: number
+          star13: number
+          star14: number
+          star15: number
+          star16: number
+          star17: number
+          star18: number
           total_pages: number
         }[]
       }
