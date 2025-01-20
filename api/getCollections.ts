@@ -81,7 +81,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     >();
 
   if (error) {
-    return NextResponse.json({ error: "Error fetching collections" });
+    return NextResponse.json({ error });
   }
 
   // Get the total pages from the first row (all rows will have the same value)
