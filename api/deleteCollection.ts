@@ -51,5 +51,9 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   }
 
   await supabase.from("beatmapCollections").delete().eq("id", data.collection);
+  await supabase
+    .from("collectionRelations")
+    .delete()
+    .eq("collection", data.collection);
   return NextResponse.json({});
 }
