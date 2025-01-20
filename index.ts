@@ -511,6 +511,10 @@ export const Schema = {
     collection: z.object({
       title: z.string(),
       description: z.string(),
+      owner: z.object({
+        id: z.number(),
+        username: z.string(),
+      }),
       beatmaps: z.array(
         z.object({
           id: z.number(),
