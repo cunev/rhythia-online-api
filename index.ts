@@ -128,6 +128,22 @@ import { Schema as DeleteBeatmapPage } from "./api/deleteBeatmapPage"
 export { Schema as SchemaDeleteBeatmapPage } from "./api/deleteBeatmapPage"
 export const deleteBeatmapPage = handleApi({url:"/api/deleteBeatmapPage",...DeleteBeatmapPage})
 
+// ./api/deleteCollection.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    collection: z.number(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as DeleteCollection } from "./api/deleteCollection"
+export { Schema as SchemaDeleteCollection } from "./api/deleteCollection"
+export const deleteCollection = handleApi({url:"/api/deleteCollection",...DeleteCollection})
+
 // ./api/editAboutMe.ts API
 
 /*
@@ -165,6 +181,24 @@ export const Schema = {
 import { Schema as EditClan } from "./api/editClan"
 export { Schema as SchemaEditClan } from "./api/editClan"
 export const editClan = handleApi({url:"/api/editClan",...EditClan})
+
+// ./api/editCollection.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    collection: z.number(),
+    title: z.string(),
+    description: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as EditCollection } from "./api/editCollection"
+export { Schema as SchemaEditCollection } from "./api/editCollection"
+export const editCollection = handleApi({url:"/api/editCollection",...EditCollection})
 
 // ./api/editProfile.ts API
 

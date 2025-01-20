@@ -61,6 +61,7 @@ export async function handler({
     return NextResponse.json({ error: "Only unranked maps can be updated" });
 
   await supabase.from("beatmapPageComments").delete().eq("beatmapPage", id);
+  await supabase.from("collectionRelations").delete().eq("beatmapPage", id);
   await supabase.from("beatmapPages").delete().eq("id", id);
   await supabase
     .from("beatmaps")
