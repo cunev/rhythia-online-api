@@ -12,6 +12,10 @@ export const Schema = {
     collection: z.object({
       title: z.string(),
       description: z.string(),
+      owner: z.object({
+        id: z.number(),
+        username: z.string(),
+      }),
       beatmaps: z.array(
         z.object({
           id: z.number(),
@@ -47,7 +51,15 @@ export async function POST(request: Request) {
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
   let { data: queryCollectionData, error: collectionError } = await supabase
     .from("beatmapCollections")
-    .select("*")
+    .select(
+      `
+      *,
+      profiles!inner(
+        id,
+        username
+      )
+      `
+    )
     .eq("id", data.collection)
     .single();
 
@@ -104,6 +116,10 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   return NextResponse.json({
     collection: {
+      owner: {
+        username: queryCollectionData.profiles.username,
+        id: queryCollectionData.profiles.id,
+      },
       title: queryCollectionData.title,
       description: queryCollectionData.description,
       beatmaps: formattedBeatmaps,
