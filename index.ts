@@ -144,6 +144,23 @@ import { Schema as DeleteCollection } from "./api/deleteCollection"
 export { Schema as SchemaDeleteCollection } from "./api/deleteCollection"
 export const deleteCollection = handleApi({url:"/api/deleteCollection",...DeleteCollection})
 
+// ./api/deleteCollectionMap.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    collection: z.number(),
+    beatmapPage: z.number(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as DeleteCollectionMap } from "./api/deleteCollectionMap"
+export { Schema as SchemaDeleteCollectionMap } from "./api/deleteCollectionMap"
+export const deleteCollectionMap = handleApi({url:"/api/deleteCollectionMap",...DeleteCollectionMap})
+
 // ./api/editAboutMe.ts API
 
 /*
