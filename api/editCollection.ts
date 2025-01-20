@@ -59,6 +59,12 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
+  if (data.description.length > 128) {
+    return NextResponse.json({
+      error: "Description too long",
+    });
+  }
+
   await supabase.from("beatmapCollections").upsert({
     id: data.collection,
     title: data.title,
