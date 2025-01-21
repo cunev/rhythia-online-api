@@ -556,6 +556,9 @@ export const Schema = {
         id: z.number(),
         title: z.string(),
         description: z.string(),
+        owner: z.number(),
+        ownerUsername: z.string(),
+        ownerAvatarUrl: z.string(),
         beatmapCount: z.number(),
         starRatingDistribution: z.array(
           z.object({

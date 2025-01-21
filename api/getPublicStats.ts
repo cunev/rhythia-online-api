@@ -135,7 +135,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   const countChart = await supabase
     .from("chartedValues")
-    .select("*")
+    .select("value")
     .eq("type", "online_players")
     .gt("created_at", new Date(Date.now() - 86400000).toISOString());
 
