@@ -16,6 +16,7 @@ export const Schema = {
         id: z.number(),
         username: z.string(),
       }),
+      isList: z.boolean(),
       beatmaps: z.array(
         z.object({
           id: z.number(),
@@ -120,6 +121,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
         username: queryCollectionData.profiles.username,
         id: queryCollectionData.profiles.id,
       },
+      isList: queryCollectionData.is_list,
       title: queryCollectionData.title,
       description: queryCollectionData.description,
       beatmaps: formattedBeatmaps,

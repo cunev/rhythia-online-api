@@ -12,6 +12,7 @@ export const Schema = {
     collection: z.number(),
     title: z.string(),
     description: z.string(),
+    isList: z.boolean(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -69,6 +70,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     id: data.collection,
     title: data.title,
     description: data.description,
+    is_list: data.isList,
     owner: queryUserData.id,
   });
   return NextResponse.json({});

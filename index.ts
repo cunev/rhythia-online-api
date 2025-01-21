@@ -208,6 +208,7 @@ export const Schema = {
     collection: z.number(),
     title: z.string(),
     description: z.string(),
+    isList: z.boolean(),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -515,6 +516,7 @@ export const Schema = {
         id: z.number(),
         username: z.string(),
       }),
+      isList: z.boolean(),
       beatmaps: z.array(
         z.object({
           id: z.number(),

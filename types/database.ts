@@ -14,6 +14,7 @@ export type Database = {
           created_at: string
           description: string
           id: number
+          is_list: boolean
           owner: number
           title: string
         }
@@ -21,6 +22,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: number
+          is_list?: boolean
           owner: number
           title: string
         }
@@ -28,6 +30,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: number
+          is_list?: boolean
           owner?: number
           title?: string
         }
