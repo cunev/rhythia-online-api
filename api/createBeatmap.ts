@@ -71,8 +71,9 @@ export async function handler({
       .includes((userData.username?.trim() || "").toLowerCase())
   ) {
     return NextResponse.json({
-      error:
-        "You are not among the authors of the map. If you made the map, please add yourself as an author in the editor.",
+      error: `You are not among the authors of the map. If you made the map, please add yourself as an author in the editor. Mappers: ${JSON.stringify(
+        parsedData.strings.mappers
+      )}, Your name: ${userData.username}`,
     });
   }
 
