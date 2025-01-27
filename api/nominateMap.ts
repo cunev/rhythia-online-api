@@ -60,10 +60,23 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Already nominated" });
   }
 
-  await supabase.from("beatmapPages").upsert({
-    id: data.mapId,
-    nominations: [...(mapData.nominations! as number[]), queryUserData.id],
-  });
+  const newNominations = [
+    ...(mapData.nominations! as number[]),
+    queryUserData.id,
+  ];
+  if (newNominations.length == 2) {
+    await supabase.from("beatmapPages").upsert({
+      id: data.mapId,
+      nominations: newNominations,
+      status: "RANKED",
+      ranked_at: Date.now(),
+    });
+  } else {
+    await supabase.from("beatmapPages").upsert({
+      id: data.mapId,
+      nominations: newNominations,
+    });
+  }
 
   return NextResponse.json({});
 }
