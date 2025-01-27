@@ -54,8 +54,13 @@ export async function handler({
   if (!userData) return NextResponse.json({ error: "No user." });
   if (!beatmapData) return NextResponse.json({ error: "No beatmap." });
 
-  if (userData.id !== pageData.owner)
-    return NextResponse.json({ error: "Non-authz user." });
+  if (userData.id !== pageData.owner) {
+    const isDev =
+      (userData.badges as string[]).includes("Developer") ||
+      (userData.badges as string[]).includes("Global Moderator");
+
+    if (!isDev) return NextResponse.json({ error: "Non-authz user." });
+  }
 
   if (pageData.status !== "UNRANKED")
     return NextResponse.json({ error: "Only unranked maps can be updated" });
