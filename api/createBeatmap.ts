@@ -67,8 +67,8 @@ export async function handler({
 
   if (
     !parsedData.strings.mappers
-      .map((mapper) => mapper.toLowerCase())
-      .includes((userData.username || "").toLowerCase())
+      .map((mapper) => mapper.toLowerCase().trim())
+      .includes((userData.username?.trim() || "").toLowerCase())
   ) {
     return NextResponse.json({
       error:
