@@ -66,6 +66,17 @@ export async function handler({
   }
 
   if (
+    !parsedData.strings.mappers
+      .map((mapper) => mapper.toLowerCase())
+      .includes((userData.username || "").toLowerCase())
+  ) {
+    return NextResponse.json({
+      error:
+        "You are among the authors of the map. If you made the map, please add yourself as an author in the editor.",
+    });
+  }
+
+  if (
     userData.ban == "excluded" ||
     userData.ban == "restricted" ||
     userData.ban == "silenced"
