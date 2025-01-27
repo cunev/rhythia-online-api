@@ -136,6 +136,7 @@ export class SSPMParser {
   }
 
   private readStringList(count: number): string[] {
+    console.log("[DANGER] Reading String List");
     const list: string[] = [];
     for (let i = 0; i < count; i++) {
       list.push(this.readString());
@@ -281,8 +282,7 @@ export class SSPMParser {
       mapID: this.readString(),
       mapName: this.readString(),
       songName: this.readString(),
-      mappers: [],
-      // mappers: this.readStringList(this.readUInt16()),
+      mappers: this.readStringList(this.readUInt16()),
     };
 
     let customData: CustomData = { fields: [] };
