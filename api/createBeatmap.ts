@@ -72,7 +72,7 @@ export async function handler({
   ) {
     return NextResponse.json({
       error:
-        "You are among the authors of the map. If you made the map, please add yourself as an author in the editor.",
+        "You are not among the authors of the map. If you made the map, please add yourself as an author in the editor.",
     });
   }
 
