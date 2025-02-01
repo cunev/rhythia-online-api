@@ -9,6 +9,7 @@ export const Schema = {
     page: z.number().optional().default(1),
     itemsPerPage: z.number().optional().default(10),
     owner: z.number().optional(), // Added owner field
+    search: z.string().optional(), // Added string field
   }),
   output: z.object({
     collections: z.array(
@@ -45,10 +46,11 @@ export async function POST(request: Request) {
 
 export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: collections, error } = await supabase
-    .rpc("get_collections_v3", {
+    .rpc("get_collections_v4", {
       page_number: data.page,
       items_per_page: data.itemsPerPage,
       owner_filter: typeof data.owner === "number" ? data.owner : undefined,
+      search_query: data.search || undefined,
     })
     .returns<
       {
