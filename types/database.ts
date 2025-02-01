@@ -256,18 +256,21 @@ export type Database = {
           collection: number
           created_at: string
           id: number
+          sort: number
         }
         Insert: {
           beatmapPage?: number | null
           collection: number
           created_at?: string
           id?: number
+          sort?: number
         }
         Update: {
           beatmapPage?: number | null
           collection?: number
           created_at?: string
           id?: number
+          sort?: number
         }
         Relationships: [
           {
@@ -545,6 +548,42 @@ export type Database = {
         Args: {
           page_number?: number
           items_per_page?: number
+        }
+        Returns: {
+          id: number
+          title: string
+          description: string
+          created_at: string
+          owner: number
+          owner_username: string
+          owner_avatar_url: string
+          beatmap_count: number
+          star1: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          star10: number
+          star11: number
+          star12: number
+          star13: number
+          star14: number
+          star15: number
+          star16: number
+          star17: number
+          star18: number
+          total_pages: number
+        }[]
+      }
+      get_collections_v3: {
+        Args: {
+          page_number?: number
+          items_per_page?: number
+          owner_filter?: number
         }
         Returns: {
           id: number
