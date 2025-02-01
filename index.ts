@@ -1,4 +1,4 @@
-import { handleApi } from "./handleApi"
+import { handleApi } from "./handleApi";
 
 // ./api/getPassToken.ts API
 
@@ -16,9 +16,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as GetPassToken } from "./api/getPassToken"
-export { Schema as SchemaGetPassToken } from "./api/getPassToken"
-export const getPassToken = handleApi({url:"/api/getPassToken",...GetPassToken})
+import { Schema as GetPassToken } from "./api/getPassToken";
+export { Schema as SchemaGetPassToken } from "./api/getPassToken";
+export const getPassToken = handleApi({
+  url: "/api/getPassToken",
+  ...GetPassToken,
+});
 
 // ./api/getMapUploadUrl.ts API
 
@@ -37,9 +40,12 @@ export const Schema = {
     objectKey: z.string().optional(),
   }),
 };*/
-import { Schema as GetMapUploadUrl } from "./api/getMapUploadUrl"
-export { Schema as SchemaGetMapUploadUrl } from "./api/getMapUploadUrl"
-export const getMapUploadUrl = handleApi({url:"/api/getMapUploadUrl",...GetMapUploadUrl})
+import { Schema as GetMapUploadUrl } from "./api/getMapUploadUrl";
+export { Schema as SchemaGetMapUploadUrl } from "./api/getMapUploadUrl";
+export const getMapUploadUrl = handleApi({
+  url: "/api/getMapUploadUrl",
+  ...GetMapUploadUrl,
+});
 
 // ./api/createCollection.ts API
 
@@ -54,9 +60,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as CreateCollection } from "./api/createCollection"
-export { Schema as SchemaCreateCollection } from "./api/createCollection"
-export const createCollection = handleApi({url:"/api/createCollection",...CreateCollection})
+import { Schema as CreateCollection } from "./api/createCollection";
+export { Schema as SchemaCreateCollection } from "./api/createCollection";
+export const createCollection = handleApi({
+  url: "/api/createCollection",
+  ...CreateCollection,
+});
 
 // ./api/deleteCollectionMap.ts API
 
@@ -71,9 +80,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as DeleteCollectionMap } from "./api/deleteCollectionMap"
-export { Schema as SchemaDeleteCollectionMap } from "./api/deleteCollectionMap"
-export const deleteCollectionMap = handleApi({url:"/api/deleteCollectionMap",...DeleteCollectionMap})
+import { Schema as DeleteCollectionMap } from "./api/deleteCollectionMap";
+export { Schema as SchemaDeleteCollectionMap } from "./api/deleteCollectionMap";
+export const deleteCollectionMap = handleApi({
+  url: "/api/deleteCollectionMap",
+  ...DeleteCollectionMap,
+});
 
 // ./api/getAvatarUploadUrl.ts API
 
@@ -91,9 +103,12 @@ export const Schema = {
     objectKey: z.string().optional(),
   }),
 };*/
-import { Schema as GetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
-export { Schema as SchemaGetAvatarUploadUrl } from "./api/getAvatarUploadUrl"
-export const getAvatarUploadUrl = handleApi({url:"/api/getAvatarUploadUrl",...GetAvatarUploadUrl})
+import { Schema as GetAvatarUploadUrl } from "./api/getAvatarUploadUrl";
+export { Schema as SchemaGetAvatarUploadUrl } from "./api/getAvatarUploadUrl";
+export const getAvatarUploadUrl = handleApi({
+  url: "/api/getAvatarUploadUrl",
+  ...GetAvatarUploadUrl,
+});
 
 // ./api/approveMap.ts API
 
@@ -107,9 +122,9 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as ApproveMap } from "./api/approveMap"
-export { Schema as SchemaApproveMap } from "./api/approveMap"
-export const approveMap = handleApi({url:"/api/approveMap",...ApproveMap})
+import { Schema as ApproveMap } from "./api/approveMap";
+export { Schema as SchemaApproveMap } from "./api/approveMap";
+export const approveMap = handleApi({ url: "/api/approveMap", ...ApproveMap });
 
 // ./api/nominateMap.ts API
 
@@ -123,9 +138,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as NominateMap } from "./api/nominateMap"
-export { Schema as SchemaNominateMap } from "./api/nominateMap"
-export const nominateMap = handleApi({url:"/api/nominateMap",...NominateMap})
+import { Schema as NominateMap } from "./api/nominateMap";
+export { Schema as SchemaNominateMap } from "./api/nominateMap";
+export const nominateMap = handleApi({
+  url: "/api/nominateMap",
+  ...NominateMap,
+});
 
 // ./api/createBeatmapPage.ts API
 
@@ -139,9 +157,12 @@ export const Schema = {
     id: z.number().optional(),
   }),
 };*/
-import { Schema as CreateBeatmapPage } from "./api/createBeatmapPage"
-export { Schema as SchemaCreateBeatmapPage } from "./api/createBeatmapPage"
-export const createBeatmapPage = handleApi({url:"/api/createBeatmapPage",...CreateBeatmapPage})
+import { Schema as CreateBeatmapPage } from "./api/createBeatmapPage";
+export { Schema as SchemaCreateBeatmapPage } from "./api/createBeatmapPage";
+export const createBeatmapPage = handleApi({
+  url: "/api/createBeatmapPage",
+  ...CreateBeatmapPage,
+});
 
 // ./api/editAboutMe.ts API
 
@@ -157,9 +178,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as EditAboutMe } from "./api/editAboutMe"
-export { Schema as SchemaEditAboutMe } from "./api/editAboutMe"
-export const editAboutMe = handleApi({url:"/api/editAboutMe",...EditAboutMe})
+import { Schema as EditAboutMe } from "./api/editAboutMe";
+export { Schema as SchemaEditAboutMe } from "./api/editAboutMe";
+export const editAboutMe = handleApi({
+  url: "/api/editAboutMe",
+  ...EditAboutMe,
+});
 
 // ./api/chartPublicStats.ts API
 
@@ -168,9 +192,12 @@ export const Schema = {
   input: z.strictObject({}),
   output: z.object({}),
 };*/
-import { Schema as ChartPublicStats } from "./api/chartPublicStats"
-export { Schema as SchemaChartPublicStats } from "./api/chartPublicStats"
-export const chartPublicStats = handleApi({url:"/api/chartPublicStats",...ChartPublicStats})
+import { Schema as ChartPublicStats } from "./api/chartPublicStats";
+export { Schema as SchemaChartPublicStats } from "./api/chartPublicStats";
+export const chartPublicStats = handleApi({
+  url: "/api/chartPublicStats",
+  ...ChartPublicStats,
+});
 
 // ./api/rankMapsArchive.ts API
 
@@ -184,9 +211,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as RankMapsArchive } from "./api/rankMapsArchive"
-export { Schema as SchemaRankMapsArchive } from "./api/rankMapsArchive"
-export const rankMapsArchive = handleApi({url:"/api/rankMapsArchive",...RankMapsArchive})
+import { Schema as RankMapsArchive } from "./api/rankMapsArchive";
+export { Schema as SchemaRankMapsArchive } from "./api/rankMapsArchive";
+export const rankMapsArchive = handleApi({
+  url: "/api/rankMapsArchive",
+  ...RankMapsArchive,
+});
 
 // ./api/getRawStarRating.ts API
 
@@ -205,9 +235,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetRawStarRating } from "./api/getRawStarRating"
-export { Schema as SchemaGetRawStarRating } from "./api/getRawStarRating"
-export const getRawStarRating = handleApi({url:"/api/getRawStarRating",...GetRawStarRating})
+import { Schema as GetRawStarRating } from "./api/getRawStarRating";
+export { Schema as SchemaGetRawStarRating } from "./api/getRawStarRating";
+export const getRawStarRating = handleApi({
+  url: "/api/getRawStarRating",
+  ...GetRawStarRating,
+});
 
 // ./api/createClan.ts API
 
@@ -222,9 +255,9 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as CreateClan } from "./api/createClan"
-export { Schema as SchemaCreateClan } from "./api/createClan"
-export const createClan = handleApi({url:"/api/createClan",...CreateClan})
+import { Schema as CreateClan } from "./api/createClan";
+export { Schema as SchemaCreateClan } from "./api/createClan";
+export const createClan = handleApi({ url: "/api/createClan", ...CreateClan });
 
 // ./api/setPasskey.ts API
 
@@ -240,9 +273,9 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as SetPasskey } from "./api/setPasskey"
-export { Schema as SchemaSetPasskey } from "./api/setPasskey"
-export const setPasskey = handleApi({url:"/api/setPasskey",...SetPasskey})
+import { Schema as SetPasskey } from "./api/setPasskey";
+export { Schema as SchemaSetPasskey } from "./api/setPasskey";
+export const setPasskey = handleApi({ url: "/api/setPasskey", ...SetPasskey });
 
 // ./api/getPublicStats.ts API
 
@@ -299,9 +332,12 @@ export const Schema = {
     ),
   }),
 };*/
-import { Schema as GetPublicStats } from "./api/getPublicStats"
-export { Schema as SchemaGetPublicStats } from "./api/getPublicStats"
-export const getPublicStats = handleApi({url:"/api/getPublicStats",...GetPublicStats})
+import { Schema as GetPublicStats } from "./api/getPublicStats";
+export { Schema as SchemaGetPublicStats } from "./api/getPublicStats";
+export const getPublicStats = handleApi({
+  url: "/api/getPublicStats",
+  ...GetPublicStats,
+});
 
 // ./api/getUserScores.ts API
 
@@ -361,9 +397,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetUserScores } from "./api/getUserScores"
-export { Schema as SchemaGetUserScores } from "./api/getUserScores"
-export const getUserScores = handleApi({url:"/api/getUserScores",...GetUserScores})
+import { Schema as GetUserScores } from "./api/getUserScores";
+export { Schema as SchemaGetUserScores } from "./api/getUserScores";
+export const getUserScores = handleApi({
+  url: "/api/getUserScores",
+  ...GetUserScores,
+});
 
 // ./api/editProfile.ts API
 
@@ -381,9 +420,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as EditProfile } from "./api/editProfile"
-export { Schema as SchemaEditProfile } from "./api/editProfile"
-export const editProfile = handleApi({url:"/api/editProfile",...EditProfile})
+import { Schema as EditProfile } from "./api/editProfile";
+export { Schema as SchemaEditProfile } from "./api/editProfile";
+export const editProfile = handleApi({
+  url: "/api/editProfile",
+  ...EditProfile,
+});
 
 // ./api/getScore.ts API
 
@@ -415,9 +457,9 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetScore } from "./api/getScore"
-export { Schema as SchemaGetScore } from "./api/getScore"
-export const getScore = handleApi({url:"/api/getScore",...GetScore})
+import { Schema as GetScore } from "./api/getScore";
+export { Schema as SchemaGetScore } from "./api/getScore";
+export const getScore = handleApi({ url: "/api/getScore", ...GetScore });
 
 // ./api/deleteBeatmapPage.ts API
 
@@ -431,9 +473,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as DeleteBeatmapPage } from "./api/deleteBeatmapPage"
-export { Schema as SchemaDeleteBeatmapPage } from "./api/deleteBeatmapPage"
-export const deleteBeatmapPage = handleApi({url:"/api/deleteBeatmapPage",...DeleteBeatmapPage})
+import { Schema as DeleteBeatmapPage } from "./api/deleteBeatmapPage";
+export { Schema as SchemaDeleteBeatmapPage } from "./api/deleteBeatmapPage";
+export const deleteBeatmapPage = handleApi({
+  url: "/api/deleteBeatmapPage",
+  ...DeleteBeatmapPage,
+});
 
 // ./api/getBadgedUsers.ts API
 
@@ -455,9 +500,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetBadgedUsers } from "./api/getBadgedUsers"
-export { Schema as SchemaGetBadgedUsers } from "./api/getBadgedUsers"
-export const getBadgedUsers = handleApi({url:"/api/getBadgedUsers",...GetBadgedUsers})
+import { Schema as GetBadgedUsers } from "./api/getBadgedUsers";
+export { Schema as SchemaGetBadgedUsers } from "./api/getBadgedUsers";
+export const getBadgedUsers = handleApi({
+  url: "/api/getBadgedUsers",
+  ...GetBadgedUsers,
+});
 
 // ./api/getBeatmapComments.ts API
 
@@ -483,9 +531,12 @@ export const Schema = {
     ),
   }),
 };*/
-import { Schema as GetBeatmapComments } from "./api/getBeatmapComments"
-export { Schema as SchemaGetBeatmapComments } from "./api/getBeatmapComments"
-export const getBeatmapComments = handleApi({url:"/api/getBeatmapComments",...GetBeatmapComments})
+import { Schema as GetBeatmapComments } from "./api/getBeatmapComments";
+export { Schema as SchemaGetBeatmapComments } from "./api/getBeatmapComments";
+export const getBeatmapComments = handleApi({
+  url: "/api/getBeatmapComments",
+  ...GetBeatmapComments,
+});
 
 // ./api/getCollections.ts API
 
@@ -520,9 +571,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as GetCollections } from "./api/getCollections"
-export { Schema as SchemaGetCollections } from "./api/getCollections"
-export const getCollections = handleApi({url:"/api/getCollections",...GetCollections})
+import { Schema as GetCollections } from "./api/getCollections";
+export { Schema as SchemaGetCollections } from "./api/getCollections";
+export const getCollections = handleApi({
+  url: "/api/getCollections",
+  ...GetCollections,
+});
 
 // ./api/getTimestamp.ts API
 
@@ -533,9 +587,12 @@ export const Schema = {
     time: z.number(),
   }),
 };*/
-import { Schema as GetTimestamp } from "./api/getTimestamp"
-export { Schema as SchemaGetTimestamp } from "./api/getTimestamp"
-export const getTimestamp = handleApi({url:"/api/getTimestamp",...GetTimestamp})
+import { Schema as GetTimestamp } from "./api/getTimestamp";
+export { Schema as SchemaGetTimestamp } from "./api/getTimestamp";
+export const getTimestamp = handleApi({
+  url: "/api/getTimestamp",
+  ...GetTimestamp,
+});
 
 // ./api/deleteCollection.ts API
 
@@ -549,9 +606,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as DeleteCollection } from "./api/deleteCollection"
-export { Schema as SchemaDeleteCollection } from "./api/deleteCollection"
-export const deleteCollection = handleApi({url:"/api/deleteCollection",...DeleteCollection})
+import { Schema as DeleteCollection } from "./api/deleteCollection";
+export { Schema as SchemaDeleteCollection } from "./api/deleteCollection";
+export const deleteCollection = handleApi({
+  url: "/api/deleteCollection",
+  ...DeleteCollection,
+});
 
 // ./api/editCollection.ts API
 
@@ -568,9 +628,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as EditCollection } from "./api/editCollection"
-export { Schema as SchemaEditCollection } from "./api/editCollection"
-export const editCollection = handleApi({url:"/api/editCollection",...EditCollection})
+import { Schema as EditCollection } from "./api/editCollection";
+export { Schema as SchemaEditCollection } from "./api/editCollection";
+export const editCollection = handleApi({
+  url: "/api/editCollection",
+  ...EditCollection,
+});
 
 // ./api/getBeatmaps.ts API
 
@@ -618,9 +681,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetBeatmaps } from "./api/getBeatmaps"
-export { Schema as SchemaGetBeatmaps } from "./api/getBeatmaps"
-export const getBeatmaps = handleApi({url:"/api/getBeatmaps",...GetBeatmaps})
+import { Schema as GetBeatmaps } from "./api/getBeatmaps";
+export { Schema as SchemaGetBeatmaps } from "./api/getBeatmaps";
+export const getBeatmaps = handleApi({
+  url: "/api/getBeatmaps",
+  ...GetBeatmaps,
+});
 
 // ./api/postBeatmapComment.ts API
 
@@ -635,9 +701,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as PostBeatmapComment } from "./api/postBeatmapComment"
-export { Schema as SchemaPostBeatmapComment } from "./api/postBeatmapComment"
-export const postBeatmapComment = handleApi({url:"/api/postBeatmapComment",...PostBeatmapComment})
+import { Schema as PostBeatmapComment } from "./api/postBeatmapComment";
+export { Schema as SchemaPostBeatmapComment } from "./api/postBeatmapComment";
+export const postBeatmapComment = handleApi({
+  url: "/api/postBeatmapComment",
+  ...PostBeatmapComment,
+});
 
 // ./api/getProfile.ts API
 
@@ -679,9 +748,9 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetProfile } from "./api/getProfile"
-export { Schema as SchemaGetProfile } from "./api/getProfile"
-export const getProfile = handleApi({url:"/api/getProfile",...GetProfile})
+import { Schema as GetProfile } from "./api/getProfile";
+export { Schema as SchemaGetProfile } from "./api/getProfile";
+export const getProfile = handleApi({ url: "/api/getProfile", ...GetProfile });
 
 // ./api/editClan.ts API
 
@@ -699,9 +768,9 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as EditClan } from "./api/editClan"
-export { Schema as SchemaEditClan } from "./api/editClan"
-export const editClan = handleApi({url:"/api/editClan",...EditClan})
+import { Schema as EditClan } from "./api/editClan";
+export { Schema as SchemaEditClan } from "./api/editClan";
+export const editClan = handleApi({ url: "/api/editClan", ...EditClan });
 
 // ./api/getClan.ts API
 
@@ -741,9 +810,9 @@ export const Schema = {
     ),
   }),
 };*/
-import { Schema as GetClan } from "./api/getClan"
-export { Schema as SchemaGetClan } from "./api/getClan"
-export const getClan = handleApi({url:"/api/getClan",...GetClan})
+import { Schema as GetClan } from "./api/getClan";
+export { Schema as SchemaGetClan } from "./api/getClan";
+export const getClan = handleApi({ url: "/api/getClan", ...GetClan });
 
 // ./api/getBeatmapPageById.ts API
 
@@ -778,9 +847,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetBeatmapPageById } from "./api/getBeatmapPageById"
-export { Schema as SchemaGetBeatmapPageById } from "./api/getBeatmapPageById"
-export const getBeatmapPageById = handleApi({url:"/api/getBeatmapPageById",...GetBeatmapPageById})
+import { Schema as GetBeatmapPageById } from "./api/getBeatmapPageById";
+export { Schema as SchemaGetBeatmapPageById } from "./api/getBeatmapPageById";
+export const getBeatmapPageById = handleApi({
+  url: "/api/getBeatmapPageById",
+  ...GetBeatmapPageById,
+});
 
 // ./api/getBeatmapPage.ts API
 
@@ -818,9 +890,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetBeatmapPage } from "./api/getBeatmapPage"
-export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage"
-export const getBeatmapPage = handleApi({url:"/api/getBeatmapPage",...GetBeatmapPage})
+import { Schema as GetBeatmapPage } from "./api/getBeatmapPage";
+export { Schema as SchemaGetBeatmapPage } from "./api/getBeatmapPage";
+export const getBeatmapPage = handleApi({
+  url: "/api/getBeatmapPage",
+  ...GetBeatmapPage,
+});
 
 // ./api/createBeatmap.ts API
 
@@ -836,9 +911,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as CreateBeatmap } from "./api/createBeatmap"
-export { Schema as SchemaCreateBeatmap } from "./api/createBeatmap"
-export const createBeatmap = handleApi({url:"/api/createBeatmap",...CreateBeatmap})
+import { Schema as CreateBeatmap } from "./api/createBeatmap";
+export { Schema as SchemaCreateBeatmap } from "./api/createBeatmap";
+export const createBeatmap = handleApi({
+  url: "/api/createBeatmap",
+  ...CreateBeatmap,
+});
 
 // ./api/getLeaderboard.ts API
 
@@ -878,9 +956,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetLeaderboard } from "./api/getLeaderboard"
-export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard"
-export const getLeaderboard = handleApi({url:"/api/getLeaderboard",...GetLeaderboard})
+import { Schema as GetLeaderboard } from "./api/getLeaderboard";
+export { Schema as SchemaGetLeaderboard } from "./api/getLeaderboard";
+export const getLeaderboard = handleApi({
+  url: "/api/getLeaderboard",
+  ...GetLeaderboard,
+});
 
 // ./api/getBeatmapStarRating.ts API
 
@@ -899,9 +980,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as GetBeatmapStarRating } from "./api/getBeatmapStarRating"
-export { Schema as SchemaGetBeatmapStarRating } from "./api/getBeatmapStarRating"
-export const getBeatmapStarRating = handleApi({url:"/api/getBeatmapStarRating",...GetBeatmapStarRating})
+import { Schema as GetBeatmapStarRating } from "./api/getBeatmapStarRating";
+export { Schema as SchemaGetBeatmapStarRating } from "./api/getBeatmapStarRating";
+export const getBeatmapStarRating = handleApi({
+  url: "/api/getBeatmapStarRating",
+  ...GetBeatmapStarRating,
+});
 
 // ./api/searchUsers.ts API
 
@@ -922,9 +1006,12 @@ export const Schema = {
       .optional(),
   }),
 };*/
-import { Schema as SearchUsers } from "./api/searchUsers"
-export { Schema as SchemaSearchUsers } from "./api/searchUsers"
-export const searchUsers = handleApi({url:"/api/searchUsers",...SearchUsers})
+import { Schema as SearchUsers } from "./api/searchUsers";
+export { Schema as SchemaSearchUsers } from "./api/searchUsers";
+export const searchUsers = handleApi({
+  url: "/api/searchUsers",
+  ...SearchUsers,
+});
 
 // ./api/submitScore.ts API
 
@@ -950,9 +1037,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as SubmitScore } from "./api/submitScore"
-export { Schema as SchemaSubmitScore } from "./api/submitScore"
-export const submitScore = handleApi({url:"/api/submitScore",...SubmitScore})
+import { Schema as SubmitScore } from "./api/submitScore";
+export { Schema as SchemaSubmitScore } from "./api/submitScore";
+export const submitScore = handleApi({
+  url: "/api/submitScore",
+  ...SubmitScore,
+});
 
 // ./api/addCollectionMap.ts API
 
@@ -967,9 +1057,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as AddCollectionMap } from "./api/addCollectionMap"
-export { Schema as SchemaAddCollectionMap } from "./api/addCollectionMap"
-export const addCollectionMap = handleApi({url:"/api/addCollectionMap",...AddCollectionMap})
+import { Schema as AddCollectionMap } from "./api/addCollectionMap";
+export { Schema as SchemaAddCollectionMap } from "./api/addCollectionMap";
+export const addCollectionMap = handleApi({
+  url: "/api/addCollectionMap",
+  ...AddCollectionMap,
+});
 
 // ./api/getCollection.ts API
 
@@ -1010,9 +1103,12 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as GetCollection } from "./api/getCollection"
-export { Schema as SchemaGetCollection } from "./api/getCollection"
-export const getCollection = handleApi({url:"/api/getCollection",...GetCollection})
+import { Schema as GetCollection } from "./api/getCollection";
+export { Schema as SchemaGetCollection } from "./api/getCollection";
+export const getCollection = handleApi({
+  url: "/api/getCollection",
+  ...GetCollection,
+});
 
 // ./api/updateBeatmapPage.ts API
 
@@ -1029,7 +1125,11 @@ export const Schema = {
     error: z.string().optional(),
   }),
 };*/
-import { Schema as UpdateBeatmapPage } from "./api/updateBeatmapPage"
-export { Schema as SchemaUpdateBeatmapPage } from "./api/updateBeatmapPage"
-export const updateBeatmapPage = handleApi({url:"/api/updateBeatmapPage",...UpdateBeatmapPage})
-export { handleApi } from "./handleApi"
+import { Schema as UpdateBeatmapPage } from "./api/updateBeatmapPage";
+export { Schema as SchemaUpdateBeatmapPage } from "./api/updateBeatmapPage";
+export const updateBeatmapPage = handleApi({
+  url: "/api/updateBeatmapPage",
+  ...UpdateBeatmapPage,
+});
+export { handleApi } from "./handleApi";
+// Deploy
