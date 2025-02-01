@@ -48,7 +48,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     .rpc("get_collections_v3", {
       page_number: data.page,
       items_per_page: data.itemsPerPage,
-      owner_filter: data.owner || undefined, // Added owner_filter parameter
+      owner_filter: typeof data.owner === "number" ? data.owner : undefined,
     })
     .returns<
       {
