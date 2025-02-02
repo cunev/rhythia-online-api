@@ -658,6 +658,8 @@ export type Database = {
           items_per_page?: number
           owner_filter?: number
           search_query?: string
+          author_filter?: string
+          min_beatmaps?: number
         }
         Returns: {
           id: number

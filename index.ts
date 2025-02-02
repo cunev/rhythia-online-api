@@ -497,6 +497,7 @@ export const Schema = {
     itemsPerPage: z.number().optional().default(10),
     owner: z.number().optional(), // Added owner field
     search: z.string().optional(), // Added string field
+    minBeatmaps: z.number().optional(), // Added string field
   }),
   output: z.object({
     collections: z.array(

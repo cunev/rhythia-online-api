@@ -10,6 +10,7 @@ export const Schema = {
     itemsPerPage: z.number().optional().default(10),
     owner: z.number().optional(), // Added owner field
     search: z.string().optional(), // Added string field
+    minBeatmaps: z.number().optional(), // Added string field
   }),
   output: z.object({
     collections: z.array(
@@ -51,6 +52,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
       items_per_page: data.itemsPerPage,
       owner_filter: typeof data.owner === "number" ? data.owner : undefined,
       search_query: data.search || undefined,
+      min_beatmaps: data.minBeatmaps || 0,
     })
     .returns<
       {
