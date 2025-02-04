@@ -9,6 +9,7 @@ export function setEnvironment(
 export function handleApi<
   T extends { url: string; input: z.ZodObject<any>; output: z.ZodObject<any> }
 >(apiSchema: T) {
+  profanity.whitelist.addWords(["willy"]);
   return async (input: T["input"]["_type"]): Promise<T["output"]["_type"]> => {
     const response = await fetch(`https://${env}.rhythia.com${apiSchema.url}`, {
       method: "POST",
