@@ -8,6 +8,27 @@ import { rateMap } from "../utils/star-calc";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
+
+class CustomHttpHandler extends NodeHttpHandler {
+  async handle(request: any) {
+    // Strip out any checksum headers
+    const headers = request.headers;
+    const checksumHeaders = [
+      "x-amz-checksum-crc32",
+      "x-amz-checksum-crc32c",
+      "x-amz-checksum-sha256",
+      "x-amz-content-sha256",
+      "x-amz-checksum-algorithm",
+    ];
+
+    checksumHeaders.forEach((header) => {
+      delete headers[header];
+    });
+
+    return super.handle(request);
+  }
+}
+
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -17,10 +38,7 @@ const s3Client = new S3Client({
   },
   forcePathStyle: true,
   customUserAgent: undefined,
-  maxAttempts: 1,
-  requestHandler: new NodeHttpHandler({
-    socketTimeout: 3000,
-  }),
+  requestHandler: new CustomHttpHandler(),
 });
 
 // Remove ALL validation and checksum middleware
