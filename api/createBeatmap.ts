@@ -7,6 +7,7 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { rateMap } from "../utils/star-calc";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -15,10 +16,30 @@ const s3Client = new S3Client({
     accessKeyId: process.env.ACCESS_BUCKET || "",
   },
   forcePathStyle: true,
-  customUserAgent: "MyApp/1.0.0",
-  // This is the key addition that fixes the checksum error
+  customUserAgent: undefined,
+  maxAttempts: 1,
+  requestHandler: new NodeHttpHandler({
+    socketTimeout: 3000,
+  }),
 });
-s3Client.middlewareStack.remove("build:checksum");
+
+// Remove ALL validation and checksum middleware
+const middlewareToRemove = [
+  "build:checksum",
+  "build:content-checksum",
+  "build:content-md5",
+  "validate",
+  "validateChecksum",
+];
+
+middlewareToRemove.forEach((middleware) => {
+  try {
+    s3Client.middlewareStack.remove(middleware);
+  } catch (e) {
+    // Ignore if middleware doesn't exist
+  }
+});
+
 export const Schema = {
   input: z.strictObject({
     url: z.string(),
