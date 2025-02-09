@@ -198,7 +198,7 @@ export async function handler({
 
   if (
     beatmaps.starRating &&
-    Math.abs(beatmaps.starRating - data.virtualStars) < 0.01
+    Math.abs(beatmaps.starRating - data.virtualStars) < 0.1
   ) {
     awarded_sp = calculatePerformancePoints(
       data.speed * beatmaps.starRating * multiplierMod,
