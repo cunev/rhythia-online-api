@@ -14,8 +14,11 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.SECRET_BUCKET || "",
     accessKeyId: process.env.ACCESS_BUCKET || "",
   },
+  forcePathStyle: true,
+  customUserAgent: "MyApp/1.0.0",
+  // This is the key addition that fixes the checksum error
 });
-
+s3Client.middlewareStack.remove("build:checksum");
 export const Schema = {
   input: z.strictObject({
     url: z.string(),
