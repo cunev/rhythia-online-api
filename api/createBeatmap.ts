@@ -9,26 +9,6 @@ import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
 
-class CustomHttpHandler extends NodeHttpHandler {
-  async handle(request: any) {
-    // Strip out any checksum headers
-    const headers = request.headers;
-    const checksumHeaders = [
-      "x-amz-checksum-crc32",
-      "x-amz-checksum-crc32c",
-      "x-amz-checksum-sha256",
-      "x-amz-content-sha256",
-      "x-amz-checksum-algorithm",
-    ];
-
-    checksumHeaders.forEach((header) => {
-      delete headers[header];
-    });
-
-    return super.handle(request);
-  }
-}
-
 const s3Client = new S3Client({
   region: "auto",
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
@@ -36,9 +16,7 @@ const s3Client = new S3Client({
     secretAccessKey: process.env.SECRET_BUCKET || "",
     accessKeyId: process.env.ACCESS_BUCKET || "",
   },
-  forcePathStyle: true,
-  customUserAgent: undefined,
-  requestHandler: new CustomHttpHandler(),
+  requestChecksumCalculation: "WHEN_REQUIRED",
 });
 
 // Remove ALL validation and checksum middleware
@@ -50,13 +28,33 @@ const middlewareToRemove = [
   "validateChecksum",
 ];
 
-middlewareToRemove.forEach((middleware) => {
-  try {
-    s3Client.middlewareStack.remove(middleware);
-  } catch (e) {
-    // Ignore if middleware doesn't exist
-  }
-});
+s3Client.middlewareStack.add(
+  (next) =>
+    async (args): Promise<any> => {
+      const request = args.request as RequestInit;
+
+      // Remove checksum headers
+      const headers = request.headers as Record<string, string>;
+      delete headers["x-amz-checksum-crc32"];
+      delete headers["x-amz-checksum-crc32c"];
+      delete headers["x-amz-checksum-sha1"];
+      delete headers["x-amz-checksum-sha256"];
+      request.headers = headers;
+
+      Object.entries(request.headers).forEach(
+        // @ts-ignore
+        ([key, value]: [string, string]): void => {
+          if (!request.headers) {
+            request.headers = {};
+          }
+          (request.headers as Record<string, string>)[key] = value;
+        }
+      );
+
+      return next(args);
+    },
+  { step: "build", name: "customHeaders" }
+);
 
 export const Schema = {
   input: z.strictObject({
