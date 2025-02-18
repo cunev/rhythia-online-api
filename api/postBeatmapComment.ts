@@ -42,6 +42,9 @@ export async function handler({
   if (!userData) return NextResponse.json({ error: "No user." });
   if (userData.ban !== "cool") return NextResponse.json({ error: "Error" });
 
+  if (content.length > 256)
+    return NextResponse.json({ error: "Comment exceeds length." });
+
   const upserted = await supabase
     .from("beatmapPageComments")
     .upsert({
