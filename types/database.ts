@@ -538,6 +538,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_clan_leaderboard: {
+        Args: {
+          page_number?: number
+          items_per_page?: number
+        }
+        Returns: {
+          id: number
+          name: string
+          acronym: string
+          avatar_url: string
+          description: string
+          member_count: number
+          total_skill_points: number
+          total_pages: number
+        }[]
+      }
       get_collections_v1: {
         Args: {
           page_number?: number
