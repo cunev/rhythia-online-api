@@ -1,5 +1,21 @@
 import { handleApi } from "./handleApi"
 
+// ./api/acceptInvite.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    code: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as AcceptInvite } from "./api/acceptInvite"
+export { Schema as SchemaAcceptInvite } from "./api/acceptInvite"
+export const acceptInvite = handleApi({url:"/api/acceptInvite",...AcceptInvite})
+
 // ./api/addCollectionMap.ts API
 
 /*
@@ -47,17 +63,7 @@ export const chartPublicStats = handleApi({url:"/api/chartPublicStats",...ChartP
 // ./api/createBeatmap.ts API
 
 /*
-export const Schema = {
-  input: z.strictObject({
-    url: z.string(),
-    session: z.string(),
-    updateFlag: z.boolean().optional(),
-  }),
-  output: z.strictObject({
-    hash: z.string().optional(),
-    error: z.string().optional(),
-  }),
-};*/
+*/
 import { Schema as CreateBeatmap } from "./api/createBeatmap"
 export { Schema as SchemaCreateBeatmap } from "./api/createBeatmap"
 export const createBeatmap = handleApi({url:"/api/createBeatmap",...CreateBeatmap})
@@ -111,6 +117,24 @@ export const Schema = {
 import { Schema as CreateCollection } from "./api/createCollection"
 export { Schema as SchemaCreateCollection } from "./api/createCollection"
 export const createCollection = handleApi({url:"/api/createCollection",...CreateCollection})
+
+// ./api/createInvite.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    type: z.string(),
+    resourceId: z.string(),
+  }),
+  output: z.object({
+    code: z.string().optional(),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as CreateInvite } from "./api/createInvite"
+export { Schema as SchemaCreateInvite } from "./api/createInvite"
+export const createInvite = handleApi({url:"/api/createInvite",...CreateInvite})
 
 // ./api/deleteBeatmapPage.ts API
 
@@ -499,6 +523,33 @@ export const Schema = {
 import { Schema as GetClan } from "./api/getClan"
 export { Schema as SchemaGetClan } from "./api/getClan"
 export const getClan = handleApi({url:"/api/getClan",...GetClan})
+
+// ./api/getClans.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    page: z.number(),
+  }),
+  output: z.object({
+    clanData: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        acronym: z.string().nullable(),
+        avatar_url: z.string().nullable(),
+        description: z.string().nullable(),
+        member_count: z.number(),
+        total_skill_points: z.number(),
+        total_pages: z.number(),
+      })
+    ),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as GetClans } from "./api/getClans"
+export { Schema as SchemaGetClans } from "./api/getClans"
+export const getClans = handleApi({url:"/api/getClans",...GetClans})
 
 // ./api/getCollection.ts API
 

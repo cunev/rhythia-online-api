@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 export const Schema = {
   input: z.strictObject({
     page: z.number(),
+    session: z.any(),
   }),
   output: z.object({
     clanData: z.array(
