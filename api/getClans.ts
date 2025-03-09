@@ -41,5 +41,5 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     page_number: data.page,
     items_per_page: 25,
   });
-  return NextResponse.json({ clanData });
+  return NextResponse.json({ clanData, error });
 }
