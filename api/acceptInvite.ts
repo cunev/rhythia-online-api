@@ -5,15 +5,14 @@ import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 import short from "short-uuid";
+import { error } from "console";
 
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
-    type: z.string(),
-    resourceId: z.string(),
+    code: z.string(),
   }),
   output: z.object({
-    code: z.string().optional(),
     error: z.string().optional(),
   }),
 };
@@ -39,28 +38,42 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     return NextResponse.json({ error: "Can't find user" });
   }
 
-  if (data.type !== "clan") {
-    return NextResponse.json({
-      error: "Invites can only be created for clans",
-    });
-  }
-
-  if (data.resourceId !== queryUserData.clan?.toString()) {
-    return NextResponse.json({
-      error: "You can't create invite for a clan that you aren't owner of.",
-    });
-  }
-
-  const invite = short.generate();
-
-  const upsertResult = await supabase
+  let { data: codeData } = await supabase
     .from("invites")
-    .upsert({
-      code: invite,
-      type: "clan",
-      resourceId: data.resourceId,
-    })
-    .select();
+    .select("*")
+    .eq("code", data.code)
+    .single();
 
-  return NextResponse.json({ code: invite });
+  if (!codeData || (codeData && codeData.used)) {
+    return NextResponse.json({ error: "Can't find code, or used" });
+  }
+
+  if (codeData.type == "clan") {
+    if (queryUserData.clan) {
+      return NextResponse.json({
+        error: "You can't join another clan while being in a clan",
+      });
+    }
+
+    let { data: queryClanData, error: clanError } = await supabase
+      .from("clans")
+      .select("*")
+      .eq("id", Number(codeData.resourceId))
+      .single();
+
+    if (!queryClanData) {
+      return NextResponse.json({
+        error: "No such clan",
+      });
+    }
+
+    await supabase.from("profiles").upsert({
+      id: queryUserData.id,
+      clan: queryClanData?.id,
+    });
+
+    return NextResponse.json({});
+  }
+
+  return NextResponse.json({ error: "Unknown invite type" });
 }

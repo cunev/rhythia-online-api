@@ -312,19 +312,25 @@ export type Database = {
           code: string
           created_at: string
           id: number
+          resourceId: string
           type: string
+          used: boolean
         }
         Insert: {
           code: string
           created_at?: string
           id?: number
+          resourceId: string
           type: string
+          used?: boolean
         }
         Update: {
           code?: string
           created_at?: string
           id?: number
+          resourceId?: string
           type?: string
+          used?: boolean
         }
         Relationships: []
       }
