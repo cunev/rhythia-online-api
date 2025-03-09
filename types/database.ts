@@ -307,6 +307,27 @@ export type Database = {
         }
         Relationships: []
       }
+      invites: {
+        Row: {
+          code: string
+          created_at: string
+          id: number
+          type: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: number
+          type: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: number
+          type?: string
+        }
+        Relationships: []
+      }
       levers: {
         Row: {
           disable_scores: boolean
