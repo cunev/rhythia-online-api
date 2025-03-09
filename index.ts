@@ -530,6 +530,7 @@ export const getClan = handleApi({url:"/api/getClan",...GetClan})
 export const Schema = {
   input: z.strictObject({
     page: z.number(),
+    session: z.any(),
   }),
   output: z.object({
     clanData: z.array(

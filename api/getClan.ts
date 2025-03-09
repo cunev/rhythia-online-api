@@ -62,7 +62,8 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   let { data: queryUsers, error: usersError } = await supabase
     .from("profiles")
     .select("*")
-    .eq("clan", queryClanData.id);
+    .eq("clan", queryClanData.id)
+    .neq("ban", "excluded");
 
   return NextResponse.json({
     acronym: queryClanData.acronym,
