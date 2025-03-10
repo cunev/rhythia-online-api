@@ -100,7 +100,7 @@ export async function handler(
   );
 
   if (error) {
-    return NextResponse.json({ error: "Error fetching scores" });
+    return NextResponse.json({ error: JSON.stringify(error) });
   }
 
   return NextResponse.json({
