@@ -734,6 +734,26 @@ export type Database = {
           total_pages: number
         }[]
       }
+      get_top_scores_for_beatmap: {
+        Args: {
+          beatmap_hash: string
+        }
+        Returns: {
+          id: number
+          awarded_sp: number
+          created_at: string
+          misses: number
+          mods: Json
+          passed: boolean
+          replayhwid: string
+          songid: string
+          speed: number
+          spin: boolean
+          userid: number
+          username: string
+          avatar_url: string
+        }[]
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"

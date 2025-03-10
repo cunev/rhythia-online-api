@@ -10,6 +10,25 @@ export const Schema = {
   }),
   output: z.object({
     error: z.string().optional(),
+    scores: z
+      .array(
+        z.object({
+          id: z.number(),
+          awarded_sp: z.number().nullable(),
+          created_at: z.string(), // Assuming Supabase returns timestamps as strings
+          misses: z.number().nullable(),
+          mods: z.record(z.unknown()), // JSONB data, can be any object
+          passed: z.boolean().nullable(),
+          replayHwid: z.string().nullable(),
+          songId: z.string().nullable(),
+          speed: z.number().nullable(),
+          spin: z.boolean(),
+          userId: z.number().nullable(),
+          username: z.string().nullable(),
+          avatar_url: z.string().nullable(),
+        })
+      )
+      .optional(),
     beatmap: z
       .object({
         id: z.number().nullable().optional(),
@@ -75,7 +94,31 @@ export async function handler(
 
   if (!beatmapPage) return NextResponse.json({});
 
+  const { data: scoreData, error } = await supabase.rpc(
+    "get_top_scores_for_beatmap",
+    { beatmap_hash: beatmapPage?.latestBeatmapHash || "" }
+  );
+
+  if (error) {
+    return NextResponse.json({ error: "Error fetching scores" });
+  }
+
   return NextResponse.json({
+    scores: scoreData.map((score: any) => ({
+      id: score.id,
+      awarded_sp: score.awarded_sp,
+      created_at: score.created_at,
+      misses: score.misses,
+      mods: score.mods,
+      passed: score.passed,
+      replayHwid: score.replayhwid,
+      songId: score.songid,
+      speed: score.speed,
+      spin: score.spin,
+      userId: score.userid,
+      username: score.username,
+      avatar_url: score.avatar_url,
+    })),
     beatmap: {
       playcount: beatmapPage.beatmaps?.playcount,
       created_at: beatmapPage.created_at,
