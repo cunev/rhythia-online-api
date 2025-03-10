@@ -19,7 +19,6 @@ export const Schema = {
           misses: z.number().nullable(),
           mods: z.record(z.unknown()), // JSONB data, can be any object
           passed: z.boolean().nullable(),
-          replayHwid: z.string().nullable(),
           songId: z.string().nullable(),
           speed: z.number().nullable(),
           spin: z.boolean(),
@@ -115,7 +114,6 @@ export async function handler(
       misses: score.misses,
       mods: score.mods,
       passed: score.passed,
-      replayHwid: score.replayhwid,
       songId: score.songid,
       speed: score.speed,
       spin: score.spin,

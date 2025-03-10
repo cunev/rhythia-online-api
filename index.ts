@@ -344,6 +344,25 @@ export const Schema = {
   }),
   output: z.object({
     error: z.string().optional(),
+    scores: z
+      .array(
+        z.object({
+          id: z.number(),
+          awarded_sp: z.number().nullable(),
+          created_at: z.string(), // Assuming Supabase returns timestamps as strings
+          misses: z.number().nullable(),
+          mods: z.record(z.unknown()), // JSONB data, can be any object
+          passed: z.boolean().nullable(),
+          replayHwid: z.string().nullable(),
+          songId: z.string().nullable(),
+          speed: z.number().nullable(),
+          spin: z.boolean(),
+          userId: z.number().nullable(),
+          username: z.string().nullable(),
+          avatar_url: z.string().nullable(),
+        })
+      )
+      .optional(),
     beatmap: z
       .object({
         id: z.number().nullable().optional(),
@@ -384,6 +403,25 @@ export const Schema = {
   }),
   output: z.object({
     error: z.string().optional(),
+    scores: z
+      .array(
+        z.object({
+          id: z.number(),
+          awarded_sp: z.number().nullable(),
+          created_at: z.string(), // Assuming Supabase returns timestamps as strings
+          misses: z.number().nullable(),
+          mods: z.record(z.unknown()), // JSONB data, can be any object
+          passed: z.boolean().nullable(),
+          replayHwid: z.string().nullable(),
+          songId: z.string().nullable(),
+          speed: z.number().nullable(),
+          spin: z.boolean(),
+          userId: z.number().nullable(),
+          username: z.string().nullable(),
+          avatar_url: z.string().nullable(),
+        })
+      )
+      .optional(),
     beatmap: z
       .object({
         id: z.number().nullable().optional(),
