@@ -52,7 +52,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: mapData, error } = await supabase
     .from("beatmapPages")
     .select("id,nominations,owner,status")
-    .eq("owner", user.id)
+    .eq("id", data.mapId)
     .eq("status", "UNRANKED");
 
   if (!mapData) {
