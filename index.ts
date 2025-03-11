@@ -969,6 +969,7 @@ export const Schema = {
           beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
           beatmapTitle: z.string().nullable(),
           difficulty: z.number().nullable(),
+          beatmapNotes: z.number().optional().nullable(),
         })
       )
       .optional(),
