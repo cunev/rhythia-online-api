@@ -95,7 +95,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
         )`
   );
 
-  if (data.status == "ranked") {
+  if (data.status == "RANKED") {
     qry = qry.order("ranked_at", { ascending: false });
   } else {
     qry = qry.order("created_at", { ascending: false });
