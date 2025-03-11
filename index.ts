@@ -967,6 +967,8 @@ export const Schema = {
           speed: z.number().nullable(),
           spin: z.boolean(),
           beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
+          beatmapTitle: z.string().nullable(),
+          difficulty: z.number().nullable(),
         })
       )
       .optional(),
