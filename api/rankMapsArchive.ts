@@ -52,8 +52,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const { data: mapData, error } = await supabase
     .from("beatmapPages")
     .select("id,nominations,owner,status")
-    .eq("id", data.mapId)
-    .eq("status", "UNRANKED");
+    .eq("id", data.mapId);
 
   if (!mapData) {
     return NextResponse.json({ error: "Bad map" });
@@ -64,6 +63,7 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
       id: element.id,
       nominations: [queryUserData.id, queryUserData.id],
       status: "RANKED",
+      ranked_at: Date.now(),
     });
   }
 
