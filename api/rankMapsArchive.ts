@@ -39,7 +39,12 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
   const tags = (queryUserData?.badges || []) as string[];
 
   if (
-    !(tags.includes("Bot") || tags.includes("Admin") || tags.includes("MMT"))
+    !(
+      tags.includes("Bot") ||
+      tags.includes("Admin") ||
+      tags.includes("MMT") ||
+      tags.includes("Developer")
+    )
   ) {
     return NextResponse.json({ error: "Only management can force-rank maps!" });
   }
