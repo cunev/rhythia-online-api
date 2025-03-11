@@ -30,6 +30,22 @@ export const Schema = {
         })
       )
       .optional(),
+    reign: z
+      .array(
+        z.object({
+          id: z.number(), // Use z.number() for compatibility, or z.bigint() if supported
+          awarded_sp: z.number().nullable(), // Use z.number() for NUMERIC
+          created_at: z.string(), // Use z.string() for TIMESTAMP WITH TIME ZONE
+          misses: z.number().nullable(),
+          mods: z.record(z.unknown()),
+          passed: z.boolean().nullable(),
+          songId: z.string().nullable(),
+          speed: z.number().nullable(),
+          spin: z.boolean(),
+          beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
+        })
+      )
+      .optional(),
     top: z
       .array(
         z.object({
@@ -135,6 +151,15 @@ export async function handler(
     .slice(0, data.limit)
     .map((e) => e.score);
 
+  const { data: reignScores, error } = await supabase.rpc(
+    "get_user_reigning_scores",
+    { userid: data.id }
+  );
+
+  if (error) {
+    return NextResponse.json({ error: JSON.stringify(error) });
+  }
+
   return NextResponse.json({
     lastDay: scores1?.map((s) => ({
       created_at: s.created_at,
@@ -150,6 +175,18 @@ export async function handler(
       beatmapTitle: s.beatmaps?.title,
       speed: s.speed,
       spin: s.spin,
+    })),
+    reign: reignScores?.map((s) => ({
+      id: s.id,
+      awarded_sp: s.awarded_sp,
+      created_at: s.created_at,
+      misses: s.misses,
+      mods: s.mods as any,
+      passed: s.passed,
+      songId: s.songid,
+      speed: s.speed,
+      spin: s.spin,
+      beatmapHash: s.beatmaphash,
     })),
     top: vals?.map((s) => ({
       created_at: s.created_at,

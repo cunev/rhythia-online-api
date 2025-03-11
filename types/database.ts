@@ -754,6 +754,24 @@ export type Database = {
           avatar_url: string
         }[]
       }
+      get_user_reigning_scores: {
+        Args: {
+          userid: number
+        }
+        Returns: {
+          id: number
+          awarded_sp: number
+          created_at: string
+          misses: number
+          mods: Json
+          passed: boolean
+          replayhwid: string
+          songid: string
+          speed: number
+          spin: boolean
+          beatmaphash: string
+        }[]
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"
