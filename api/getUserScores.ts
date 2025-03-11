@@ -43,6 +43,8 @@ export const Schema = {
           speed: z.number().nullable(),
           spin: z.boolean(),
           beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
+          beatmapTitle: z.string().nullable(),
+          difficulty: z.number().nullable(),
         })
       )
       .optional(),
@@ -187,6 +189,8 @@ export async function handler(
       speed: s.speed,
       spin: s.spin,
       beatmapHash: s.beatmaphash,
+      beatmapTitle: s.beatmaptitle,
+      difficulty: s.difficulty,
     })),
     top: vals?.map((s) => ({
       created_at: s.created_at,
