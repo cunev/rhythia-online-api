@@ -72,15 +72,14 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
     .from("beatmapPages")
     .select("id", { count: "exact", head: true });
 
-  let qry = supabase
-    .from("beatmapPages")
-    .select(
-      `
+  let qry = supabase.from("beatmapPages").select(
+    `
         owner,
         created_at,
         id,
         status,
         tags,
+        ranked_at,
         beatmaps!inner(
           playcount,
           ranked,
@@ -94,8 +93,13 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
         profiles!inner(
           username
         )`
-    )
-    .order("created_at", { ascending: false });
+  );
+
+  if (data.status == "ranked") {
+    qry = qry.order("ranked_at", { ascending: false });
+  } else {
+    qry = qry.order("created_at", { ascending: false });
+  }
 
   if (data.textFilter) {
     qry = qry.ilike("beatmaps.title", `%${data.textFilter}%`);
