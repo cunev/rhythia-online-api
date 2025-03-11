@@ -353,7 +353,6 @@ export const Schema = {
           misses: z.number().nullable(),
           mods: z.record(z.unknown()), // JSONB data, can be any object
           passed: z.boolean().nullable(),
-          replayHwid: z.string().nullable(),
           songId: z.string().nullable(),
           speed: z.number().nullable(),
           spin: z.boolean(),
@@ -412,7 +411,6 @@ export const Schema = {
           misses: z.number().nullable(),
           mods: z.record(z.unknown()), // JSONB data, can be any object
           passed: z.boolean().nullable(),
-          replayHwid: z.string().nullable(),
           songId: z.string().nullable(),
           speed: z.number().nullable(),
           spin: z.boolean(),
@@ -953,6 +951,22 @@ export const Schema = {
           beatmapTitle: z.string().optional().nullable(),
           speed: z.number().optional().nullable(),
           spin: z.boolean().optional().nullable(),
+        })
+      )
+      .optional(),
+    reign: z
+      .array(
+        z.object({
+          id: z.number(), // Use z.number() for compatibility, or z.bigint() if supported
+          awarded_sp: z.number().nullable(), // Use z.number() for NUMERIC
+          created_at: z.string(), // Use z.string() for TIMESTAMP WITH TIME ZONE
+          misses: z.number().nullable(),
+          mods: z.record(z.unknown()),
+          passed: z.boolean().nullable(),
+          songId: z.string().nullable(),
+          speed: z.number().nullable(),
+          spin: z.boolean(),
+          beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
         })
       )
       .optional(),

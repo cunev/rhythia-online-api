@@ -153,7 +153,7 @@ export async function handler(
 
   const { data: reignScores, error } = await supabase.rpc(
     "get_user_reigning_scores",
-    { userid: data.id }
+    { userid: data.id, page_size: 10 }
   );
 
   if (error) {
