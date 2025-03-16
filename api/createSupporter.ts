@@ -44,7 +44,6 @@ export const Schema = {
 
 export async function POST(request: Request): Promise<NextResponse> {
   console.log(
-    request.headers.getAll("Set-Cookie"),
     request.headers.get("X-BMC-Signature"),
     request.headers.get("X-Bmc-Signature")
   );
