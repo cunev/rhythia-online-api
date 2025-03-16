@@ -43,11 +43,8 @@ export const Schema = {
 };
 
 export async function POST(request: Request): Promise<NextResponse> {
-  console.log(
-    request.headers.get("X-BMC-Signature"),
-    request.headers.get("X-Bmc-Signature")
-  );
-  if (process.env.ACCESS_BUCKET !== request.headers.get("X-BMC-Signature")) {
+  console.log(request.headers.get("x-bmc-signature"));
+  if (process.env.ACCESS_BUCKET !== request.headers.get("x-bmc-signature")) {
     return NextResponse.json({
       error: "Invalid Signature",
     });
