@@ -11,30 +11,31 @@ export const Schema = {
       "membership.updated",
     ]),
     live_mode: z.boolean(),
-    attempt: z.number(),
-    created: z.number(),
-    event_id: z.number(),
-    data: z.strictObject({
-      id: z.number(),
-      amount: z.number(),
-      object: z.enum(["membership"]),
-      paused: z.enum(["true", "false"]),
-      status: z.enum(["active", "inactive"]),
-      canceled: z.enum(["true", "false"]),
-      currency: z.string(),
-      psp_id: z.string(),
-      duration_type: z.enum(["month", "year"]),
-      membership_level_id: z.number(),
-      membership_level_name: z.string(),
-      started_at: z.number(),
+    attempt: z.number().nullable(),
+    created: z.number().nullable(),
+    event_id: z.number().nullable(),
+    data: z.object({
+      id: z.number().nullable(),
+      amount: z.number().nullable(),
+      object: z.enum(["membership"]).nullable(),
+      paused: z.enum(["true", "false"]).nullable(),
+      status: z.enum(["active", "inactive"]).nullable(),
+      canceled: z.enum(["true", "false"]).nullable(),
+      currency: z.string().nullable(),
+      psp_id: z.string().nullable(),
+      duration_type: z.enum(["month", "year"]).nullable(),
+      membership_level_id: z.number().nullable(),
+      membership_level_name: z.string().nullable(),
+      started_at: z.number().nullable(),
       canceled_at: z.string().nullable(),
-      note_hidden: z.boolean(),
-      support_note: z.string(),
-      supporter_name: z.string(),
-      supporter_id: z.number(),
-      supporter_email: z.string(),
-      current_period_end: z.number(),
-      current_period_start: z.number(),
+      note_hidden: z.boolean().nullable(),
+      support_note: z.string().nullable(),
+      supporter_name: z.string().nullable(),
+      supporter_id: z.number().nullable(),
+      supporter_email: z.string().nullable(),
+      current_period_end: z.number().nullable(),
+      current_period_start: z.number().nullable(),
+      supporter_feedback: z.any(),
     }),
   }),
   output: z.object({
@@ -91,7 +92,7 @@ export async function handler(
     });
   }
 
-  const endDate = data.data.current_period_end * 1000;
+  const endDate = (data.data.current_period_end || 0) * 1000;
 
   let { data: queryData, error } = await supabase
     .from("profiles")
