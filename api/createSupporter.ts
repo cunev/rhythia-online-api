@@ -55,6 +55,11 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   request: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  console.log(request.headers["X-BMC-Signature"]);
+  console.log(JSON.stringify(request.headers));
+  if (process.env.ACCESS_BUCKET !== request.headers["X-BMC-Signature"]) {
+    return NextResponse.json({
+      error: "Invalid Signature",
+    });
+  }
   return NextResponse.json({});
 }
