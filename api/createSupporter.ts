@@ -43,8 +43,8 @@ export const Schema = {
 };
 
 export async function POST(request: Request): Promise<NextResponse> {
-  console.log(request.url);
-  if (process.env.ACCESS_BUCKET !== request.headers.get("x-bmc-signature")) {
+  const sig = request.url.split("key=")[1];
+  if (process.env.BUY_SECRET !== sig) {
     return NextResponse.json({
       error: "Invalid Signature",
     });
