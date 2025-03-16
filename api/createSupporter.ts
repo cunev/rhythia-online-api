@@ -63,9 +63,17 @@ export async function handler(
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   let username = "";
 
-  if (data.type !== "membership.started") {
+  if (
+    !(data.type === "membership.started" || data.type === "membership.updated")
+  ) {
     return NextResponse.json({
       error: "Invalid type",
+    });
+  }
+
+  if (data.data.status !== "active") {
+    return NextResponse.json({
+      error: "Inactive",
     });
   }
 
@@ -101,6 +109,8 @@ export async function handler(
     .from("profiles")
     .upsert({
       id: queryData.id,
+      verificationDeadline: endDate,
+      verified: true,
     })
     .select();
 

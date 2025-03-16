@@ -27,6 +27,7 @@ export const Schema = {
         ban: z.string().nullable(),
         username: z.string().nullable(),
         verified: z.boolean().nullable(),
+        verificationDeadline: z.number().nullable(),
         play_count: z.number().nullable(),
         skill_points: z.number().nullable(),
         squares_hit: z.number().nullable(),
@@ -135,6 +136,16 @@ export async function handler(
     .select(`*`, { count: "exact", head: true })
     .neq("ban", "excluded")
     .gt("skill_points", user.skill_points);
+
+  if (user.verificationDeadline < Date.now()) {
+    await supabase
+      .from("profiles")
+      .upsert({
+        id: user.id,
+        verified: false,
+      })
+      .select();
+  }
 
   return NextResponse.json({
     user: {
