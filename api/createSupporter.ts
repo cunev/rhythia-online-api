@@ -61,5 +61,48 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   request: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  let username = "";
+
+  if (data.type !== "membership.started") {
+    return NextResponse.json({
+      error: "Invalid type",
+    });
+  }
+
+  if (data.data.supporter_name) {
+    username = data.data.supporter_name;
+  }
+
+  if (data.data.support_note) {
+    username = data.data.support_note;
+  }
+
+  if (data.data.membership_level_name !== "Supporter") {
+    return NextResponse.json({
+      error: "Invalid membership",
+    });
+  }
+
+  const endDate = data.data.current_period_end * 1000;
+
+  let { data: queryData, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("computedUsername", username.toLowerCase())
+    .single();
+
+  if (!queryData) {
+    return NextResponse.json({
+      error: "No such player",
+    });
+  }
+
+  const upsertResult = await supabase
+    .from("profiles")
+    .upsert({
+      id: queryData.id,
+    })
+    .select();
+
   return NextResponse.json({});
 }

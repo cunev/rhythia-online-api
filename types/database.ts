@@ -412,6 +412,7 @@ export type Database = {
           total_score: number | null
           uid: string | null
           username: string | null
+          verificationDeadline: number
           verified: boolean | null
         }
         Insert: {
@@ -435,6 +436,7 @@ export type Database = {
           total_score?: number | null
           uid?: string | null
           username?: string | null
+          verificationDeadline?: number
           verified?: boolean | null
         }
         Update: {
@@ -458,6 +460,7 @@ export type Database = {
           total_score?: number | null
           uid?: string | null
           username?: string | null
+          verificationDeadline?: number
           verified?: boolean | null
         }
         Relationships: [
@@ -792,6 +795,7 @@ export type Database = {
               beatmaphash: string
               beatmaptitle: string
               difficulty: number
+              notes: number
             }[]
           }
     }
