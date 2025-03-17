@@ -112,7 +112,7 @@ export async function handler({
       {
         error: "User doesn't exist",
       },
-      { status: 500 }
+      { status: 400 }
     );
 
   console.log(userData);
@@ -143,7 +143,7 @@ export async function handler({
       {
         error: "Map not submitted",
       },
-      { status: 500 }
+      { status: 400 }
     );
   }
 
@@ -152,7 +152,7 @@ export async function handler({
       {
         error: "Map not submitted",
       },
-      { status: 500 }
+      { status: 400 }
     );
   }
 
@@ -162,7 +162,7 @@ export async function handler({
       {
         error: "Wrong map",
       },
-      { status: 500 }
+      { status: 400 }
     );
   }
 

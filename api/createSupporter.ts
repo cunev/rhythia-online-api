@@ -98,7 +98,7 @@ export async function handler(
     let { data: queryData, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("computedUsername", data.data.support_note)
+      .eq("computedUsername", data.data.support_note.toLowerCase())
       .single();
 
     if (queryData) {
@@ -110,7 +110,7 @@ export async function handler(
     let { data: queryData, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("computedUsername", data.data.supporter_name)
+      .eq("computedUsername", data.data.supporter_name.toLowerCase())
       .single();
 
     if (queryData) {
