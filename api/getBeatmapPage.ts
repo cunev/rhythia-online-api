@@ -25,6 +25,7 @@ export const Schema = {
           userId: z.number().nullable(),
           username: z.string().nullable(),
           avatar_url: z.string().nullable(),
+          accuracy: z.number().nullable(),
         })
       )
       .optional(),

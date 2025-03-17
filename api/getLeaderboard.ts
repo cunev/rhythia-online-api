@@ -28,6 +28,7 @@ export const Schema = {
           skill_points: z.number().nullable(),
           spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
+          verified: z.boolean().nullable(),
           clans: z
             .object({
               id: z.number(),
@@ -131,6 +132,7 @@ export async function getLeaderboard(
       total_score: user.total_score,
       username: user.username,
       clans: user.clans as any,
+      verified: user.verified,
     })),
   };
 }

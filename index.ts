@@ -136,6 +136,52 @@ import { Schema as CreateInvite } from "./api/createInvite"
 export { Schema as SchemaCreateInvite } from "./api/createInvite"
 export const createInvite = handleApi({url:"/api/createInvite",...CreateInvite})
 
+// ./api/createSupporter.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    type: z.enum([
+      "membership.started",
+      "membership.ended",
+      "membership.updated",
+    ]),
+    live_mode: z.boolean(),
+    attempt: z.number().nullable(),
+    created: z.number().nullable(),
+    event_id: z.number().nullable(),
+    data: z.object({
+      id: z.number().nullable(),
+      amount: z.number().nullable(),
+      object: z.enum(["membership"]).nullable(),
+      paused: z.enum(["true", "false"]).nullable(),
+      status: z.enum(["active", "inactive"]).nullable(),
+      canceled: z.enum(["true", "false"]).nullable(),
+      currency: z.string().nullable(),
+      psp_id: z.string().nullable(),
+      duration_type: z.enum(["month", "year"]).nullable(),
+      membership_level_id: z.number().nullable(),
+      membership_level_name: z.string().nullable(),
+      started_at: z.number().nullable(),
+      canceled_at: z.string().nullable(),
+      note_hidden: z.boolean().nullable(),
+      support_note: z.string().nullable(),
+      supporter_name: z.string().nullable(),
+      supporter_id: z.number().nullable(),
+      supporter_email: z.string().nullable(),
+      current_period_end: z.number().nullable(),
+      current_period_start: z.number().nullable(),
+      supporter_feedback: z.any(),
+    }),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as CreateSupporter } from "./api/createSupporter"
+export { Schema as SchemaCreateSupporter } from "./api/createSupporter"
+export const createSupporter = handleApi({url:"/api/createSupporter",...CreateSupporter})
+
 // ./api/deleteBeatmapPage.ts API
 
 /*
@@ -359,6 +405,7 @@ export const Schema = {
           userId: z.number().nullable(),
           username: z.string().nullable(),
           avatar_url: z.string().nullable(),
+          accuracy: z.number().nullable(),
         })
       )
       .optional(),
@@ -696,6 +743,7 @@ export const Schema = {
           skill_points: z.number().nullable(),
           spin_skill_points: z.number().nullable(),
           total_score: z.number().nullable(),
+          verified: z.boolean().nullable(),
           clans: z
             .object({
               id: z.number(),
@@ -776,6 +824,7 @@ export const Schema = {
         ban: z.string().nullable(),
         username: z.string().nullable(),
         verified: z.boolean().nullable(),
+        verificationDeadline: z.number().nullable(),
         play_count: z.number().nullable(),
         skill_points: z.number().nullable(),
         squares_hit: z.number().nullable(),
