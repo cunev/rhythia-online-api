@@ -77,6 +77,23 @@ export async function handler(
     });
   }
 
+  if (data.data.supporter_email) {
+    const emlRes = await supabase.rpc("get_user_by_email", {
+      email_address: data.data.supporter_email,
+    });
+
+    if (emlRes.data) {
+      let { data: queryData, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("uid", (emlRes.data as any).id)
+        .single();
+      if (queryData) {
+        user = queryData;
+      }
+    }
+  }
+
   if (data.data.support_note) {
     let { data: queryData, error } = await supabase
       .from("profiles")

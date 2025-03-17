@@ -757,6 +757,12 @@ export type Database = {
           avatar_url: string
         }[]
       }
+      get_user_by_email: {
+        Args: {
+          email_address: string
+        }
+        Returns: Json
+      }
       get_user_reigning_scores:
         | {
             Args: {
