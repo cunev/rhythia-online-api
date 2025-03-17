@@ -757,6 +757,27 @@ export type Database = {
           avatar_url: string
         }[]
       }
+      get_top_scores_for_beatmap2: {
+        Args: {
+          beatmap_hash: string
+        }
+        Returns: {
+          id: number
+          awarded_sp: number
+          created_at: string
+          misses: number
+          mods: Json
+          passed: boolean
+          replayhwid: string
+          songid: string
+          speed: number
+          spin: boolean
+          userid: number
+          username: string
+          avatar_url: string
+          accuracy: number
+        }[]
+      }
       get_user_by_email: {
         Args: {
           email_address: string

@@ -120,6 +120,7 @@ export async function handler(
       userId: score.userid,
       username: score.username,
       avatar_url: score.avatar_url,
+      accuracy: score.accuracy,
     })),
     beatmap: {
       playcount: beatmapPage.beatmaps?.playcount,
