@@ -62,8 +62,7 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   request: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  let username = "";
-
+  let user: any;
   if (
     !(data.type === "membership.started" || data.type === "membership.updated")
   ) {
@@ -78,12 +77,28 @@ export async function handler(
     });
   }
 
-  if (data.data.supporter_name) {
-    username = data.data.supporter_name;
+  if (data.data.support_note) {
+    let { data: queryData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("computedUsername", data.data.support_note)
+      .single();
+
+    if (queryData) {
+      user = queryData;
+    }
   }
 
-  if (data.data.support_note) {
-    username = data.data.support_note;
+  if (data.data.supporter_name) {
+    let { data: queryData, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("computedUsername", data.data.supporter_name)
+      .single();
+
+    if (queryData) {
+      user = queryData;
+    }
   }
 
   if (data.data.membership_level_name !== "Supporter") {
@@ -94,13 +109,7 @@ export async function handler(
 
   const endDate = (data.data.current_period_end || 0) * 1000;
 
-  let { data: queryData, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("computedUsername", username.toLowerCase())
-    .single();
-
-  if (!queryData) {
+  if (!user) {
     return NextResponse.json({
       error: "No such player",
     });
@@ -109,7 +118,7 @@ export async function handler(
   const upsertResult = await supabase
     .from("profiles")
     .upsert({
-      id: queryData.id,
+      id: user.id,
       verificationDeadline: endDate,
       verified: true,
     })
