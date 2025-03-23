@@ -1054,6 +1054,19 @@ import { Schema as GetUserScores } from "./api/getUserScores"
 export { Schema as SchemaGetUserScores } from "./api/getUserScores"
 export const getUserScores = handleApi({url:"/api/getUserScores",...GetUserScores})
 
+// ./api/getVerified.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+  }),
+  output: z.strictObject({}),
+};*/
+import { Schema as GetVerified } from "./api/getVerified"
+export { Schema as SchemaGetVerified } from "./api/getVerified"
+export const getVerified = handleApi({url:"/api/getVerified",...GetVerified})
+
 // ./api/nominateMap.ts API
 
 /*

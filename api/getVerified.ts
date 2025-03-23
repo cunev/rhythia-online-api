@@ -35,7 +35,7 @@ export async function handler(
     NextResponse.json({});
   }
 
-  console.log("CHEATER: " + queryData);
+  console.log("CHEATER: " + JSON.stringify(queryData));
 
   return NextResponse.json({});
 }
