@@ -45,7 +45,19 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
     });
   }
 
-  if (data.resourceId !== queryUserData.clan?.toString()) {
+  let { data: clanQuery, error: clanError } = await supabase
+    .from("clans")
+    .select("*")
+    .eq("id", queryUserData.clan || -1)
+    .single();
+
+  if (!clanQuery) {
+    return NextResponse.json({
+      error: "You're not in a clan",
+    });
+  }
+
+  if (data.resourceId !== (clanQuery.owner || -1).toString()) {
     return NextResponse.json({
       error: "You can't create invite for a clan that you aren't owner of.",
     });
