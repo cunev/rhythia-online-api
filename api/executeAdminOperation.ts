@@ -103,7 +103,7 @@ export async function handler(
   const isGlobalModerator =
     badges &&
     Array.isArray(badges.badges) &&
-    badges.badges.some((badge: any) => badge.name === "Global Moderator");
+    badges.badges.some((badge: any) => badge === "Global Moderator");
 
   if (!isGlobalModerator) {
     return NextResponse.json(
