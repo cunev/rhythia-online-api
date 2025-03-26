@@ -9,6 +9,62 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_actions: {
+        Row: {
+          action_type: string
+          admin_id: number
+          created_at: string | null
+          details: Json | null
+          id: number
+          target_id: number | null
+        }
+        Insert: {
+          action_type: string
+          admin_id: number
+          created_at?: string | null
+          details?: Json | null
+          id?: number
+          target_id?: number | null
+        }
+        Update: {
+          action_type?: string
+          admin_id?: number
+          created_at?: string | null
+          details?: Json | null
+          id?: number
+          target_id?: number | null
+        }
+        Relationships: []
+      }
+      admin_operations: {
+        Row: {
+          action_type: string | null
+          details: Json
+          id: number
+          target_id: string | null
+        }
+        Insert: {
+          action_type?: string | null
+          details: Json
+          id?: number
+          target_id?: string | null
+        }
+        Update: {
+          action_type?: string | null
+          details?: Json
+          id?: number
+          target_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_operations_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beatmapCollections: {
         Row: {
           created_at: string
@@ -541,6 +597,86 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_delete_user: {
+        Args: {
+          user_id: number
+        }
+        Returns: boolean
+      }
+      admin_exclude_user: {
+        Args: {
+          user_id: number
+        }
+        Returns: boolean
+      }
+      admin_invalidate_ranked_scores: {
+        Args: {
+          user_id: number
+        }
+        Returns: number
+      }
+      admin_log_action: {
+        Args: {
+          admin_id: number
+          action_type: string
+          target_id: string
+          details?: Json
+        }
+        Returns: undefined
+      }
+      admin_remove_all_scores: {
+        Args: {
+          user_id: number
+        }
+        Returns: number
+      }
+      admin_restrict_user: {
+        Args: {
+          user_id: number
+        }
+        Returns: boolean
+      }
+      admin_search_users: {
+        Args: {
+          search_text: string
+        }
+        Returns: {
+          about_me: string | null
+          avatar_url: string | null
+          badges: Json | null
+          ban: Database["public"]["Enums"]["banTypes"] | null
+          bannedAt: number | null
+          clan: number | null
+          computedUsername: string | null
+          created_at: number | null
+          flag: string | null
+          id: number
+          mu_rank: number
+          play_count: number | null
+          profile_image: string | null
+          sigma_rank: number | null
+          skill_points: number | null
+          spin_skill_points: number
+          squares_hit: number | null
+          total_score: number | null
+          uid: string | null
+          username: string | null
+          verificationDeadline: number
+          verified: boolean | null
+        }[]
+      }
+      admin_silence_user: {
+        Args: {
+          user_id: number
+        }
+        Returns: boolean
+      }
+      admin_unban_user: {
+        Args: {
+          user_id: number
+        }
+        Returns: boolean
+      }
       get_clan_leaderboard: {
         Args: {
           page_number?: number
@@ -755,6 +891,7 @@ export type Database = {
           userid: number
           username: string
           avatar_url: string
+          accuracy: number
         }[]
       }
       get_top_scores_for_beatmap2: {
