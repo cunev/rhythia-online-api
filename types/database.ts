@@ -615,14 +615,30 @@ export type Database = {
         }
         Returns: number
       }
-      admin_log_action: {
+      admin_log_action:
+        | {
+            Args: {
+              admin_id: number
+              action_type: string
+              target_id: number
+              details?: Json
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              admin_id: number
+              action_type: string
+              target_id: string
+              details?: Json
+            }
+            Returns: undefined
+          }
+      admin_profanity_clear: {
         Args: {
-          admin_id: number
-          action_type: string
-          target_id: string
-          details?: Json
+          user_id: number
         }
-        Returns: undefined
+        Returns: boolean
       }
       admin_remove_all_scores: {
         Args: {

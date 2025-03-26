@@ -12,6 +12,7 @@ const adminOperations = {
   excludeUser: z.object({ userId: z.number() }),
   restrictUser: z.object({ userId: z.number() }),
   silenceUser: z.object({ userId: z.number() }),
+  profanityClear: z.object({ userId: z.number() }),
   searchUsers: z.object({ searchText: z.string() }),
   removeAllScores: z.object({ userId: z.number() }),
   invalidateRankedScores: z.object({ userId: z.number() }),
@@ -39,6 +40,10 @@ const OperationParam = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("searchUsers"),
     params: adminOperations.searchUsers,
+  }),
+  z.object({
+    operation: z.literal("profanityClear"),
+    params: adminOperations.profanityClear,
   }),
   z.object({
     operation: z.literal("removeAllScores"),
@@ -145,6 +150,12 @@ export async function handler(
       case "searchUsers":
         result = await supabase.rpc("admin_search_users", {
           search_text: params.searchText,
+        });
+        break;
+
+      case "profanityClear":
+        result = await supabase.rpc("admin_profanity_clear", {
+          user_id: params.userId,
         });
         break;
 
