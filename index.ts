@@ -308,6 +308,24 @@ import { Schema as EditProfile } from "./api/editProfile"
 export { Schema as SchemaEditProfile } from "./api/editProfile"
 export const editProfile = handleApi({url:"/api/editProfile",...EditProfile})
 
+// ./api/executeAdminOperation.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    data: OperationParam,
+  }),
+  output: z.object({
+    success: z.boolean(),
+    result: z.any().optional(),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as ExecuteAdminOperation } from "./api/executeAdminOperation"
+export { Schema as SchemaExecuteAdminOperation } from "./api/executeAdminOperation"
+export const executeAdminOperation = handleApi({url:"/api/executeAdminOperation",...ExecuteAdminOperation})
+
 // ./api/getAvatarUploadUrl.ts API
 
 /*

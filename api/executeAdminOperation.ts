@@ -97,13 +97,9 @@ export async function handler(
       { status: 404 }
     );
   }
-
+  const tags = (queryUserData?.badges || []) as string[];
   // Check if user has "Global Moderator" badge
-  const badges = queryUserData.badges as Record<string, any> | null;
-  const isGlobalModerator =
-    badges &&
-    Array.isArray(badges.badges) &&
-    badges.badges.some((badge: any) => badge === "Global Moderator");
+  const isGlobalModerator = tags.includes("Global Moderator");
 
   if (!isGlobalModerator) {
     return NextResponse.json(
