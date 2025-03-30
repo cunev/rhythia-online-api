@@ -10,6 +10,7 @@ import { User } from "@supabase/supabase-js";
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    version: z.string().optional(),
     data: z.strictObject({
       token: z.string(),
       relayHwid: z.string(),
@@ -60,6 +61,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
 export async function handler({
   data,
+  version,
   session,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
@@ -268,6 +270,7 @@ export async function handler({
   // Only spin scores
   const spinTotalSp = weightCalculate(spinHashMap);
 
+  console.log("VERSION: " + version);
   await supabase.from("profiles").upsert({
     id: userData.id,
     play_count: (userData.play_count || 0) + 1,
