@@ -1181,6 +1181,7 @@ export const setPasskey = handleApi({url:"/api/setPasskey",...SetPasskey})
 export const Schema = {
   input: z.strictObject({
     session: z.string(),
+    version: z.string().optional(),
     data: z.strictObject({
       token: z.string(),
       relayHwid: z.string(),

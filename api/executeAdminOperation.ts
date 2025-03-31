@@ -9,6 +9,7 @@ import { User } from "@supabase/supabase-js";
 // Define supported admin operations and their parameter types
 const adminOperations = {
   deleteUser: z.object({ userId: z.number() }),
+  changeFlag: z.object({ userId: z.number(), flag: z.string() }),
   excludeUser: z.object({ userId: z.number() }),
   restrictUser: z.object({ userId: z.number() }),
   silenceUser: z.object({ userId: z.number() }),
@@ -56,6 +57,10 @@ const OperationParam = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("unbanUser"),
     params: adminOperations.unbanUser,
+  }),
+  z.object({
+    operation: z.literal("changeFlag"),
+    params: adminOperations.changeFlag,
   }),
 ]);
 
@@ -175,6 +180,16 @@ export async function handler(
         result = await supabase.rpc("admin_unban_user", {
           user_id: params.userId,
         });
+        break;
+
+      case "changeFlag":
+        await supabase
+          .from("profiles")
+          .upsert({
+            id: params.userId,
+            flag: params.flag,
+          })
+          .select();
         break;
     }
 
