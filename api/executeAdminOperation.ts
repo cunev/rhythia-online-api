@@ -183,7 +183,7 @@ export async function handler(
         break;
 
       case "changeFlag":
-        await supabase
+        result = await supabase
           .from("profiles")
           .upsert({
             id: params.userId,
