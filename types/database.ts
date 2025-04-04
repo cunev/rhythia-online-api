@@ -363,6 +363,29 @@ export type Database = {
         }
         Relationships: []
       }
+      inventories: {
+        Row: {
+          contents: Json
+          id: number
+        }
+        Insert: {
+          contents?: Json
+          id?: number
+        }
+        Update: {
+          contents?: Json
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invites: {
         Row: {
           code: string
