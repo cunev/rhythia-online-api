@@ -10,6 +10,7 @@ import { User } from "@supabase/supabase-js";
 const adminOperations = {
   deleteUser: z.object({ userId: z.number() }),
   changeFlag: z.object({ userId: z.number(), flag: z.string() }),
+  changeBadges: z.object({ userId: z.number(), badges: z.string() }),
   excludeUser: z.object({ userId: z.number() }),
   restrictUser: z.object({ userId: z.number() }),
   silenceUser: z.object({ userId: z.number() }),
@@ -61,6 +62,10 @@ const OperationParam = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("changeFlag"),
     params: adminOperations.changeFlag,
+  }),
+  z.object({
+    operation: z.literal("changeBadges"),
+    params: adminOperations.changeBadges,
   }),
 ]);
 
@@ -188,6 +193,15 @@ export async function handler(
           .upsert({
             id: params.userId,
             flag: params.flag,
+          })
+          .select();
+        break;
+      case "changeBadges":
+        result = await supabase
+          .from("profiles")
+          .upsert({
+            id: params.userId,
+            badges: JSON.parse(params.badges),
           })
           .select();
         break;
