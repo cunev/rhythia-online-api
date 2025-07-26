@@ -197,13 +197,17 @@ export async function handler(
           .select();
         break;
       case "changeBadges":
-        result = await supabase
-          .from("profiles")
-          .upsert({
-            id: params.userId,
-            badges: JSON.parse(params.badges),
-          })
-          .select();
+        // Allow only developers to modify badges.
+        if ((queryUserData.badges as string[]).includes("Developer")) {
+          result = await supabase
+            .from("profiles")
+            .upsert({
+              id: params.userId,
+              badges: JSON.parse(params.badges),
+            })
+            .select();
+        }
+
         break;
     }
 

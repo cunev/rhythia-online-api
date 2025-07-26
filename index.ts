@@ -735,6 +735,22 @@ import { Schema as GetCollections } from "./api/getCollections"
 export { Schema as SchemaGetCollections } from "./api/getCollections"
 export const getCollections = handleApi({url:"/api/getCollections",...GetCollections})
 
+// ./api/getInventory.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+  }),
+  output: z.strictObject({
+    error: z.string().optional(),
+    inventory: z.any().optional(),
+  }),
+};*/
+import { Schema as GetInventory } from "./api/getInventory"
+export { Schema as SchemaGetInventory } from "./api/getInventory"
+export const getInventory = handleApi({url:"/api/getInventory",...GetInventory})
+
 // ./api/getLeaderboard.ts API
 
 /*
