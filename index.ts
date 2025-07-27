@@ -994,6 +994,45 @@ import { Schema as GetScore } from "./api/getScore"
 export { Schema as SchemaGetScore } from "./api/getScore"
 export const getScore = handleApi({url:"/api/getScore",...GetScore})
 
+// ./api/getStoryBeatmaps.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+  }),
+  output: z.object({
+    error: z.string().optional(),
+    beatmaps: z
+      .array(
+        z.object({
+          id: z.number().nullable().optional(),
+          nominations: z.array(z.number()).nullable().optional(),
+          playcount: z.number().nullable().optional(),
+          created_at: z.string().nullable().optional(),
+          updated_at: z.number().nullable().optional(),
+          difficulty: z.number().nullable().optional(),
+          noteCount: z.number().nullable().optional(),
+          length: z.number().nullable().optional(),
+          title: z.string().nullable().optional(),
+          ranked: z.boolean().nullable().optional(),
+          beatmapFile: z.string().nullable().optional(),
+          image: z.string().nullable().optional(),
+          starRating: z.number().nullable().optional(),
+          owner: z.number().nullable().optional(),
+          ownerUsername: z.string().nullable().optional(),
+          ownerAvatar: z.string().nullable().optional(),
+          status: z.string().nullable().optional(),
+          requiresHardrock: z.boolean(),
+        })
+      )
+      .optional(),
+  }),
+};*/
+import { Schema as GetStoryBeatmaps } from "./api/getStoryBeatmaps"
+export { Schema as SchemaGetStoryBeatmaps } from "./api/getStoryBeatmaps"
+export const getStoryBeatmaps = handleApi({url:"/api/getStoryBeatmaps",...GetStoryBeatmaps})
+
 // ./api/getTimestamp.ts API
 
 /*
