@@ -19,6 +19,12 @@ const adminOperations = {
   removeAllScores: z.object({ userId: z.number() }),
   invalidateRankedScores: z.object({ userId: z.number() }),
   unbanUser: z.object({ userId: z.number() }),
+  getScoresPaginated: z.object({
+    page: z.number().min(1).default(1),
+    limit: z.number().min(1).max(100).default(50),
+    userId: z.number().optional(),
+    includeAdditionalData: z.boolean().default(true),
+  }),
 } as const;
 
 // Create a discriminated union type for operation parameters
@@ -66,6 +72,10 @@ const OperationParam = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("changeBadges"),
     params: adminOperations.changeBadges,
+  }),
+  z.object({
+    operation: z.literal("getScoresPaginated"),
+    params: adminOperations.getScoresPaginated,
   }),
 ]);
 
@@ -208,6 +218,103 @@ export async function handler(
             .select();
         }
 
+        break;
+
+      case "getScoresPaginated":
+        const offset = (params.page - 1) * params.limit;
+        let query = supabase
+          .from("scores")
+          .select(
+            `
+            id,
+            awarded_sp,
+            created_at,
+            misses,
+            mods,
+            passed,
+            songId,
+            speed,
+            spin,
+            userId,
+            beatmapHash,
+            additional_data,
+            beatmaps (
+              difficulty,
+              noteCount,
+              title,
+              starRating,
+              image,
+              imageLarge
+            ),
+            profiles (
+              username,
+              avatar_url
+            )
+          `
+          )
+          .order("created_at", { ascending: false })
+          .range(offset, offset + params.limit - 1);
+
+        if (params.userId) {
+          query = query.eq("userId", params.userId);
+        }
+
+        const { data: scoresData, error: scoresError, count } = await query;
+
+        if (scoresError) {
+          result = { error: scoresError, data: null };
+        } else {
+          const transformedScores = scoresData?.map((score) => {
+            const transformed: any = {
+              id: score.id,
+              awarded_sp: score.awarded_sp,
+              created_at: score.created_at,
+              misses: score.misses,
+              mods: score.mods,
+              passed: score.passed,
+              songId: score.songId,
+              speed: score.speed,
+              spin: score.spin,
+              userId: score.userId,
+              beatmapHash: score.beatmapHash,
+              beatmap: score.beatmaps
+                ? {
+                    difficulty: score.beatmaps.difficulty,
+                    noteCount: score.beatmaps.noteCount,
+                    title: score.beatmaps.title,
+                    starRating: score.beatmaps.starRating,
+                    image: score.beatmaps.image,
+                    imageLarge: score.beatmaps.imageLarge,
+                  }
+                : null,
+              profile: score.profiles
+                ? {
+                    username: score.profiles.username,
+                    avatar_url: score.profiles.avatar_url,
+                  }
+                : null,
+            };
+
+            if (params.includeAdditionalData) {
+              transformed.additional_data = score.additional_data;
+            }
+
+            return transformed;
+          });
+
+          result = {
+            data: {
+              scores: transformedScores,
+              pagination: {
+                page: params.page,
+                limit: params.limit,
+                total: count || 0,
+                totalPages: Math.ceil((count || 0) / params.limit),
+              },
+            },
+            error: null,
+          };
+        }
         break;
     }
 
