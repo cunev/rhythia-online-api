@@ -228,30 +228,14 @@ export async function handler(
             `
             id,
             awarded_sp,
-            created_at,
-            misses,
-            mods,
-            passed,
-            songId,
-            speed,
-            spin,
             userId,
-            beatmapHash,
             additional_data,
-            beatmaps (
-              difficulty,
-              noteCount,
-              title,
-              starRating,
-              image,
-              imageLarge
-            ),
             profiles (
-              username,
-              avatar_url
+              username
             )
           `
           )
+          .eq("passed", true)
           .order("created_at", { ascending: false })
           .range(offset, offset + params.limit - 1);
 
@@ -268,31 +252,8 @@ export async function handler(
             const transformed: any = {
               id: score.id,
               awarded_sp: score.awarded_sp,
-              created_at: score.created_at,
-              misses: score.misses,
-              mods: score.mods,
-              passed: score.passed,
-              songId: score.songId,
-              speed: score.speed,
-              spin: score.spin,
               userId: score.userId,
-              beatmapHash: score.beatmapHash,
-              beatmap: score.beatmaps
-                ? {
-                    difficulty: score.beatmaps.difficulty,
-                    noteCount: score.beatmaps.noteCount,
-                    title: score.beatmaps.title,
-                    starRating: score.beatmaps.starRating,
-                    image: score.beatmaps.image,
-                    imageLarge: score.beatmaps.imageLarge,
-                  }
-                : null,
-              profile: score.profiles
-                ? {
-                    username: score.profiles.username,
-                    avatar_url: score.profiles.avatar_url,
-                  }
-                : null,
+              username: score.profiles?.username || null,
             };
 
             if (params.includeAdditionalData) {
