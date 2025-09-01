@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       admin_actions: {
@@ -621,64 +626,47 @@ export type Database = {
     }
     Functions: {
       admin_delete_user: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       admin_exclude_user: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       admin_invalidate_ranked_scores: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: number
       }
-      admin_log_action:
-        | {
-            Args: {
-              admin_id: number
+      admin_log_action: {
+        Args:
+          | {
               action_type: string
+              admin_id: number
+              details?: Json
               target_id: number
-              details?: Json
             }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              admin_id: number
+          | {
               action_type: string
-              target_id: string
+              admin_id: number
               details?: Json
+              target_id: string
             }
-            Returns: undefined
-          }
+        Returns: undefined
+      }
       admin_profanity_clear: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       admin_remove_all_scores: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: number
       }
       admin_restrict_user: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       admin_search_users: {
-        Args: {
-          search_text: string
-        }
+        Args: { search_text: string }
         Returns: {
           about_me: string | null
           avatar_url: string | null
@@ -705,54 +693,35 @@ export type Database = {
         }[]
       }
       admin_silence_user: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       admin_unban_user: {
-        Args: {
-          user_id: number
-        }
+        Args: { user_id: number }
         Returns: boolean
       }
       get_clan_leaderboard: {
-        Args: {
-          page_number?: number
-          items_per_page?: number
-        }
+        Args: { items_per_page?: number; page_number?: number }
         Returns: {
-          id: number
-          name: string
           acronym: string
           avatar_url: string
           description: string
+          id: number
           member_count: number
-          total_skill_points: number
+          name: string
           total_pages: number
+          total_skill_points: number
         }[]
       }
       get_collections_v1: {
-        Args: {
-          page_number?: number
-          items_per_page?: number
-        }
+        Args: { items_per_page?: number; page_number?: number }
         Returns: {
-          id: number
-          title: string
-          description: string
-          created_at: string
-          owner: number
           beatmap_count: number
+          created_at: string
+          description: string
+          id: number
+          owner: number
           star1: number
-          star2: number
-          star3: number
-          star4: number
-          star5: number
-          star6: number
-          star7: number
-          star8: number
-          star9: number
           star10: number
           star11: number
           star12: number
@@ -762,105 +731,35 @@ export type Database = {
           star16: number
           star17: number
           star18: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          title: string
           total_pages: number
         }[]
       }
-      get_collections_v2:
-        | {
-            Args: {
-              page_number?: number
-              items_per_page?: number
-            }
-            Returns: {
-              id: number
-              title: string
-              description: string
-              created_at: string
-              owner: number
-              owner_username: string
-              owner_avatar_url: string
-              beatmap_count: number
-              star1: number
-              star2: number
-              star3: number
-              star4: number
-              star5: number
-              star6: number
-              star7: number
-              star8: number
-              star9: number
-              star10: number
-              star11: number
-              star12: number
-              star13: number
-              star14: number
-              star15: number
-              star16: number
-              star17: number
-              star18: number
-              total_pages: number
-            }[]
-          }
-        | {
-            Args: {
-              page_number?: number
+      get_collections_v2: {
+        Args:
+          | {
               items_per_page?: number
               owner_filter?: number
+              page_number?: number
             }
-            Returns: {
-              id: number
-              title: string
-              description: string
-              created_at: string
-              owner: number
-              owner_username: string
-              owner_avatar_url: string
-              beatmap_count: number
-              star1: number
-              star2: number
-              star3: number
-              star4: number
-              star5: number
-              star6: number
-              star7: number
-              star8: number
-              star9: number
-              star10: number
-              star11: number
-              star12: number
-              star13: number
-              star14: number
-              star15: number
-              star16: number
-              star17: number
-              star18: number
-              total_pages: number
-            }[]
-          }
-      get_collections_v3: {
-        Args: {
-          page_number?: number
-          items_per_page?: number
-          owner_filter?: number
-        }
+          | { items_per_page?: number; page_number?: number }
         Returns: {
-          id: number
-          title: string
-          description: string
-          created_at: string
-          owner: number
-          owner_username: string
-          owner_avatar_url: string
           beatmap_count: number
+          created_at: string
+          description: string
+          id: number
+          owner: number
+          owner_avatar_url: string
+          owner_username: string
           star1: number
-          star2: number
-          star3: number
-          star4: number
-          star5: number
-          star6: number
-          star7: number
-          star8: number
-          star9: number
           star10: number
           star11: number
           star12: number
@@ -870,36 +769,72 @@ export type Database = {
           star16: number
           star17: number
           star18: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          title: string
+          total_pages: number
+        }[]
+      }
+      get_collections_v3: {
+        Args: {
+          items_per_page?: number
+          owner_filter?: number
+          page_number?: number
+        }
+        Returns: {
+          beatmap_count: number
+          created_at: string
+          description: string
+          id: number
+          owner: number
+          owner_avatar_url: string
+          owner_username: string
+          star1: number
+          star10: number
+          star11: number
+          star12: number
+          star13: number
+          star14: number
+          star15: number
+          star16: number
+          star17: number
+          star18: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          title: string
           total_pages: number
         }[]
       }
       get_collections_v4: {
         Args: {
-          page_number?: number
-          items_per_page?: number
-          owner_filter?: number
-          search_query?: string
           author_filter?: string
+          items_per_page?: number
           min_beatmaps?: number
+          owner_filter?: number
+          page_number?: number
+          search_query?: string
         }
         Returns: {
-          id: number
-          title: string
-          description: string
-          created_at: string
-          owner: number
-          owner_username: string
-          owner_avatar_url: string
           beatmap_count: number
+          created_at: string
+          description: string
+          id: number
+          owner: number
+          owner_avatar_url: string
+          owner_username: string
           star1: number
-          star2: number
-          star3: number
-          star4: number
-          star5: number
-          star6: number
-          star7: number
-          star8: number
-          star9: number
           star10: number
           star11: number
           star12: number
@@ -909,17 +844,26 @@ export type Database = {
           star16: number
           star17: number
           star18: number
+          star2: number
+          star3: number
+          star4: number
+          star5: number
+          star6: number
+          star7: number
+          star8: number
+          star9: number
+          title: string
           total_pages: number
         }[]
       }
       get_top_scores_for_beatmap: {
-        Args: {
-          beatmap_hash: string
-        }
+        Args: { beatmap_hash: string }
         Returns: {
-          id: number
+          accuracy: number
+          avatar_url: string
           awarded_sp: number
           created_at: string
+          id: number
           misses: number
           mods: Json
           passed: boolean
@@ -929,18 +873,16 @@ export type Database = {
           spin: boolean
           userid: number
           username: string
-          avatar_url: string
-          accuracy: number
         }[]
       }
       get_top_scores_for_beatmap2: {
-        Args: {
-          beatmap_hash: string
-        }
+        Args: { beatmap_hash: string }
         Returns: {
-          id: number
+          accuracy: number
+          avatar_url: string
           awarded_sp: number
           created_at: string
+          id: number
           misses: number
           mods: Json
           passed: boolean
@@ -950,57 +892,35 @@ export type Database = {
           spin: boolean
           userid: number
           username: string
-          avatar_url: string
-          accuracy: number
         }[]
       }
-      get_user_by_email: {
-        Args: {
-          email_address: string
-        }
+      get_user_activity: {
+        Args: { score_limit?: number; user_id: number }
         Returns: Json
       }
-      get_user_reigning_scores:
-        | {
-            Args: {
-              userid: number
-            }
-            Returns: {
-              id: number
-              awarded_sp: number
-              created_at: string
-              misses: number
-              mods: Json
-              passed: boolean
-              replayhwid: string
-              songid: string
-              speed: number
-              spin: boolean
-              beatmaphash: string
-            }[]
-          }
-        | {
-            Args: {
-              userid: number
-              page_size: number
-            }
-            Returns: {
-              id: number
-              awarded_sp: number
-              created_at: string
-              misses: number
-              mods: Json
-              passed: boolean
-              replayhwid: string
-              songid: string
-              speed: number
-              spin: boolean
-              beatmaphash: string
-              beatmaptitle: string
-              difficulty: number
-              notes: number
-            }[]
-          }
+      get_user_by_email: {
+        Args: { email_address: string }
+        Returns: Json
+      }
+      get_user_reigning_scores: {
+        Args: { page_size: number; userid: number } | { userid: number }
+        Returns: {
+          awarded_sp: number
+          beatmaphash: string
+          beatmaptitle: string
+          created_at: string
+          difficulty: number
+          id: number
+          misses: number
+          mods: Json
+          notes: number
+          passed: boolean
+          replayhwid: string
+          songid: string
+          speed: number
+          spin: boolean
+        }[]
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"
@@ -1012,27 +932,33 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1040,20 +966,24 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1061,20 +991,24 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1082,29 +1016,44 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
-    | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      banTypes: ["cool", "silenced", "restricted", "excluded"],
+      discordWebhookType: ["maps", "scores"],
+    },
+  },
+} as const
