@@ -91,10 +91,14 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const { data: result, error } = await supabase.rpc("get_user_activity", {
-    user_id: data.id,
-    score_limit: data.limit,
-  });
+  // Call the RPC created earlier
+  const { data: result, error } = await supabase.rpc(
+    "get_user_scores_summary",
+    {
+      userid: data.id,
+      limit_param: data.limit,
+    }
+  );
 
   if (error) {
     return NextResponse.json({ error: JSON.stringify(error) });
@@ -104,11 +108,12 @@ export async function handler(
     return NextResponse.json({ error: "No data returned" });
   }
 
+  // The RPC may return { error: "..." } as a JSON object
   if (typeof result === "object" && result !== null && "error" in result) {
-    return NextResponse.json({ error: String(result.error) });
+    return NextResponse.json({ error: String((result as any).error) });
   }
 
+  // Trust the RPC's JSON shape to match Schema.output
   const typedResult = result as (typeof Schema)["output"]["_type"];
-
   return NextResponse.json(typedResult);
 }

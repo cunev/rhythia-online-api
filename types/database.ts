@@ -921,6 +921,10 @@ export type Database = {
           spin: boolean
         }[]
       }
+      get_user_scores_summary: {
+        Args: { limit_param?: number; userid: number }
+        Returns: Json
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"
