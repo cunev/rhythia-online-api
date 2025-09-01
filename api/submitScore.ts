@@ -279,6 +279,27 @@ export async function handler({
     squares_hit: (userData.squares_hit || 0) + data.hits,
   });
   console.log("p3");
+  // Grant special badges if applicable
+  if (passed && beatmapPages) {
+    try {
+      const { data: badgeResult, error: badgeError } = await supabase.rpc(
+        "grant_special_badges",
+        {
+          p_user_id: userData.id,
+          p_beatmap_id: beatmapPages.id,
+          p_spin: data.spin || false,
+          p_passed: passed,
+        }
+      );
+
+      const result = badgeResult as { granted: boolean; badge: string | null };
+      if (result && result.granted) {
+        console.log(`Badge granted: ${result.badge} to user ${userData.id}`);
+      }
+    } catch (error) {
+      console.error("Error granting badge:", error);
+    }
+  }
 
   if (awarded_sp > 99 && userData.ban == "cool") {
     await postToWebhooks({

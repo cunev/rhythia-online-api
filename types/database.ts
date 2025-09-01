@@ -925,6 +925,15 @@ export type Database = {
         Args: { limit_param?: number; userid: number }
         Returns: Json
       }
+      grant_special_badges: {
+        Args: {
+          p_beatmap_id: number
+          p_passed?: boolean
+          p_spin?: boolean
+          p_user_id: number
+        }
+        Returns: Json
+      }
     }
     Enums: {
       banTypes: "cool" | "silenced" | "restricted" | "excluded"
