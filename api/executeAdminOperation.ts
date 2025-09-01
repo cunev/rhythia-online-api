@@ -11,6 +11,8 @@ const adminOperations = {
   deleteUser: z.object({ userId: z.number() }),
   changeFlag: z.object({ userId: z.number(), flag: z.string() }),
   changeBadges: z.object({ userId: z.number(), badges: z.string() }),
+  addBadge: z.object({ userId: z.number(), badge: z.string() }),
+  removeBadge: z.object({ userId: z.number(), badge: z.string() }),
   excludeUser: z.object({ userId: z.number() }),
   restrictUser: z.object({ userId: z.number() }),
   silenceUser: z.object({ userId: z.number() }),
@@ -72,6 +74,14 @@ const OperationParam = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("changeBadges"),
     params: adminOperations.changeBadges,
+  }),
+  z.object({
+    operation: z.literal("addBadge"),
+    params: adminOperations.addBadge,
+  }),
+  z.object({
+    operation: z.literal("removeBadge"),
+    params: adminOperations.removeBadge,
   }),
   z.object({
     operation: z.literal("getScoresPaginated"),
@@ -217,7 +227,55 @@ export async function handler(
             })
             .select();
         }
+        break;
 
+      case "addBadge":
+        // Allow only developers to modify badges.
+        if ((queryUserData.badges as string[]).includes("Developer")) {
+          // Get current badges
+          const { data: targetUser } = await supabase
+            .from("profiles")
+            .select("badges")
+            .eq("id", params.userId)
+            .single();
+          
+          const currentBadges = (targetUser?.badges || []) as string[];
+          if (!currentBadges.includes(params.badge)) {
+            currentBadges.push(params.badge);
+            result = await supabase
+              .from("profiles")
+              .upsert({
+                id: params.userId,
+                badges: currentBadges,
+              })
+              .select();
+          } else {
+            result = { data: targetUser, error: null };
+          }
+        }
+        break;
+
+      case "removeBadge":
+        // Allow only developers to modify badges.
+        if ((queryUserData.badges as string[]).includes("Developer")) {
+          // Get current badges
+          const { data: targetUser } = await supabase
+            .from("profiles")
+            .select("badges")
+            .eq("id", params.userId)
+            .single();
+          
+          const currentBadges = (targetUser?.badges || []) as string[];
+          const updatedBadges = currentBadges.filter(b => b !== params.badge);
+          
+          result = await supabase
+            .from("profiles")
+            .upsert({
+              id: params.userId,
+              badges: updatedBadges,
+            })
+            .select();
+        }
         break;
 
       case "getScoresPaginated":
