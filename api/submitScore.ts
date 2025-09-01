@@ -280,7 +280,7 @@ export async function handler({
   });
   console.log("p3");
   // Grant special badges if applicable
-  if (passed && beatmapPages) {
+  if (passed && beatmapPages && !data.mods.includes("mod_nofail")) {
     try {
       const { data: badgeResult, error: badgeError } = await supabase.rpc(
         "grant_special_badges",
