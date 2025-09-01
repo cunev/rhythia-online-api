@@ -370,6 +370,32 @@ import { Schema as GetBadgedUsers } from "./api/getBadgedUsers"
 export { Schema as SchemaGetBadgedUsers } from "./api/getBadgedUsers"
 export const getBadgedUsers = handleApi({url:"/api/getBadgedUsers",...GetBadgedUsers})
 
+// ./api/getBadgeLeaders.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    limit: z.number().min(1).max(100).optional().default(100),
+  }),
+  output: z.object({
+    leaderboard: z.array(
+      z.object({
+        id: z.number(),
+        display_name: z.string(),
+        avatar_url: z.string().nullable(),
+        special_badge_count: z.number(),
+        earned_badges: z.array(z.string()),
+        all_badges: z.any(), // JSON type
+      })
+    ),
+    total_count: z.number(),
+    error: z.string().optional(),
+  }),
+};*/
+import { Schema as GetBadgeLeaders } from "./api/getBadgeLeaders"
+export { Schema as SchemaGetBadgeLeaders } from "./api/getBadgeLeaders"
+export const getBadgeLeaders = handleApi({url:"/api/getBadgeLeaders",...GetBadgeLeaders})
+
 // ./api/getBeatmapComments.ts API
 
 /*
@@ -1079,16 +1105,16 @@ export const Schema = {
     reign: z
       .array(
         z.object({
-          id: z.number(), // Use z.number() for compatibility, or z.bigint() if supported
-          awarded_sp: z.number().nullable(), // Use z.number() for NUMERIC
-          created_at: z.string(), // Use z.string() for TIMESTAMP WITH TIME ZONE
+          id: z.number(),
+          awarded_sp: z.number().nullable(),
+          created_at: z.string(),
           misses: z.number().nullable(),
           mods: z.record(z.unknown()),
           passed: z.boolean().nullable(),
           songId: z.string().nullable(),
           speed: z.number().nullable(),
           spin: z.boolean(),
-          beatmapHash: z.string().nullable(), // Add beatmapHash to the schema
+          beatmapHash: z.string().nullable(),
           beatmapTitle: z.string().nullable(),
           difficulty: z.number().nullable(),
           beatmapNotes: z.number().optional().nullable(),

@@ -700,6 +700,17 @@ export type Database = {
         Args: { user_id: number }
         Returns: boolean
       }
+      get_badge_leaderboard: {
+        Args: { p_limit?: number }
+        Returns: {
+          all_badges: Json
+          avatar_url: string
+          display_name: string
+          earned_badges: string[]
+          id: number
+          special_badge_count: number
+        }[]
+      }
       get_clan_leaderboard: {
         Args: { items_per_page?: number; page_number?: number }
         Returns: {
