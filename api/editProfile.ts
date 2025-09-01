@@ -34,22 +34,33 @@ export async function POST(request: Request): Promise<NextResponse> {
 export async function handler(
   data: (typeof Schema)["input"]["_type"]
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  if (data.data.username !== undefined && data.data.username.length === 0) {
-    return NextResponse.json(
-      {
-        error: "Username can't be empty",
-      },
-      { status: 404 }
-    );
-  }
+  if (data.data.username !== undefined) {
+    if (data.data.username.length < 3) {
+      return NextResponse.json(
+        {
+          error: "Username must be at least 3 characters long",
+        },
+        { status: 404 }
+      );
+    }
 
-  if (data.data.username && data.data.username.length > 20) {
-    return NextResponse.json(
-      {
-        error: "Username too long.",
-      },
-      { status: 404 }
-    );
+    if (data.data.username.length > 20) {
+      return NextResponse.json(
+        {
+          error: "Username too long.",
+        },
+        { status: 404 }
+      );
+    }
+
+    if (!/^[a-z0-9]+$/i.test(data.data.username)) {
+      return NextResponse.json(
+        {
+          error: "Username can only contain letters (a-z) and numbers (0-9)",
+        },
+        { status: 404 }
+      );
+    }
   }
 
   if (validator.trim(data.data.username || "") !== (data.data.username || "")) {
