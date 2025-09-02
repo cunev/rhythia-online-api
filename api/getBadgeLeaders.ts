@@ -13,8 +13,6 @@ export const Schema = {
         display_name: z.string(),
         avatar_url: z.string().nullable(),
         special_badge_count: z.number(),
-        earned_badges: z.array(z.string()),
-        all_badges: z.any(), // JSON type
       })
     ),
     total_count: z.number(),
