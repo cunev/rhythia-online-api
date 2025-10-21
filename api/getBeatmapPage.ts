@@ -51,6 +51,7 @@ export const Schema = {
         status: z.string().nullable().optional(),
         description: z.string().nullable().optional(),
         tags: z.string().nullable().optional(),
+        videoUrl: z.string().nullable().optional(),
       })
       .optional(),
   }),
@@ -144,6 +145,7 @@ export async function handler(
       nominations: beatmapPage.nominations as number[],
       description: beatmapPage.description,
       tags: beatmapPage.tags,
+      videoUrl: beatmapPage.video_url,
     },
   });
 }
