@@ -13,6 +13,7 @@ export const Schema = {
     beatmapHash: z.string().optional(),
     tags: z.string().optional(),
     description: z.string().optional(),
+    videoUrl: z.string().optional(),
   }),
   output: z.strictObject({
     error: z.string().optional(),
@@ -41,6 +42,7 @@ export async function handler({
   id,
   description,
   tags,
+  videoUrl,
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
@@ -82,8 +84,9 @@ export async function handler({
     owner: userData.id,
     description: description ? description : pageData.description,
     tags: tags ? tags : pageData.tags,
+    video_url: videoUrl ? videoUrl : pageData.video_url,
     updated_at: Date.now(),
-  };
+  } as any;
 
   if (beatmapHash && beatmapData) {
     upsertPayload["title"] = beatmapData.title;

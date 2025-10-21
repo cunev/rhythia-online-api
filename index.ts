@@ -1164,6 +1164,26 @@ import { Schema as GetVerified } from "./api/getVerified"
 export { Schema as SchemaGetVerified } from "./api/getVerified"
 export const getVerified = handleApi({url:"/api/getVerified",...GetVerified})
 
+// ./api/getVideoUploadUrl.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({
+    session: z.string(),
+    contentLength: z.number(),
+    contentType: z.string(),
+    intrinsicToken: z.string(),
+  }),
+  output: z.strictObject({
+    error: z.string().optional(),
+    url: z.string().optional(),
+    objectKey: z.string().optional(),
+  }),
+};*/
+import { Schema as GetVideoUploadUrl } from "./api/getVideoUploadUrl"
+export { Schema as SchemaGetVideoUploadUrl } from "./api/getVideoUploadUrl"
+export const getVideoUploadUrl = handleApi({url:"/api/getVideoUploadUrl",...GetVideoUploadUrl})
+
 // ./api/nominateMap.ts API
 
 /*
@@ -1293,6 +1313,7 @@ export const Schema = {
     beatmapHash: z.string().optional(),
     tags: z.string().optional(),
     description: z.string().optional(),
+    videoUrl: z.string().optional(),
   }),
   output: z.strictObject({
     error: z.string().optional(),

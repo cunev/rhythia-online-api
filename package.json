@@ -1,6 +1,6 @@
 {
   "name": "rhythia-api",
-  "version": "212.0.0",
+  "version": "214.0.0",
   "main": "index.ts",
   "author": "online-contributors-cunev",
   "scripts": {
@@ -43,7 +43,7 @@
     "sharp": "^0.33.5",
     "short-uuid": "^5.2.0",
     "simple-git": "^3.25.0",
-    "supabase": "^2.19.7",
+    "supabase": "^2.53.6",
     "tsx": "^4.17.0",
     "utf-8-validate": "^6.0.4",
     "uuid": "^11.1.0",
