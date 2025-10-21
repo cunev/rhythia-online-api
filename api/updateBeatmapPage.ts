@@ -74,21 +74,23 @@ export async function handler({
   if (userData.id !== pageData?.owner)
     return NextResponse.json({ error: "Non-authz user." });
 
-  if (pageData?.status !== "UNRANKED")
-    return NextResponse.json({ error: "Only unranked maps can be updated" });
-
-  const upsertPayload = {
+  const upsertPayload: any = {
     id,
-    genre: "",
-    status: "UNRANKED",
     owner: userData.id,
-    description: description ? description : pageData.description,
-    tags: tags ? tags : pageData.tags,
-    video_url: videoUrl ? videoUrl : pageData.video_url,
     updated_at: Date.now(),
-  } as any;
+  };
+
+  if (typeof description !== "undefined")
+    upsertPayload.description = description;
+  if (typeof tags !== "undefined") upsertPayload.tags = tags;
+  if (typeof videoUrl !== "undefined") upsertPayload.video_url = videoUrl;
 
   if (beatmapHash && beatmapData) {
+    if (pageData?.status !== "UNRANKED") {
+      return NextResponse.json({
+        error: "Only unranked maps can be updated",
+      });
+    }
     upsertPayload["title"] = beatmapData.title;
     upsertPayload["latestBeatmapHash"] = beatmapHash;
     upsertPayload["nominations"] = [];
