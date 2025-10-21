@@ -579,6 +579,7 @@ export const Schema = {
           ownerAvatar: z.string().nullable().optional(),
           status: z.string().nullable().optional(),
           tags: z.string().nullable().optional(),
+          videoUrl: z.string().nullable().optional(),
         })
       )
       .optional(),

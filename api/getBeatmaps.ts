@@ -41,6 +41,7 @@ export const Schema = {
           ownerAvatar: z.string().nullable().optional(),
           status: z.string().nullable().optional(),
           tags: z.string().nullable().optional(),
+          videoUrl: z.string().nullable().optional(),
         })
       )
       .optional(),
@@ -80,6 +81,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
         status,
         tags,
         ranked_at,
+        video_url,
         beatmaps!inner(
           playcount,
           ranked,
@@ -158,6 +160,7 @@ export async function getBeatmaps(data: (typeof Schema)["input"]["_type"]) {
       owner: beatmapPage.owner,
       status: beatmapPage.status,
       ownerUsername: beatmapPage.profiles?.username,
+      videoUrl: beatmapPage.video_url,
     })),
   };
 }
