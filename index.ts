@@ -473,6 +473,7 @@ export const Schema = {
         status: z.string().nullable().optional(),
         description: z.string().nullable().optional(),
         tags: z.string().nullable().optional(),
+        videoUrl: z.string().nullable().optional(),
       })
       .optional(),
   }),
@@ -496,9 +497,9 @@ export const Schema = {
         z.object({
           id: z.number(),
           awarded_sp: z.number().nullable(),
-          created_at: z.string(), // Assuming Supabase returns timestamps as strings
+          created_at: z.string(),
           misses: z.number().nullable(),
-          mods: z.record(z.unknown()), // JSONB data, can be any object
+          mods: z.record(z.unknown()),
           passed: z.boolean().nullable(),
           songId: z.string().nullable(),
           speed: z.number().nullable(),
@@ -528,6 +529,7 @@ export const Schema = {
         ownerUsername: z.string().nullable().optional(),
         ownerAvatar: z.string().nullable().optional(),
         status: z.string().nullable().optional(),
+        videoUrl: z.string().nullable(),
       })
       .optional(),
   }),
