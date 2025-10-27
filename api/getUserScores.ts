@@ -91,29 +91,43 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  // Call the RPC created earlier
-  const { data: result, error } = await supabase.rpc(
-    "get_user_scores_payload",
-    {
+  // parallel RPCs
+  const [
+    { data: lastDay, error: err1 },
+    { data: topAndStats, error: err2 },
+    { data: reign, error: err3 },
+  ] = await Promise.all([
+    supabase.rpc("get_user_scores_lastday", {
       userid: data.id,
       limit_param: data.limit,
-    }
-  );
+    }),
+    supabase.rpc("get_user_scores_top_and_stats", {
+      userid: data.id,
+      limit_param: data.limit,
+    }),
+    supabase.rpc("get_user_scores_reign", {
+      userid: data.id,
+    }),
+  ]);
 
-  if (error) {
-    return NextResponse.json({ error: JSON.stringify(error) });
+  const err = err1 || err2 || err3;
+  if (err) {
+    return NextResponse.json({ error: JSON.stringify(err) });
   }
 
-  if (!result) {
-    return NextResponse.json({ error: "No data returned" });
+  // Extract pieces from the { top, stats } object
+  let top: unknown[] | undefined;
+  let stats: { totalScores: number; spinScores: number } | undefined;
+
+  if (topAndStats && typeof topAndStats === "object") {
+    top = (topAndStats as any).top ?? [];
+    stats = (topAndStats as any).stats;
   }
 
-  // The RPC may return { error: "..." } as a JSON object
-  if (typeof result === "object" && result !== null && "error" in result) {
-    return NextResponse.json({ error: String((result as any).error) });
-  }
-
-  // Trust the RPC's JSON shape to match Schema.output
-  const typedResult = result as (typeof Schema)["output"]["_type"];
-  return NextResponse.json(typedResult);
+  return NextResponse.json({
+    lastDay: (lastDay as any) ?? [],
+    top: (top as any) ?? [],
+    stats,
+    reign: (reign as any) ?? [],
+  });
 }

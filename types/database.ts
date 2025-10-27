@@ -966,11 +966,21 @@ export type Database = {
               spin: boolean
             }[]
           }
-      get_user_scores_payload:
-        | { Args: { limit_param: number; userid: string }; Returns: Json }
-        | { Args: { limit_param: number; userid: number }; Returns: Json }
+      get_user_scores_lastday: {
+        Args: { limit_param: number; userid: number }
+        Returns: Json
+      }
+      get_user_scores_payload: {
+        Args: { limit_param: number; userid: number }
+        Returns: Json
+      }
+      get_user_scores_reign: { Args: { userid: number }; Returns: Json }
       get_user_scores_summary: {
         Args: { limit_param?: number; userid: number }
+        Returns: Json
+      }
+      get_user_scores_top_and_stats: {
+        Args: { limit_param: number; userid: number }
         Returns: Json
       }
       grant_special_badges: {
