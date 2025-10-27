@@ -628,46 +628,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      admin_delete_user: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
-      admin_exclude_user: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
+      admin_delete_user: { Args: { user_id: number }; Returns: boolean }
+      admin_exclude_user: { Args: { user_id: number }; Returns: boolean }
       admin_invalidate_ranked_scores: {
         Args: { user_id: number }
         Returns: number
       }
-      admin_log_action: {
-        Args:
-          | {
+      admin_log_action:
+        | {
+            Args: {
               action_type: string
               admin_id: number
               details?: Json
               target_id: number
             }
-          | {
+            Returns: undefined
+          }
+        | {
+            Args: {
               action_type: string
               admin_id: number
               details?: Json
               target_id: string
             }
-        Returns: undefined
-      }
-      admin_profanity_clear: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
-      admin_remove_all_scores: {
-        Args: { user_id: number }
-        Returns: number
-      }
-      admin_restrict_user: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
+            Returns: undefined
+          }
+      admin_profanity_clear: { Args: { user_id: number }; Returns: boolean }
+      admin_remove_all_scores: { Args: { user_id: number }; Returns: number }
+      admin_restrict_user: { Args: { user_id: number }; Returns: boolean }
       admin_search_users: {
         Args: { search_text: string }
         Returns: {
@@ -694,15 +682,15 @@ export type Database = {
           verificationDeadline: number
           verified: boolean | null
         }[]
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
-      admin_silence_user: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
-      admin_unban_user: {
-        Args: { user_id: number }
-        Returns: boolean
-      }
+      admin_silence_user: { Args: { user_id: number }; Returns: boolean }
+      admin_unban_user: { Args: { user_id: number }; Returns: boolean }
       get_badge_leaderboard: {
         Args: { p_limit?: number }
         Returns: {
@@ -755,44 +743,75 @@ export type Database = {
           total_pages: number
         }[]
       }
-      get_collections_v2: {
-        Args:
-          | {
+      get_collections_v2:
+        | {
+            Args: { items_per_page?: number; page_number?: number }
+            Returns: {
+              beatmap_count: number
+              created_at: string
+              description: string
+              id: number
+              owner: number
+              owner_avatar_url: string
+              owner_username: string
+              star1: number
+              star10: number
+              star11: number
+              star12: number
+              star13: number
+              star14: number
+              star15: number
+              star16: number
+              star17: number
+              star18: number
+              star2: number
+              star3: number
+              star4: number
+              star5: number
+              star6: number
+              star7: number
+              star8: number
+              star9: number
+              title: string
+              total_pages: number
+            }[]
+          }
+        | {
+            Args: {
               items_per_page?: number
               owner_filter?: number
               page_number?: number
             }
-          | { items_per_page?: number; page_number?: number }
-        Returns: {
-          beatmap_count: number
-          created_at: string
-          description: string
-          id: number
-          owner: number
-          owner_avatar_url: string
-          owner_username: string
-          star1: number
-          star10: number
-          star11: number
-          star12: number
-          star13: number
-          star14: number
-          star15: number
-          star16: number
-          star17: number
-          star18: number
-          star2: number
-          star3: number
-          star4: number
-          star5: number
-          star6: number
-          star7: number
-          star8: number
-          star9: number
-          title: string
-          total_pages: number
-        }[]
-      }
+            Returns: {
+              beatmap_count: number
+              created_at: string
+              description: string
+              id: number
+              owner: number
+              owner_avatar_url: string
+              owner_username: string
+              star1: number
+              star10: number
+              star11: number
+              star12: number
+              star13: number
+              star14: number
+              star15: number
+              star16: number
+              star17: number
+              star18: number
+              star2: number
+              star3: number
+              star4: number
+              star5: number
+              star6: number
+              star7: number
+              star8: number
+              star9: number
+              title: string
+              total_pages: number
+            }[]
+          }
       get_collections_v3: {
         Args: {
           items_per_page?: number
@@ -910,29 +929,46 @@ export type Database = {
         Args: { score_limit?: number; user_id: number }
         Returns: Json
       }
-      get_user_by_email: {
-        Args: { email_address: string }
-        Returns: Json
-      }
-      get_user_reigning_scores: {
-        Args: { page_size: number; userid: number } | { userid: number }
-        Returns: {
-          awarded_sp: number
-          beatmaphash: string
-          beatmaptitle: string
-          created_at: string
-          difficulty: number
-          id: number
-          misses: number
-          mods: Json
-          notes: number
-          passed: boolean
-          replayhwid: string
-          songid: string
-          speed: number
-          spin: boolean
-        }[]
-      }
+      get_user_by_email: { Args: { email_address: string }; Returns: Json }
+      get_user_reigning_scores:
+        | {
+            Args: { page_size: number; userid: number }
+            Returns: {
+              awarded_sp: number
+              beatmaphash: string
+              beatmaptitle: string
+              created_at: string
+              difficulty: number
+              id: number
+              misses: number
+              mods: Json
+              notes: number
+              passed: boolean
+              replayhwid: string
+              songid: string
+              speed: number
+              spin: boolean
+            }[]
+          }
+        | {
+            Args: { userid: number }
+            Returns: {
+              awarded_sp: number
+              beatmaphash: string
+              created_at: string
+              id: number
+              misses: number
+              mods: Json
+              passed: boolean
+              replayhwid: string
+              songid: string
+              speed: number
+              spin: boolean
+            }[]
+          }
+      get_user_scores_payload:
+        | { Args: { limit_param: number; userid: string }; Returns: Json }
+        | { Args: { limit_param: number; userid: number }; Returns: Json }
       get_user_scores_summary: {
         Args: { limit_param?: number; userid: number }
         Returns: Json

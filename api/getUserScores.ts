@@ -93,7 +93,7 @@ export async function handler(
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   // Call the RPC created earlier
   const { data: result, error } = await supabase.rpc(
-    "get_user_scores_summary",
+    "get_user_scores_payload",
     {
       userid: data.id,
       limit_param: data.limit,
