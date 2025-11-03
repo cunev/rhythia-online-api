@@ -214,6 +214,27 @@ export async function handler({
 
   console.log("p1");
 
+  // auto-exclude: if a newly-created account (>600 RP) submits a score
+  try {
+    const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+    if (
+      awarded_sp > 600 &&
+      userData?.created_at &&
+      Date.now() - userData.created_at < ONE_WEEK
+    ) {
+      await supabase
+        .from("profiles")
+        .upsert({ id: userData.id, ban: "excluded", bannedAt: Date.now() });
+
+      return NextResponse.json(
+        { error: "User excluded due to suspicious activity." },
+        { status: 400 }
+      );
+    }
+  } catch (e) {
+    console.error("safen/ auto-exclude check failed:", e);
+  }
+
   let parsed = [];
 
   try {
