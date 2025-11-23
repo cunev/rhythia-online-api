@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
-import { supabase } from "../utils/supabase";
+import { kv, supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.strictObject({
@@ -123,6 +123,18 @@ export async function handler(
     top = (topAndStats as any).top ?? [];
     stats = (topAndStats as any).stats;
   }
+
+  try {
+    await kv.put(
+      `userscore:${data.id}`,
+      JSON.stringify({
+        lastDay: (lastDay as any) ?? [],
+        top: (top as any) ?? [],
+        stats,
+        reign: (reign as any) ?? [],
+      })
+    );
+  } catch (error) {}
 
   return NextResponse.json({
     lastDay: (lastDay as any) ?? [],
