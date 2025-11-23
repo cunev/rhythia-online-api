@@ -101,11 +101,13 @@ export async function handler(
   if (!beatmapPage) return NextResponse.json({});
 
   const beatmapHash = beatmapPage?.latestBeatmapHash || "";
+  const isCacheable =
+    beatmapPage?.status === "RANKED" || beatmapPage?.status === "APPROVED";
   const cacheKey = `beatmap-scores:${beatmapHash}`;
 
   let scoreData: any[] | null = null;
 
-  if (beatmapPage?.beatmaps?.ranked && beatmapHash) {
+  if (isCacheable && beatmapHash) {
     scoreData = await getCacheValue<any[]>(cacheKey);
   }
 
@@ -121,7 +123,7 @@ export async function handler(
 
     scoreData = rpcScores || [];
 
-    if (beatmapPage?.beatmaps?.ranked && beatmapHash) {
+    if (isCacheable && beatmapHash) {
       await setCacheValue(cacheKey, scoreData);
     }
   }

@@ -303,7 +303,9 @@ export async function handler({
   console.log("p3");
 
   await invalidateCache(`userscore:${userData.id}`);
-  if (beatmaps?.ranked) {
+  const beatmapIsRanked =
+    beatmapPages?.status === "RANKED" || beatmapPages?.status === "APPROVED";
+  if (beatmapIsRanked) {
     await invalidateCache(`beatmap-scores:${data.mapHash}`);
   }
 
