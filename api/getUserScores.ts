@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import z from "zod";
+import { getCacheValue, setCacheValue } from "../utils/cache";
 import { protectedApi } from "../utils/requestUtils";
-import { kv, supabase } from "../utils/supabase";
+import { supabase } from "../utils/supabase";
 
 export const Schema = {
   input: z.strictObject({
@@ -91,6 +92,15 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  const cacheKey = `userscore:${data.id}`;
+  const cachedValue = await getCacheValue<(typeof Schema)["output"]["_type"]>(
+    cacheKey
+  );
+
+  if (cachedValue !== null) {
+    return NextResponse.json(cachedValue);
+  }
+
   // parallel RPCs
   const [
     { data: lastDay, error: err1 },
@@ -124,22 +134,14 @@ export async function handler(
     stats = (topAndStats as any).stats;
   }
 
-  try {
-    await kv.put(
-      `userscore:${data.id}`,
-      JSON.stringify({
-        lastDay: (lastDay as any) ?? [],
-        top: (top as any) ?? [],
-        stats,
-        reign: (reign as any) ?? [],
-      })
-    );
-  } catch (error) {}
-
-  return NextResponse.json({
+  const responseBody = {
     lastDay: (lastDay as any) ?? [],
     top: (top as any) ?? [],
     stats,
     reign: (reign as any) ?? [],
-  });
+  };
+
+  await setCacheValue(cacheKey, responseBody);
+
+  return NextResponse.json(responseBody);
 }

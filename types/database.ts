@@ -252,6 +252,21 @@ export type Database = {
         }
         Relationships: []
       }
+      cache: {
+        Row: {
+          key: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       chartedValues: {
         Row: {
           created_at: string

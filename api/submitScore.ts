@@ -6,6 +6,7 @@ import { decryptString } from "../utils/security";
 import { isEqual } from "lodash";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { invalidateCache } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
@@ -300,6 +301,9 @@ export async function handler({
     squares_hit: (userData.squares_hit || 0) + data.hits,
   });
   console.log("p3");
+
+  await invalidateCache(`userscore:${userData.id}`);
+
   // Grant special badges if applicable
   if (passed && beatmapPages && !data.mods.includes("mod_nofail")) {
     try {

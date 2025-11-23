@@ -5,6 +5,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { invalidateCache } from "../utils/cache";
 
 // Define supported admin operations and their parameter types
 const adminOperations = {
@@ -148,9 +149,13 @@ export async function handler(
 
   // Execute the requested admin operation
   try {
-    let result;
+    let result: { data?: any; error?: any } | null = null;
     const operation = data.data.operation;
     const params = data.data.params as any;
+    const targetUserId =
+      "userId" in params && typeof params.userId === "number"
+        ? params.userId
+        : null;
 
     switch (operation) {
       case "deleteUser":
@@ -226,6 +231,8 @@ export async function handler(
               badges: JSON.parse(params.badges),
             })
             .select();
+        } else {
+          result = { data: null, error: { message: "Unauthorized" } };
         }
         break;
 
@@ -252,6 +259,8 @@ export async function handler(
           } else {
             result = { data: targetUser, error: null };
           }
+        } else {
+          result = { data: null, error: { message: "Unauthorized" } };
         }
         break;
 
@@ -275,6 +284,8 @@ export async function handler(
               badges: updatedBadges,
             })
             .select();
+        } else {
+          result = { data: null, error: { message: "Unauthorized" } };
         }
         break;
 
@@ -345,7 +356,7 @@ export async function handler(
       details: { params },
     });
 
-    if (result.error) {
+    if (result?.error) {
       return NextResponse.json(
         {
           success: false,
@@ -355,9 +366,13 @@ export async function handler(
       );
     }
 
+    if (targetUserId !== null && !result?.error) {
+      await invalidateCache(`userscore:${targetUserId}`);
+    }
+
     return NextResponse.json({
       success: true,
-      result: result.data,
+      result: result?.data,
     });
   } catch (err: any) {
     return NextResponse.json(
