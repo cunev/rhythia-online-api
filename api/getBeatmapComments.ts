@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi, validUser } from "../utils/requestUtils";
+import { getCacheValue, setCacheValue } from "../utils/cache";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
@@ -39,6 +40,15 @@ export async function handler({
 }: (typeof Schema)["input"]["_type"]): Promise<
   NextResponse<(typeof Schema)["output"]["_type"]>
 > {
+  const cacheKey = `beatmap-comments:${page}`;
+  const cachedComments = await getCacheValue<
+    (typeof Schema)["output"]["_type"]["comments"]
+  >(cacheKey);
+
+  if (cachedComments) {
+    return NextResponse.json({ comments: cachedComments });
+  }
+
   let { data: userData, error: userError } = await supabase
     .from("beatmapPageComments")
     .select(
@@ -52,6 +62,10 @@ export async function handler({
       `
     )
     .eq("beatmapPage", page);
+
+  if (userData) {
+    await setCacheValue(cacheKey, userData);
+  }
 
   return NextResponse.json({ comments: userData! });
 }

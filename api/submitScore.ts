@@ -303,6 +303,9 @@ export async function handler({
   console.log("p3");
 
   await invalidateCache(`userscore:${userData.id}`);
+  if (beatmaps?.ranked) {
+    await invalidateCache(`beatmap-scores:${data.mapHash}`);
+  }
 
   // Grant special badges if applicable
   if (passed && beatmapPages && !data.mods.includes("mod_nofail")) {

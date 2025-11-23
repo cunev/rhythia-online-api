@@ -368,6 +368,27 @@ export async function handler(
 
     if (targetUserId !== null && !result?.error) {
       await invalidateCache(`userscore:${targetUserId}`);
+
+      if (
+        operation === "removeAllScores" ||
+        operation === "invalidateRankedScores" ||
+        operation === "deleteUser"
+      ) {
+        const { data: beatmapHashes } = await supabase
+          .from("scores")
+          .select("beatmapHash")
+          .eq("userId", targetUserId);
+
+        const uniqueHashes = new Set(
+          (beatmapHashes || [])
+            .map((row) => row.beatmapHash)
+            .filter((hash): hash is string => Boolean(hash))
+        );
+
+        for (const hash of uniqueHashes) {
+          await invalidateCache(`beatmap-scores:${hash}`);
+        }
+      }
     }
 
     return NextResponse.json({

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
+import { getCacheValue, setCacheValue } from "../utils/cache";
 import { supabase } from "../utils/supabase";
 
 export const Schema = {
@@ -97,16 +98,33 @@ export async function handler(
     .eq("id", data.id)
     .single();
 
-  const { data: scoreData, error } = await supabase.rpc(
-    "get_top_scores_for_beatmap",
-    { beatmap_hash: beatmapPage?.latestBeatmapHash || "" }
-  );
+  if (!beatmapPage) return NextResponse.json({});
 
-  if (error) {
-    return NextResponse.json({ error: JSON.stringify(error) });
+  const beatmapHash = beatmapPage?.latestBeatmapHash || "";
+  const cacheKey = `beatmap-scores:${beatmapHash}`;
+
+  let scoreData: any[] | null = null;
+
+  if (beatmapPage?.beatmaps?.ranked && beatmapHash) {
+    scoreData = await getCacheValue<any[]>(cacheKey);
   }
 
-  if (!beatmapPage) return NextResponse.json({});
+  if (!scoreData) {
+    const { data: rpcScores, error } = await supabase.rpc(
+      "get_top_scores_for_beatmap",
+      { beatmap_hash: beatmapHash }
+    );
+
+    if (error) {
+      return NextResponse.json({ error: JSON.stringify(error) });
+    }
+
+    scoreData = rpcScores || [];
+
+    if (beatmapPage?.beatmaps?.ranked && beatmapHash) {
+      await setCacheValue(cacheKey, scoreData);
+    }
+  }
 
   return NextResponse.json({
     scores: scoreData.map((score: any) => ({

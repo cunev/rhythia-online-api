@@ -4,6 +4,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import { invalidateCache } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
@@ -73,6 +74,11 @@ export async function handler({
     .from("beatmaps")
     .delete()
     .eq("beatmapHash", beatmapData.beatmapHash);
+
+  await invalidateCache(`beatmap-comments:${id}`);
+  if (pageData.latestBeatmapHash) {
+    await invalidateCache(`beatmap-scores:${pageData.latestBeatmapHash}`);
+  }
 
   return NextResponse.json({});
 }

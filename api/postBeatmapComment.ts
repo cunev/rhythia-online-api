@@ -4,6 +4,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { User } from "@supabase/supabase-js";
 import { getUserBySession } from "../utils/getUserBySession";
+import { invalidateCache } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
@@ -58,5 +59,8 @@ export async function handler({
   if (upserted.error?.message.length) {
     return NextResponse.json({ error: upserted.error.message });
   }
+
+  await invalidateCache(`beatmap-comments:${page}`);
+
   return NextResponse.json({});
 }
