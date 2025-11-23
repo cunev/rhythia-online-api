@@ -4,7 +4,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
-import { invalidateCache } from "../utils/cache";
+import { invalidateCache, invalidateCachePrefix } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
@@ -77,7 +77,7 @@ export async function handler({
 
   await invalidateCache(`beatmap-comments:${id}`);
   if (pageData.latestBeatmapHash) {
-    await invalidateCache(`beatmap-scores:${pageData.latestBeatmapHash}`);
+    await invalidateCachePrefix(`beatmap-scores:${pageData.latestBeatmapHash}`);
   }
 
   return NextResponse.json({});

@@ -6,7 +6,7 @@ import { decryptString } from "../utils/security";
 import { isEqual } from "lodash";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
-import { invalidateCache } from "../utils/cache";
+import { invalidateCache, invalidateCachePrefix } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
@@ -302,11 +302,11 @@ export async function handler({
   });
   console.log("p3");
 
-  await invalidateCache(`userscore:${userData.id}`);
+  await invalidateCachePrefix(`userscore:${userData.id}`);
   const beatmapIsRanked =
     beatmapPages?.status === "RANKED" || beatmapPages?.status === "APPROVED";
   if (beatmapIsRanked) {
-    await invalidateCache(`beatmap-scores:${data.mapHash}`);
+    await invalidateCachePrefix(`beatmap-scores:${data.mapHash}`);
   }
 
   // Grant special badges if applicable

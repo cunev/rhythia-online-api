@@ -8,6 +8,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     mapId: z.string(),
+    limit: z.number().min(1).max(200).default(50),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -67,6 +68,8 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
+  const limit = data.limit ?? 50;
+
   let { data: beatmapPage, error: errorlast } = await supabase
     .from("beatmapPages")
     .select(
@@ -98,7 +101,7 @@ export async function handler(
   const beatmapHash = beatmapPage?.latestBeatmapHash || "";
   const isCacheable =
     beatmapPage?.status === "RANKED" || beatmapPage?.status === "APPROVED";
-  const cacheKey = `beatmap-scores:${beatmapHash}`;
+  const cacheKey = `beatmap-scores:${beatmapHash}:limit=${limit}`;
 
   let scoreData: any[] | null = null;
 
@@ -116,7 +119,7 @@ export async function handler(
       return NextResponse.json({ error: JSON.stringify(error) });
     }
 
-    scoreData = rpcScores || [];
+    scoreData = (rpcScores || []).slice(0, limit);
 
     if (isCacheable && beatmapHash) {
       await setCacheValue(cacheKey, scoreData);
@@ -124,7 +127,7 @@ export async function handler(
   }
 
   return NextResponse.json({
-    scores: scoreData.map((score: any) => ({
+    scores: (scoreData || []).map((score: any) => ({
       id: score.id,
       awarded_sp: score.awarded_sp,
       created_at: score.created_at,

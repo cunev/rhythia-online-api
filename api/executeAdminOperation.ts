@@ -5,7 +5,7 @@ import { protectedApi, validUser } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
-import { invalidateCache } from "../utils/cache";
+import { invalidateCache, invalidateCachePrefix } from "../utils/cache";
 
 // Define supported admin operations and their parameter types
 const adminOperations = {
@@ -367,7 +367,7 @@ export async function handler(
     }
 
     if (targetUserId !== null && !result?.error) {
-      await invalidateCache(`userscore:${targetUserId}`);
+      await invalidateCachePrefix(`userscore:${targetUserId}`);
 
       if (
         operation === "removeAllScores" ||
@@ -386,7 +386,7 @@ export async function handler(
         );
 
         for (const hash of uniqueHashes) {
-          await invalidateCache(`beatmap-scores:${hash}`);
+          await invalidateCachePrefix(`beatmap-scores:${hash}`);
         }
       }
     }

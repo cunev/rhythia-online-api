@@ -46,3 +46,15 @@ export async function invalidateCache(key: CacheKey): Promise<void> {
     console.error("invalidateCache error", error);
   }
 }
+
+export async function invalidateCachePrefix(prefix: CacheKey): Promise<void> {
+  const normalizedPrefix = normalizeKey(prefix);
+  const { error } = await supabase
+    .from(CACHE_TABLE)
+    .delete()
+    .like("key", `${normalizedPrefix}%`);
+
+  if (error) {
+    console.error("invalidateCachePrefix error", error);
+  }
+}

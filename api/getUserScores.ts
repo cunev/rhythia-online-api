@@ -92,7 +92,8 @@ export async function handler(
   data: (typeof Schema)["input"]["_type"],
   req: Request
 ): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
-  const cacheKey = `userscore:${data.id}`;
+  const limit = data.limit ?? 10;
+  const cacheKey = `userscore:${data.id}:limit=${limit}`;
   const cachedValue = await getCacheValue<(typeof Schema)["output"]["_type"]>(
     cacheKey
   );
@@ -109,11 +110,11 @@ export async function handler(
   ] = await Promise.all([
     supabase.rpc("get_user_scores_lastday", {
       userid: data.id,
-      limit_param: data.limit,
+      limit_param: limit,
     }),
     supabase.rpc("get_user_scores_top_and_stats", {
       userid: data.id,
-      limit_param: data.limit,
+      limit_param: limit,
     }),
     supabase.rpc("get_user_scores_reign", {
       userid: data.id,
