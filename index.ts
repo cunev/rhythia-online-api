@@ -429,6 +429,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     id: z.number(),
+    limit: z.number().min(1).max(200).default(50),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -489,6 +490,7 @@ export const Schema = {
   input: z.strictObject({
     session: z.string(),
     mapId: z.string(),
+    limit: z.number().min(1).max(200).default(50),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -841,6 +843,26 @@ export const Schema = {
 import { Schema as GetMapUploadUrl } from "./api/getMapUploadUrl"
 export { Schema as SchemaGetMapUploadUrl } from "./api/getMapUploadUrl"
 export const getMapUploadUrl = handleApi({url:"/api/getMapUploadUrl",...GetMapUploadUrl})
+
+// ./api/getOnlinePlayers.ts API
+
+/*
+export const Schema = {
+  input: z.strictObject({}),
+  output: z.object({
+    error: z.string().optional(),
+    players: z.array(
+      z.object({
+        id: z.number(),
+        name: z.string().nullable(),
+        profilePictureUrl: z.string().nullable(),
+      })
+    ),
+  }),
+};*/
+import { Schema as GetOnlinePlayers } from "./api/getOnlinePlayers"
+export { Schema as SchemaGetOnlinePlayers } from "./api/getOnlinePlayers"
+export const getOnlinePlayers = handleApi({url:"/api/getOnlinePlayers",...GetOnlinePlayers})
 
 // ./api/getPassToken.ts API
 
