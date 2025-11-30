@@ -71,7 +71,7 @@ export async function handler(
     profiles?.map((profile) => ({
       id: profile.id,
       name: profile.username,
-      profilePictureUrl: profile.profile_image || profile.avatar_url,
+      profilePictureUrl: profile.avatar_url,
     })) || [];
 
   return NextResponse.json({ players });
