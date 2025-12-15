@@ -23,6 +23,7 @@ export const Schema = {
         z.object({
           flag: z.string().nullable(),
           id: z.number(),
+          avatar_url: z.string().nullable(),
           username: z.string().nullable(),
           play_count: z.number().nullable(),
           skill_points: z.number().nullable(),
@@ -126,6 +127,7 @@ export async function getLeaderboard(
     leaderboard: queryData?.map((user) => ({
       flag: user.flag,
       id: user.id,
+      avatar_url: user.avatar_url,
       play_count: user.play_count,
       skill_points: user.skill_points,
       spin_skill_points: user.spin_skill_points,
