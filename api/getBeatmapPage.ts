@@ -108,31 +108,31 @@ export async function handler(
     beatmapPage?.status === "RANKED" || beatmapPage?.status === "APPROVED";
   const cacheKey = `beatmap-scores:${beatmapHash}:limit=${limit}`;
 
-  let scoreData: any[] | null = null;
+  // let scoreData: any[] | null = null;
 
-  if (isCacheable && beatmapHash) {
-    scoreData = await getCacheValue<any[]>(cacheKey);
-  }
+  // if (isCacheable && beatmapHash) {
+  //   scoreData = await getCacheValue<any[]>(cacheKey);
+  // }
 
-  if (!scoreData) {
-    const { data: rpcScores, error } = await supabase.rpc(
-      "get_top_scores_for_beatmap",
-      { beatmap_hash: beatmapHash }
-    );
+  // if (!scoreData) {
+  //   const { data: rpcScores, error } = await supabase.rpc(
+  //     "get_top_scores_for_beatmap",
+  //     { beatmap_hash: beatmapHash }
+  //   );
 
-    if (error) {
-      return NextResponse.json({ error: JSON.stringify(error) });
-    }
+  //   if (error) {
+  //     return NextResponse.json({ error: JSON.stringify(error) });
+  //   }
 
-    scoreData = (rpcScores || []).slice(0, limit);
+  //   scoreData = (rpcScores || []).slice(0, limit);
 
-    if (isCacheable && beatmapHash) {
-      await setCacheValue(cacheKey, scoreData);
-    }
-  }
+  //   if (isCacheable && beatmapHash) {
+  //     await setCacheValue(cacheKey, scoreData);
+  //   }
+  // }
 
   return NextResponse.json({
-    scores: (scoreData || []).map((score: any) => ({
+    scores: [].map((score: any) => ({
       id: score.id,
       awarded_sp: score.awarded_sp,
       created_at: score.created_at,
