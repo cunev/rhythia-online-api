@@ -4,6 +4,10 @@ import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import {
+  getActivityStatusForUserId,
+  getScoreActivityCutoffIso,
+} from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -72,6 +76,7 @@ export async function getLeaderboard(
   spin: boolean,
   flag?: string
 ) {
+  const cutoffIso = getScoreActivityCutoffIso();
   const getUserData = (await getUserBySession(session)) as User;
 
   let leaderPosition = 0;
@@ -84,27 +89,40 @@ export async function getLeaderboard(
       .single();
 
     if (queryData) {
-      const { count: playersWithMorePoints, error: rankError } = await supabase
-        .from("profiles")
-        .select("*", { count: "exact", head: true })
-        .neq("ban", "excluded")
-        .gt("skill_points", queryData.skill_points);
+      const activityStatus = await getActivityStatusForUserId(queryData.id);
+      if (activityStatus === "active") {
+        const { count: playersWithMorePoints } = await supabase
+          .from("profiles")
+          .select("id,scores!inner(id)", { count: "exact", head: true })
+          .neq("ban", "excluded")
+          .gte("scores.created_at", cutoffIso)
+          .gt("skill_points", queryData.skill_points);
 
-      leaderPosition = (playersWithMorePoints || 0) + 1;
+        leaderPosition = (playersWithMorePoints || 0) + 1;
+      }
     }
   }
 
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
-  const countQuery = await supabase
+  let countQuery = supabase
     .from("profiles")
-    .select("ban", { count: "exact", head: true })
-    .neq("ban", "excluded");
+    .select("id,scores!inner(id)", { count: "exact", head: true })
+    .neq("ban", "excluded")
+    .gte("scores.created_at", cutoffIso);
+
+  if (flag) {
+    countQuery.eq("flag", flag);
+  }
+
+  const countResult = await countQuery;
 
   let query = supabase
     .from("profiles")
-    .select("*,clans:clan(id, acronym)")
-    .neq("ban", "excluded");
+    .select("*,clans:clan(id, acronym),scores!inner(id)")
+    .neq("ban", "excluded")
+    .gte("scores.created_at", cutoffIso)
+    .limit(1, { foreignTable: "scores" });
 
   if (flag) {
     query.eq("flag", flag);
@@ -120,7 +138,7 @@ export async function getLeaderboard(
 
   let { data: queryData, error } = await query;
   return {
-    total: countQuery.count || 0,
+    total: countResult.count || 0,
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
     userPosition: leaderPosition,

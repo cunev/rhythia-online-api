@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import z from "zod";
 import { supabase } from "../utils/supabase";
+import { getActiveProfileIdSet } from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -49,9 +50,17 @@ export async function handler({
       );
     }
 
+    const activeIds = await getActiveProfileIdSet(
+      (leaderboard || []).map((entry) => entry.id)
+    );
+
+    const filteredLeaderboard = (leaderboard || []).filter((entry) =>
+      activeIds.has(entry.id)
+    );
+
     return NextResponse.json({
-      leaderboard: leaderboard || [],
-      total_count: leaderboard?.length || 0,
+      leaderboard: filteredLeaderboard,
+      total_count: filteredLeaderboard.length,
     });
   } catch (error) {
     console.error("Badge leaderboard exception:", error);

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
+import { getScoreActivityCutoffIso } from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({}),
@@ -103,10 +104,12 @@ export async function handler(data: (typeof Schema)["input"]["_type"]) {
 
   let { data: topUsers } = await supabase
     .from("profiles")
-    .select("*")
+    .select("id,username,avatar_url,skill_points,scores!inner(id)")
     .neq("ban", "excluded")
+    .gte("scores.created_at", getScoreActivityCutoffIso())
     .order("skill_points", { ascending: false })
-    .limit(3);
+    .limit(3)
+    .limit(1, { foreignTable: "scores" });
 
   let { data: comments } = await supabase
     .from("beatmapPageComments")

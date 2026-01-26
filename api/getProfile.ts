@@ -6,6 +6,10 @@ import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
+import {
+  getActivityStatusForUserId,
+  getScoreActivityCutoffIso,
+} from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -33,6 +37,7 @@ export const Schema = {
         squares_hit: z.number().nullable(),
         total_score: z.number().nullable(),
         position: z.number().nullable(),
+        activity_status: z.enum(["active", "inactive"]),
         is_online: z.boolean(),
         clans: z
           .object({
@@ -114,6 +119,8 @@ export async function handler(
 
   const user = profiles[0];
 
+  const activityStatus = await getActivityStatusForUserId(user.id);
+
   const { data: activityData } = await supabase
     .from("profileActivities")
     .select("*")
@@ -125,12 +132,18 @@ export async function handler(
     isOnline = Date.now() - activityData.last_activity < 1800000;
   }
 
-  // Query to count how many players have more skill points than the specific player
-  const { count: playersWithMorePoints, error: rankError } = await supabase
-    .from("profiles")
-    .select(`*`, { count: "exact", head: true })
-    .neq("ban", "excluded")
-    .gt("skill_points", user.skill_points);
+  let position: number | null = null;
+  if (activityStatus === "active") {
+    const cutoffIso = getScoreActivityCutoffIso();
+    const { count: playersWithMorePoints } = await supabase
+      .from("profiles")
+      .select("id,scores!inner(id)", { count: "exact", head: true })
+      .neq("ban", "excluded")
+      .gte("scores.created_at", cutoffIso)
+      .gt("skill_points", user.skill_points);
+
+    position = (playersWithMorePoints || 0) + 1;
+  }
 
   if (user.verificationDeadline < Date.now()) {
     await supabase
@@ -145,7 +158,8 @@ export async function handler(
   return NextResponse.json({
     user: {
       ...user,
-      position: (playersWithMorePoints || 0) + 1,
+      position,
+      activity_status: activityStatus,
       is_online: isOnline,
     },
   });
