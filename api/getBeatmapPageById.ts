@@ -3,6 +3,7 @@ import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
 import { getCacheValue, setCacheValue } from "../utils/cache";
 import { supabase } from "../utils/supabase";
+import { getActiveProfileIdSet } from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -101,7 +102,7 @@ export async function handler(
   const beatmapHash = beatmapPage?.latestBeatmapHash || "";
   const isCacheable =
     beatmapPage?.status === "RANKED" || beatmapPage?.status === "APPROVED";
-  const cacheKey = `beatmap-scores:${beatmapHash}:limit=${limit}`;
+  const cacheKey = `beatmap-scores:${beatmapHash}`;
 
   let scoreData: any[] | null = null;
 
@@ -119,15 +120,23 @@ export async function handler(
       return NextResponse.json({ error: JSON.stringify(error) });
     }
 
-    scoreData = (rpcScores || []).slice(0, limit);
+    scoreData = (rpcScores || []).slice(0, 200);
 
     if (isCacheable && beatmapHash) {
       await setCacheValue(cacheKey, scoreData);
     }
   }
 
+  const userIds = Array.from(
+    new Set((scoreData || []).map((score) => score.userid).filter(Boolean))
+  );
+  const activeUserIds = await getActiveProfileIdSet(userIds);
+  const visibleScores = (scoreData || [])
+    .filter((score) => activeUserIds.has(score.userid))
+    .slice(0, limit);
+
   return NextResponse.json({
-    scores: (scoreData || []).map((score: any) => ({
+    scores: visibleScores.map((score: any) => ({
       id: score.id,
       awarded_sp: score.awarded_sp,
       created_at: score.created_at,
