@@ -15,6 +15,7 @@ export const Schema = {
     page: z.number().default(1),
     flag: z.string().optional(),
     spin: z.boolean().default(false),
+    include_inactive: z.boolean().optional().default(false),
   }),
   output: z.object({
     error: z.string().optional(),
@@ -63,7 +64,8 @@ export async function handler(
     data.page,
     data.session,
     data.spin,
-    data.flag
+    data.flag,
+    data.include_inactive
   );
   return NextResponse.json(result);
 }
@@ -74,7 +76,8 @@ export async function getLeaderboard(
   page = 1,
   session: string,
   spin: boolean,
-  flag?: string
+  flag?: string,
+  includeInactive = false
 ) {
   const cutoffIso = getScoreActivityCutoffIso();
   const getUserData = (await getUserBySession(session)) as User;
@@ -89,43 +92,78 @@ export async function getLeaderboard(
       .single();
 
     if (queryData) {
-      const activityStatus = await getActivityStatusForUserId(queryData.id);
-      if (activityStatus === "active") {
+      if (includeInactive) {
         const { count: playersWithMorePoints } = await supabase
           .from("profiles")
-          .select("id,scores!inner(id)", { count: "exact", head: true })
+          .select("id", { count: "exact", head: true })
           .neq("ban", "excluded")
-          .gte("scores.created_at", cutoffIso)
           .gt("skill_points", queryData.skill_points);
 
         leaderPosition = (playersWithMorePoints || 0) + 1;
+      } else {
+        const activityStatus = await getActivityStatusForUserId(queryData.id);
+        if (activityStatus === "active") {
+          const { count: playersWithMorePoints } = await supabase
+            .from("profiles")
+            .select("id,scores!inner(id)", { count: "exact", head: true })
+            .neq("ban", "excluded")
+            .gte("scores.created_at", cutoffIso)
+            .gt("skill_points", queryData.skill_points);
+
+          leaderPosition = (playersWithMorePoints || 0) + 1;
+        }
       }
     }
   }
 
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
-  let countQuery = supabase
-    .from("profiles")
-    .select("id,scores!inner(id)", { count: "exact", head: true })
-    .neq("ban", "excluded")
-    .gte("scores.created_at", cutoffIso);
+  let countResult;
+  let query;
 
-  if (flag) {
-    countQuery.eq("flag", flag);
-  }
+  if (includeInactive) {
+    let countQuery = supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+      .neq("ban", "excluded");
 
-  const countResult = await countQuery;
+    if (flag) {
+      countQuery.eq("flag", flag);
+    }
 
-  let query = supabase
-    .from("profiles")
-    .select("*,clans:clan(id, acronym),scores!inner(id)")
-    .neq("ban", "excluded")
-    .gte("scores.created_at", cutoffIso)
-    .limit(1, { foreignTable: "scores" });
+    countResult = await countQuery;
 
-  if (flag) {
-    query.eq("flag", flag);
+    query = supabase
+      .from("profiles")
+      .select("*,clans:clan(id, acronym)")
+      .neq("ban", "excluded");
+
+    if (flag) {
+      query.eq("flag", flag);
+    }
+  } else {
+    let countQuery = supabase
+      .from("profiles")
+      .select("id,scores!inner(id)", { count: "exact", head: true })
+      .neq("ban", "excluded")
+      .gte("scores.created_at", cutoffIso);
+
+    if (flag) {
+      countQuery.eq("flag", flag);
+    }
+
+    countResult = await countQuery;
+
+    query = supabase
+      .from("profiles")
+      .select("*,clans:clan(id, acronym),scores!inner(id)")
+      .neq("ban", "excluded")
+      .gte("scores.created_at", cutoffIso)
+      .limit(1, { foreignTable: "scores" });
+
+    if (flag) {
+      query.eq("flag", flag);
+    }
   }
 
   if (spin) {

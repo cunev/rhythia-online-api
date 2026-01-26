@@ -6,6 +6,7 @@ import { getActiveProfileIdSet } from "../utils/activityStatus";
 export const Schema = {
   input: z.strictObject({
     limit: z.number().min(1).max(100).optional().default(100),
+    include_inactive: z.boolean().optional().default(false),
   }),
   output: z.object({
     leaderboard: z.array(
@@ -22,13 +23,20 @@ export const Schema = {
 };
 
 export async function POST(request: Request): Promise<NextResponse> {
-  return handler({ limit: 100 });
+  let body: unknown = {};
+  try {
+    body = await request.json();
+  } catch {}
+
+  return handler(Schema.input.parse(body));
 }
 
 export async function handler({
   limit = 100,
+  include_inactive = false,
 }: {
   limit?: number;
+  include_inactive?: boolean;
 }): Promise<NextResponse<(typeof Schema)["output"]["_type"]>> {
   try {
     const { data: leaderboard, error } = await supabase.rpc(
@@ -50,13 +58,18 @@ export async function handler({
       );
     }
 
-    const activeIds = await getActiveProfileIdSet(
-      (leaderboard || []).map((entry) => entry.id)
-    );
+    const entries = leaderboard || [];
 
-    const filteredLeaderboard = (leaderboard || []).filter((entry) =>
-      activeIds.has(entry.id)
-    );
+    if (include_inactive) {
+      return NextResponse.json({
+        leaderboard: entries,
+        total_count: entries.length,
+      });
+    }
+
+    const activeIds = await getActiveProfileIdSet(entries.map((entry) => entry.id));
+
+    const filteredLeaderboard = entries.filter((entry) => activeIds.has(entry.id));
 
     return NextResponse.json({
       leaderboard: filteredLeaderboard,

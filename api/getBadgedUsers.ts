@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import z from "zod";
 import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
-import { getScoreActivityCutoffIso } from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -39,11 +38,9 @@ export async function handler(
 }
 
 export async function getLeaderboard(badge: string) {
-  const cutoffIso = getScoreActivityCutoffIso();
   let { data: queryData, error } = await supabase
     .from("profiles")
     .select("flag,id,username,badges,scores!inner(id)")
-    .gte("scores.created_at", cutoffIso)
     .limit(1, { foreignTable: "scores" });
 
   const users = queryData?.filter((e) =>
