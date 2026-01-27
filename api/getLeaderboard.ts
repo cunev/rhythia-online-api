@@ -5,6 +5,8 @@ import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
 import { getScoreActivityCutoffIso } from "../utils/activityStatus";
+import { getCacheValue, setCacheValue } from "../utils/cache";
+import { LEADERBOARD_CACHE_INVALIDATE_KEY } from "../utils/leaderboardCache";
 
 export const Schema = {
   input: z.strictObject({
@@ -68,6 +70,7 @@ export async function handler(
 }
 
 const VIEW_PER_PAGE = 50;
+const CACHE_TTL_MS = 4 * 60 * 1000;
 
 export async function getLeaderboard(
   page = 1,
@@ -77,79 +80,141 @@ export async function getLeaderboard(
   includeInactive = false
 ) {
   const cutoffIso = getScoreActivityCutoffIso();
-  const getUserDataPromise = getUserBySession(session) as Promise<User | null>;
+  const userPromise = getUserBySession(session) as Promise<User | null>;
+  const invalidateAtPromise = getCacheValue<number>(
+    LEADERBOARD_CACHE_INVALIDATE_KEY
+  );
 
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
-  let countResult;
-  let query;
+  const cacheKey = `leaderboard:page=${page}:spin=${spin ? 1 : 0}:flag=${
+    flag || "all"
+  }:include_inactive=${includeInactive ? 1 : 0}`;
+  const cachedPagePromise = getCacheValue<{
+    cachedAt: number;
+    total: number;
+    leaderboard: (typeof Schema)["output"]["_type"]["leaderboard"];
+  }>(cacheKey);
 
-  if (includeInactive) {
-    let countQuery = supabase
-      .from("profiles")
-      .select("id", { count: "exact", head: true })
-      .neq("ban", "excluded");
+  const [user, invalidateAt, cachedPage] = await Promise.all([
+    userPromise,
+    invalidateAtPromise,
+    cachedPagePromise,
+  ]);
+
+  const cutoffInvalidation = invalidateAt || 0;
+  const now = Date.now();
+  const cacheFresh = Boolean(
+    cachedPage &&
+      cachedPage.cachedAt >= cutoffInvalidation &&
+      now - cachedPage.cachedAt < CACHE_TTL_MS
+  );
+
+  const pageDataPromise = (async () => {
+    if (cachedPage && cacheFresh) {
+      return cachedPage;
+    }
+
+    let countQuery;
+    let query;
+
+    if (includeInactive) {
+      countQuery = supabase
+        .from("profiles")
+        .select("id", { count: "exact", head: true })
+        .neq("ban", "excluded");
+
+      query = supabase
+        .from("profiles")
+        .select(
+          "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym)"
+        )
+        .neq("ban", "excluded");
+    } else {
+      countQuery = supabase
+        .from("profiles")
+        .select("id,scores!inner(id)", { count: "exact", head: true })
+        .neq("ban", "excluded")
+        .gte("scores.created_at", cutoffIso);
+
+      query = supabase
+        .from("profiles")
+        .select(
+          "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym),scores!inner(id)"
+        )
+        .neq("ban", "excluded")
+        .gte("scores.created_at", cutoffIso)
+        .limit(1, { foreignTable: "scores" });
+    }
 
     if (flag) {
       countQuery.eq("flag", flag);
-    }
-
-    countResult = countQuery;
-
-    query = supabase
-      .from("profiles")
-      .select(
-        "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym)"
-      )
-      .neq("ban", "excluded");
-
-    if (flag) {
       query.eq("flag", flag);
     }
-  } else {
-    let countQuery = supabase
-      .from("profiles")
-      .select("id,scores!inner(id)", { count: "exact", head: true })
-      .neq("ban", "excluded")
-      .gte("scores.created_at", cutoffIso);
 
-    if (flag) {
-      countQuery.eq("flag", flag);
+    if (spin) {
+      query.order("spin_skill_points", { ascending: false });
+    } else {
+      query.order("skill_points", { ascending: false });
     }
 
-    countResult = countQuery;
+    query.range(startPage, endPage);
 
-    query = supabase
-      .from("profiles")
-      .select(
-        "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym),scores!inner(id)"
-      )
-      .neq("ban", "excluded")
-      .gte("scores.created_at", cutoffIso)
-      .limit(1, { foreignTable: "scores" });
+    const [countQueryResult, { data: queryData }] = await Promise.all([
+      countQuery,
+      query,
+    ]);
 
-    if (flag) {
-      query.eq("flag", flag);
-    }
-  }
+    const leaderboard = queryData?.map((user) => ({
+      flag: user.flag,
+      id: user.id,
+      avatar_url: user.avatar_url,
+      play_count: user.play_count,
+      skill_points: user.skill_points,
+      spin_skill_points: user.spin_skill_points,
+      total_score: user.total_score,
+      username: user.username,
+      clans: user.clans as any,
+      verified: user.verified,
+    }));
 
-  if (spin) {
-    query.order("spin_skill_points", { ascending: false });
-  } else {
-    query.order("skill_points", { ascending: false });
-  }
+    const data = {
+      cachedAt: Date.now(),
+      total: countQueryResult.count || 0,
+      leaderboard,
+    };
 
-  query.range(startPage, endPage);
+    await setCacheValue(cacheKey, data);
+
+    return data;
+  })();
 
   const leaderPositionPromise = (async () => {
-    const getUserData = await getUserDataPromise;
-    if (!getUserData) return 0;
+    if (!user) return 0;
+
+    const posCacheKey = `leaderboard:userPosition:uid=${user.id}:include_inactive=${
+      includeInactive ? 1 : 0
+    }`;
+
+    const cachedPosition = await getCacheValue<{
+      cachedAt: number;
+      position: number;
+    }>(posCacheKey);
+
+    const positionCacheFresh =
+      cachedPosition &&
+      cachedPosition.cachedAt >= cutoffInvalidation &&
+      now - cachedPosition.cachedAt < CACHE_TTL_MS;
+
+    if (positionCacheFresh) {
+      return cachedPosition.position;
+    }
 
     if (includeInactive) {
       const { data: profile } = await supabase
         .from("profiles")
         .select("id,skill_points")
-        .eq("uid", getUserData.id)
+        .eq("uid", user.id)
         .maybeSingle();
 
       if (!profile) return 0;
@@ -160,13 +225,15 @@ export async function getLeaderboard(
         .neq("ban", "excluded")
         .gt("skill_points", profile.skill_points);
 
-      return (playersWithMorePoints || 0) + 1;
+      const position = (playersWithMorePoints || 0) + 1;
+      await setCacheValue(posCacheKey, { cachedAt: Date.now(), position });
+      return position;
     }
 
     const { data: profile } = await supabase
       .from("profiles")
       .select("id,skill_points,scores!inner(id)")
-      .eq("uid", getUserData.id)
+      .eq("uid", user.id)
       .gte("scores.created_at", cutoffIso)
       .limit(1, { foreignTable: "scores" })
       .maybeSingle();
@@ -180,28 +247,21 @@ export async function getLeaderboard(
       .gte("scores.created_at", cutoffIso)
       .gt("skill_points", profile.skill_points);
 
-    return (playersWithMorePoints || 0) + 1;
+    const position = (playersWithMorePoints || 0) + 1;
+    await setCacheValue(posCacheKey, { cachedAt: Date.now(), position });
+    return position;
   })();
 
-  const [countQueryResult, { data: queryData }, leaderPosition] =
-    await Promise.all([countResult, query, leaderPositionPromise]);
+  const [pageData, leaderPosition] = await Promise.all([
+    pageDataPromise,
+    leaderPositionPromise,
+  ]);
 
   return {
-    total: countQueryResult.count || 0,
+    total: pageData.total,
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
     userPosition: leaderPosition,
-    leaderboard: queryData?.map((user) => ({
-      flag: user.flag,
-      id: user.id,
-      avatar_url: user.avatar_url,
-      play_count: user.play_count,
-      skill_points: user.skill_points,
-      spin_skill_points: user.spin_skill_points,
-      total_score: user.total_score,
-      username: user.username,
-      clans: user.clans as any,
-      verified: user.verified,
-    })),
+    leaderboard: pageData.leaderboard,
   };
 }

@@ -6,7 +6,7 @@ import { decryptString } from "../utils/security";
 import { isEqual } from "lodash";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
-import { invalidateCache, invalidateCachePrefix } from "../utils/cache";
+import { invalidateCachePrefix } from "../utils/cache";
 
 export const Schema = {
   input: z.strictObject({
