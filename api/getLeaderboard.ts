@@ -4,10 +4,7 @@ import { protectedApi } from "../utils/requestUtils";
 import { supabase } from "../utils/supabase";
 import { getUserBySession } from "../utils/getUserBySession";
 import { User } from "@supabase/supabase-js";
-import {
-  getActivityStatusForUserId,
-  getScoreActivityCutoffIso,
-} from "../utils/activityStatus";
+import { getScoreActivityCutoffIso } from "../utils/activityStatus";
 
 export const Schema = {
   input: z.strictObject({
@@ -80,41 +77,7 @@ export async function getLeaderboard(
   includeInactive = false
 ) {
   const cutoffIso = getScoreActivityCutoffIso();
-  const getUserData = (await getUserBySession(session)) as User;
-
-  let leaderPosition = 0;
-
-  if (getUserData) {
-    let { data: queryData, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("uid", getUserData.id)
-      .single();
-
-    if (queryData) {
-      if (includeInactive) {
-        const { count: playersWithMorePoints } = await supabase
-          .from("profiles")
-          .select("id", { count: "exact", head: true })
-          .neq("ban", "excluded")
-          .gt("skill_points", queryData.skill_points);
-
-        leaderPosition = (playersWithMorePoints || 0) + 1;
-      } else {
-        const activityStatus = await getActivityStatusForUserId(queryData.id);
-        if (activityStatus === "active") {
-          const { count: playersWithMorePoints } = await supabase
-            .from("profiles")
-            .select("id,scores!inner(id)", { count: "exact", head: true })
-            .neq("ban", "excluded")
-            .gte("scores.created_at", cutoffIso)
-            .gt("skill_points", queryData.skill_points);
-
-          leaderPosition = (playersWithMorePoints || 0) + 1;
-        }
-      }
-    }
-  }
+  const getUserDataPromise = getUserBySession(session) as Promise<User | null>;
 
   const startPage = (page - 1) * VIEW_PER_PAGE;
   const endPage = startPage + VIEW_PER_PAGE - 1;
@@ -131,11 +94,13 @@ export async function getLeaderboard(
       countQuery.eq("flag", flag);
     }
 
-    countResult = await countQuery;
+    countResult = countQuery;
 
     query = supabase
       .from("profiles")
-      .select("*,clans:clan(id, acronym)")
+      .select(
+        "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym)"
+      )
       .neq("ban", "excluded");
 
     if (flag) {
@@ -152,11 +117,13 @@ export async function getLeaderboard(
       countQuery.eq("flag", flag);
     }
 
-    countResult = await countQuery;
+    countResult = countQuery;
 
     query = supabase
       .from("profiles")
-      .select("*,clans:clan(id, acronym),scores!inner(id)")
+      .select(
+        "flag,id,avatar_url,username,play_count,skill_points,spin_skill_points,total_score,verified,clans:clan(id, acronym),scores!inner(id)"
+      )
       .neq("ban", "excluded")
       .gte("scores.created_at", cutoffIso)
       .limit(1, { foreignTable: "scores" });
@@ -174,9 +141,53 @@ export async function getLeaderboard(
 
   query.range(startPage, endPage);
 
-  let { data: queryData, error } = await query;
+  const leaderPositionPromise = (async () => {
+    const getUserData = await getUserDataPromise;
+    if (!getUserData) return 0;
+
+    if (includeInactive) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id,skill_points")
+        .eq("uid", getUserData.id)
+        .maybeSingle();
+
+      if (!profile) return 0;
+
+      const { count: playersWithMorePoints } = await supabase
+        .from("profiles")
+        .select("id", { count: "exact", head: true })
+        .neq("ban", "excluded")
+        .gt("skill_points", profile.skill_points);
+
+      return (playersWithMorePoints || 0) + 1;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id,skill_points,scores!inner(id)")
+      .eq("uid", getUserData.id)
+      .gte("scores.created_at", cutoffIso)
+      .limit(1, { foreignTable: "scores" })
+      .maybeSingle();
+
+    if (!profile) return 0;
+
+    const { count: playersWithMorePoints } = await supabase
+      .from("profiles")
+      .select("id,scores!inner(id)", { count: "exact", head: true })
+      .neq("ban", "excluded")
+      .gte("scores.created_at", cutoffIso)
+      .gt("skill_points", profile.skill_points);
+
+    return (playersWithMorePoints || 0) + 1;
+  })();
+
+  const [countQueryResult, { data: queryData }, leaderPosition] =
+    await Promise.all([countResult, query, leaderPositionPromise]);
+
   return {
-    total: countResult.count || 0,
+    total: countQueryResult.count || 0,
     viewPerPage: VIEW_PER_PAGE,
     currentPage: page,
     userPosition: leaderPosition,
